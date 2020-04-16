@@ -10,7 +10,7 @@ from libra.trusted_state import TrustedState
 from libra.ledger_info import LedgerInfoWithSignatures
 from libra.transaction import SignedTransaction
 from json_rpc.client import get_response_from_batch, JsonRpcResponse
-from json_rpc.views import AccountView, EventView, BlockMetadata, TransactionView, TransactionDataView, StateProofView, AccountStateWithProofView
+from json_rpc.views import AccountView, EventView, BlockMetadataView, TransactionView, TransactionDataView, StateProofView, AccountStateWithProofView
 from libra.account_state_blob import AccountStateBlob
 from libra.access_path import AccessPath
 from libra.account_config import AccountConfig
@@ -76,7 +76,7 @@ class LibraClient():
         self._handle_response(response)
 
 
-    def get_account_state(self, account: bytes, with_state_proof: bool):
+    def get_account_state(self, account: bytes, with_state_proof: bool)-> AccountView:
         client_version = self.trusted_state.latest_version
         batch = JsonRpcBatch.new()
         batch.add_get_account_state_request(account)
@@ -88,8 +88,8 @@ class LibraClient():
             self.process_state_proof_response(state_proof)
         response = get_response_from_batch(0, responses)
         ensure(isinstance(response, JsonRpcResponse), f"Failed to get account state for account address {account} with error: {response}")
-        account_view = AccountView.optional_from_response(response)
-        return account_view, self.trusted_state.latest_version
+        account_view = AccountView.from_response(response)
+        return account_view
 
     def get_events(self, event_key, start: int, limit: int) -> EventView:
         batch = JsonRpcBatch.new()
@@ -104,8 +104,8 @@ class LibraClient():
         batch.add_get_metadata_request()
         response = self.client.execute(batch)
         response = get_response_from_batch(0, response)
-        ensure(isinstance(response, JsonRpcResponse), f"Failed to get block metadata with error: {response}")
-        return BlockMetadata.from_response(response)
+        self._handle_response(response)
+        return BlockMetadataView.from_response(response)
 
     def get_state_proof(self):
         batch = JsonRpcBatch.new()
@@ -117,7 +117,9 @@ class LibraClient():
     def process_state_proof_response(self, response):
         ensure(isinstance(response, JsonRpcResponse), f"Failed to get state proof with error: {response}")
         state_proof = StateProofView.from_response(response)
-        return self.verify_state_proof(state_proof)
+        return state_proof
+        #TODO
+        # return self.verify_state_proof(state_proof)
 
     def verify_state_proof(self, state_proof: StateProofView):
         pass
@@ -154,7 +156,7 @@ class LibraClient():
         state_proof = get_response_from_batch(1, responses)
         self.process_state_proof_response(state_proof)
         response = get_response_from_batch(0, responses)
-        ensure(isinstance(response, JsonRpcResponse), f"Failed to get transactions with error: {response}")
+        self._handle_response(response)
         return TransactionView.vec_from_response(response)
 
     def get_sequence_number(self, account: bytes):
@@ -164,15 +166,16 @@ class LibraClient():
 
     def get_events_by_access_path(self, access_path: AccessPath, start_event_seq_num: int, limit: int):
         account_view = self.get_account_state(access_path.address, False)
-        ensure(account_view, f"No account found for address {access_path.address.hex()}")
+        if account_view is None:
+            return []
         path = access_path.path
         ensure(path in (AccountConfig.account_sent_event_path(), AccountConfig.account_received_event_path()), "Unexpected event path found in access path")
         if path == AccountConfig.account_sent_event_path():
-            event_key =  account_view.sent_events_key
+            event_key = account_view.sent_events_key
         elif path == AccountConfig.account_received_event_path():
-            event_key = account_view.received_event_key
-        events = self.get_events(event_key.hex(), start_event_seq_num, limit)
-        return events, account_view
+            event_key = account_view.received_events_key
+        events = self.get_events(event_key, start_event_seq_num, limit)
+        return events
 
     def _handle_response(self, response):
         if isinstance(response, dict):

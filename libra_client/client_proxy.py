@@ -22,6 +22,8 @@ from json_rpc.views import AccountView
 from libra.account import AccountStatus
 import time
 from error import ViolasError, StatusCode
+from libra.access_path import AccessPath
+from libra.account_config import AccountConfig
 
 CLIENT_WALLET_MNEMONIC_FILE = "client.mnemonic"
 GAS_UNIT_PRICE = 0
@@ -54,7 +56,7 @@ NETWORKS = {
 
 class Client():
 
-    WAIT_TRANSACTION_COUNT = 1000
+    WAIT_TRANSACTION_COUNT = 10
     WAIT_TRANSACTION_INTERVAL = 0.1
     def __init__(self, network="tianjin_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
@@ -71,16 +73,28 @@ class Client():
         faucet_server = chain.get("faucet_server")
         self.faucet_server = faucet_server
 
+
+    def new(self, host:str, port:int, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
+        url = f"http://{host}:{port}"
+        self.client = LibraClient.new(url, waypoint)
+        faucet_account_file = faucet_file
+        if faucet_account_file is None:
+            self.faucet_account = None
+        else:
+            self.faucet_account = Account.load_faucet_account_file(faucet_account_file)
+        faucet_server = faucet_server
+        self.faucet_server = faucet_server
+
     def get_balance(self, account_address: Union[bytes, str])-> Optional[int]:
-        account_resource = self.get_account_resource(account_address)
-        if account_resource:
-            return account_resource.balance
+        account_state = self.get_account_state(account_address)
+        if account_state:
+            return account_state.balance
         return 0
 
     def get_sequence_number(self, account_address: Union[bytes, str]) -> Optional[int]:
-        account_resource = self.get_account_resource(account_address)
-        if account_resource:
-            return account_resource.sequence_number
+        account_state = self.get_account_state(account_address)
+        if account_state:
+            return account_state.sequence_number
         return 0
 
     def mint_coins(self, receiver_address, micro_coins, is_blocking=True, receiver_auth_key_prefix_opt=None):
@@ -91,24 +105,25 @@ class Client():
         receiver_auth_key = Address.normalize_to_bytes(receiver_auth_key_prefix_opt) + Address.normalize_to_bytes(receiver_address)
         return self.mint_coins_with_faucet_service(receiver_auth_key, micro_coins,  is_blocking)
 
-    def enable_custom_script(self):
-        pass
-
-    def disable_custom_script(self):
-        pass
-
-    def remove_validator(self):
-        pass
-
-    def add_validator(self):
-        pass
-
-    def register_validator(self):
-        pass
+    # def enable_custom_script(self):
+    #     pass
+    #
+    # def disable_custom_script(self):
+    #     pass
+    #
+    # def remove_validator(self):
+    #     pass
+    #
+    # def add_validator(self):
+    #     pass
+    #
+    # def register_validator(self):
+    #     pass
 
     def wait_for_transaction(self, address: Union[bytes, str], sequence_number: int):
         wait_time = 0
         while wait_time < self.WAIT_TRANSACTION_COUNT:
+            wait_time += 1
             time.sleep(self.WAIT_TRANSACTION_INTERVAL)
             transaction = self.get_account_transaction(address, sequence_number, fetch_events=False)
             if transaction is None:
@@ -131,11 +146,11 @@ class Client():
             self.wait_for_transaction(sender_account.address, sequence_number)
         return sequence_number
 
-    def compile_program(self):
-        pass
-
-    def handle_dependencies(self):
-        pass
+    # def compile_program(self):
+    #     pass
+    #
+    # def handle_dependencies(self):
+    #     pass
 
     def submit_signed_transaction(self, signed_transaction: Union[bytes, str, SignedTransaction], is_blocking=True):
         if isinstance(signed_transaction, str):
@@ -144,47 +159,56 @@ class Client():
             signed_transaction = SignedTransaction.deserialize(signed_transaction)
         sender_address = signed_transaction.sender
         sequence_number = signed_transaction.sequence_number
-        self.client.submit_transaction(signed_transaction.deserialize())
+        self.client.submit_transaction(signed_transaction)
         if is_blocking:
             self.wait_for_transaction(sender_address, sequence_number)
         return sequence_number
 
 
-    def submit_program(self):
-        pass
-
-    def publish_module(self):
-        pass
-
-    def execute_script(self):
-        pass
+    # def submit_program(self):
+    #     pass
+    #
+    # def publish_module(self):
+    #     pass
+    #
+    # def execute_script(self):
+    #     pass
 
     def get_account_state(self, account_address: Union[bytes, str]):
         address = Address.normalize_to_bytes(account_address)
-        account_state = self.client.get_account_state(address, True)
-        return account_state
+        return self.client.get_account_state(address, True)
 
     def get_account_transaction(self, account_address: Union[bytes, str], sequence_number: int, fetch_events: bool=False):
         return self.client.get_txn_by_acc_seq(account_address, sequence_number, fetch_events)
 
     def get_transactions(self, start_version: int, limit: int, fetch_events: bool=True):
-        return self.client.get_txn_by_range(start_version, limit, fetch_events)
+        try:
+            return self.client.get_txn_by_range(start_version, limit, fetch_events)
+        except ViolasError as e:
+            return []
 
-    def get_sent_events(self, address):
-        pass
+    def get_transaction(self, version, fetch_events:bool=True):
+        txs = self.get_transactions(version, 1, fetch_events)
+        if len(txs) == 1:
+            return txs[0]
 
-    def get_received_events(self, address):
-        pass
+    def get_sent_events(self, address: Union[bytes, str], start: int, limit: int):
+        address = Address.normalize_to_bytes(address)
+        path = AccountConfig.account_sent_event_path()
+        access_path = AccessPath(address, path)
+        return self.client.get_events_by_access_path(access_path, start, limit)
 
-    def test_validator_connection(self):
+    def get_received_events(self, address: Union[bytes, str], start: int, limit: int):
+        address = Address.normalize_to_bytes(address)
+        path = AccountConfig.account_received_event_path()
+        access_path = AccessPath(address, path)
+        return self.client.get_events_by_access_path(access_path, start, limit)
+
+    def get_metadata(self):
         return self.client.get_metadata()
 
-    def test_trusted_connection(self):
+    def get_state_proof(self):
         return self.client.get_state_proof()
-
-    def get_account_resource(self, address: Union[bytes, str]):
-        account_state = self.get_account_state(address)
-        return account_state[0].value
 
     def association_transaction_with_local_faucet_account(self, program, is_blocking):
         ensure(self.faucet_account is not None, "No faucet account loaded")
@@ -207,9 +231,15 @@ class Client():
             self.wait_for_transaction(AccountConfig.association_address(), sequence_number-1)
         return sequence_number
 
-    def create_txn_to_submit(self, payload: TransactionPayload, sender_account: Account, sequence_number, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE) -> SignedTransaction:
+    @staticmethod
+    def create_txn_to_submit(payload: TransactionPayload, sender_account: Account, sequence_number, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE) -> SignedTransaction:
         raw_tx = RawTransaction.new_tx(sender_account.address, sequence_number, payload, max_gas_amount, gas_unit_price)
         return SignedTransaction.gen_from_raw_txn(raw_tx, sender_account)
+
+    def get_latest_version(self):
+        metadata = self.get_metadata()
+        return metadata.version
+
 
 
 
