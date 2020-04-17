@@ -26,21 +26,23 @@ class Script(Struct):
             receiver_address = bytes.fromhex(receiver_address)
         if auth_key_prefix is None:
             auth_key_prefix = b''
+
         if metadata is None:
-            code = bytecodes["peer_to_peer"]
-            args = [
-                    TransactionArgument('Address', receiver_address),
-                    TransactionArgument('U8Vector', auth_key_prefix),
-                    TransactionArgument('U64', micro_libra)
-                ]
-        else:
-            code = bytecodes["peer_to_peer_with_metadata"]
-            args = [
-                    TransactionArgument('Address', receiver_address),
-                    TransactionArgument('U8Vector', auth_key_prefix),
-                    TransactionArgument('U64', micro_libra),
-                    TransactionArgument('U8Vector', metadata)
-                ]
+            metadata = b""
+        #     code = bytecodes["peer_to_peer"]
+        #     args = [
+        #             TransactionArgument('Address', receiver_address),
+        #             TransactionArgument('U8Vector', auth_key_prefix),
+        #             TransactionArgument('U64', micro_libra)
+        #         ]
+        # else:
+        code = bytecodes["peer_to_peer_with_metadata"]
+        args = [
+                TransactionArgument('Address', receiver_address),
+                TransactionArgument('U8Vector', auth_key_prefix),
+                TransactionArgument('U64', micro_libra),
+                TransactionArgument('U8Vector', metadata)
+            ]
         ty_args = [AccountConfig.lbr_type_tag()]
         return Script(code, ty_args, args)
 

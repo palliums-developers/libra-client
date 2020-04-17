@@ -135,3 +135,10 @@ def test_get_event():
     assert len(events) == 0
     events = client.get_received_events(a3.address, 10, 10)
     assert len(events) == 0
+
+
+def test_seq():
+    [a1, a2] = create_accounts_with_coins(2)
+    client = create_client()
+    seq = client.transfer_coins(a1, 10, a2.address, is_blocking=True)
+    client.get_account_transaction(seq-1, True)

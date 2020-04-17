@@ -18,7 +18,7 @@ from libra.rustlib import ensure
 from libra.account_config import AccountConfig
 from libra.transaction.script import Script
 import requests
-from json_rpc.views import AccountView
+from json_rpc.views import AccountView, TransactionView
 from libra.account import AccountStatus
 import time
 from error import ViolasError, StatusCode
@@ -32,24 +32,18 @@ TX_EXPIRATION = 100
 
 NETWORKS = {
     'libra_testnet':{
-        'host': "ac.testnet.libra.org",
-        'port': 8080,
+        "url": "https://client.testnet.libra.org",
         'faucet_server': "faucet.testnet.libra.org"
     },
     'violas_testnet':{
-        "host": "52.27.228.84",
-        "port": 50001,
+        "url": "http://52.27.228.84:50001",
+        "host": "125.39.5.57",
         "faucet_file": "/root/violas_toml/mint.key"
     },
     'tianjin_testnet': {
+        "url": "http://125.39.5.57:50001",
         "host": "125.39.5.57",
-        "port": 50001,
         "faucet_file": "/root/violas_toml/mint.key"
-    },
-    'local_testnet': {
-        "host": "localhost",
-        "port": 8000,
-        "faucet_file": "/home/ops/config/mint.key"
     }
 
 }
@@ -61,9 +55,8 @@ class Client():
     def __init__(self, network="tianjin_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
-        ensure("host" in chain, "The specified chain has no host")
-        ensure("port" in chain, "The specified chain has no port")
-        url = f"http://{chain['host']}:{chain['port']}"
+        ensure("url" in chain, "The specified chain has no url")
+        url = chain.get("url")
         self.client = LibraClient.new(url, waypoint)
         faucet_account_file = chain.get("faucet_file")
         if faucet_account_file is None:
@@ -73,17 +66,18 @@ class Client():
         faucet_server = chain.get("faucet_server")
         self.faucet_server = faucet_server
 
-
-    def new(self, host:str, port:int, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
-        url = f"http://{host}:{port}"
-        self.client = LibraClient.new(url, waypoint)
+    @classmethod
+    def new(cls, url, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
+        ret = cls.__new__(cls)
+        ret.client = LibraClient.new(url, waypoint)
         faucet_account_file = faucet_file
         if faucet_account_file is None:
-            self.faucet_account = None
+            ret.faucet_account = None
         else:
-            self.faucet_account = Account.load_faucet_account_file(faucet_account_file)
+            ret.faucet_account = Account.load_faucet_account_file(faucet_account_file)
         faucet_server = faucet_server
-        self.faucet_server = faucet_server
+        ret.faucet_server = faucet_server
+        return ret
 
     def get_balance(self, account_address: Union[bytes, str])-> Optional[int]:
         account_state = self.get_account_state(account_address)
@@ -178,10 +172,10 @@ class Client():
         address = Address.normalize_to_bytes(account_address)
         return self.client.get_account_state(address, True)
 
-    def get_account_transaction(self, account_address: Union[bytes, str], sequence_number: int, fetch_events: bool=False):
+    def get_account_transaction(self, account_address: Union[bytes, str], sequence_number: int, fetch_events: bool=False) -> TransactionView:
         return self.client.get_txn_by_acc_seq(account_address, sequence_number, fetch_events)
 
-    def get_transactions(self, start_version: int, limit: int, fetch_events: bool=True):
+    def get_transactions(self, start_version: int, limit: int, fetch_events: bool=True) -> [TransactionView]:
         try:
             return self.client.get_txn_by_range(start_version, limit, fetch_events)
         except ViolasError as e:

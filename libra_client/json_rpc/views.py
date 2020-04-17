@@ -171,6 +171,18 @@ class ScriptView(RustEnum):
         if type == "unknown_transaction":
             return cls("Unknown", UnknownScript())
 
+    def get_receiver(self):
+        if self.enum_name != "Unknown":
+            return self.value.get_receiver()
+
+    def get_amount(self):
+        if self.enum_name != "Unknown":
+            return self.value.get_amount()
+
+    def get_metadata(self):
+        if self.enum_name == "PeerToPeer":
+            return self.value.get_metadata()
+
 
 class UserTransaction(Struct):
     _fields = [
@@ -216,6 +228,15 @@ class UserTransaction(Struct):
     def get_script(self):
         return self.script
 
+    def get_receiver(self):
+        return self.script.get_receiver()
+
+    def get_amount(self):
+        return self.script.get_amount()
+
+    def get_metadata(self):
+        return self.script.get_metadata()
+
 class BlockMetadataView(Struct):
     _fields = [
         ("version", Uint64),
@@ -257,6 +278,22 @@ class TransactionDataView(RustEnum):
         if value.get("type") == "writeset":
             return cls("WriteSet", None)
 
+    def get_sender(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_sender()
+
+    def get_receiver(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_receiver()
+
+    def get_amount(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_amount()
+
+    def get_metadata(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_metadata()
+
 class TransactionView(Struct):
     _fields = [
         ("version", Uint64),
@@ -293,6 +330,17 @@ class TransactionView(Struct):
     def get_gas_used(self) -> int:
         return self.gas_used
 
+    def get_sender(self):
+        return self.transaction.get_sender()
+
+    def get_receiver(self):
+        return self.transaction.get_receiver()
+
+    def get_amount(self):
+        return self.transaction.get_amount()
+
+    def get_metadata(self):
+        return self.transaction.get_metadata()
 
 class StateProofView(Struct):
     _fields = [
@@ -304,7 +352,7 @@ class StateProofView(Struct):
     @staticmethod
     def from_response(response):
         return response.value
-    
+
 class AccountStateWithProofView(Struct):
 
     def from_response(self, response):

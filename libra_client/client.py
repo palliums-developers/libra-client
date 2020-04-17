@@ -16,7 +16,7 @@ from libra.access_path import AccessPath
 from libra.account_config import AccountConfig
 from libra.account import Account
 
-JSON_RPC_TIMEOUT_MS = 50000
+JSON_RPC_TIMEOUT = 5
 MAX_JSON_RPC_RETRY_COUNT = 2
 
 class JsonRpcClient():
@@ -41,15 +41,19 @@ class JsonRpcClient():
     def send_with_retry(self, request):
         response = self.send(request)
         try_cnt = 0
-        while try_cnt < MAX_JSON_RPC_RETRY_COUNT and response.status_code != 200:
+        while try_cnt < MAX_JSON_RPC_RETRY_COUNT and (response is None or response.status_code != 200):
             response = self.send(request)
             try_cnt += 1
+        if response is None:
+            raise ViolasError(StatusCode.WAIT_TIME_OUT)
         return response
 
     def send(self,request):
-        headers = {'content-type': 'application/json'}
-        return requests.post(self.url, data=json.dumps(request),headers=headers, timeout=JSON_RPC_TIMEOUT_MS)
-
+        try:
+            headers = {'content-type': 'application/json'}
+            return requests.post(self.url, data=json.dumps(request),headers=headers, timeout=JSON_RPC_TIMEOUT)
+        except:
+            return None
 
 class LibraClient():
     def __init__(self, client: JsonRpcClient, trusted_state: TrustedState, latest_epoch_change_li: Optional[LedgerInfoWithSignatures]):
