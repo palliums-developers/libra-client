@@ -10,7 +10,7 @@ def test_get_balance():
     balance = client.get_balance(a1.address)
     assert balance == 0
 
-    client.mint_coins(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
+    client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
     balance = client.get_balance(a1.address)
     assert balance == 100
 
@@ -19,48 +19,48 @@ def test_get_sequence_number():
     client = create_client()
     seq = client.get_sequence_number(a1.address)
     assert 0 == seq
-    client.mint_coins(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
+    client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
     seq = client.get_sequence_number(a1.address)
     assert 0 == seq
-    client.transfer_coins(a1, 10, a2.address, receiver_auth_key_prefix_opt=a2.auth_key_prefix, is_blocking=True)
+    client.transfer_coin(a1, 10, a2.address, receiver_auth_key_prefix_opt=a2.auth_key_prefix, is_blocking=True)
     seq = client.get_sequence_number(a1.address)
     assert 1 == seq
 
-def test_mint_coins():
+def test_mint_coin():
     [a1] = create_accounts(1)
     client = create_client()
     try:
-        client.mint_coins(a1.address, 100, is_blocking=True)
+        client.mint_coin(a1.address, 100, is_blocking=True)
         assert 0
     except ViolasError as e:
         print("Mint:", e)
-    client.mint_coins(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
+    client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
     assert 100 == client.get_balance(a1.address)
 
-def test_transfer_coins():
+def test_transfer_coin():
     a1, a2 = create_accounts(2)
     client = create_client()
 
     try:
-        client.transfer_coins(a1, 100, a2.address, is_blocking=True)
+        client.transfer_coin(a1, 100, a2.address, is_blocking=True)
         assert 0
     except ViolasError as e:
         print("Transfer:", e)
-    client.mint_coins(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
+    client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
 
     try:
-        client.transfer_coins(a1, 10, a2.address, is_blocking=True)
+        client.transfer_coin(a1, 10, a2.address, is_blocking=True)
         assert 0
     except ViolasError as e:
         print("Transfer:", e)
 
     try:
-        client.transfer_coins(a1, 1000, a2.address, is_blocking=True)
+        client.transfer_coin(a1, 1000, a2.address, is_blocking=True)
         assert 0
     except ViolasError as e:
         print("Transfer:", e)
 
-    client.transfer_coins(a1, 10, a2.address, receiver_auth_key_prefix_opt=a2.auth_key_prefix, is_blocking=True)
+    client.transfer_coin(a1, 10, a2.address, receiver_auth_key_prefix_opt=a2.auth_key_prefix, is_blocking=True)
     assert 90 == client.get_balance(a1.address)
     assert 10 == client.get_balance(a2.address)
 
@@ -112,8 +112,8 @@ def test_get_transaction():
 def test_get_event():
     [a1, a2] = create_accounts_with_coins(2)
     client = create_client()
-    client.transfer_coins(a1, 10, a2.address, is_blocking=True)
-    client.transfer_coins(a1, 10, a2.address, is_blocking=True)
+    client.transfer_coin(a1, 10, a2.address, is_blocking=True)
+    client.transfer_coin(a1, 10, a2.address, is_blocking=True)
     events = client.get_sent_events(a1.address, 0, 10)
     assert len(events) == 2
     for event in events:
@@ -136,9 +136,3 @@ def test_get_event():
     events = client.get_received_events(a3.address, 10, 10)
     assert len(events) == 0
 
-
-def test_seq():
-    [a1, a2] = create_accounts_with_coins(2)
-    client = create_client()
-    seq = client.transfer_coins(a1, 10, a2.address, is_blocking=True)
-    client.get_account_transaction(seq-1, True)

@@ -16,7 +16,7 @@ from libra.access_path import AccessPath
 from libra.account_config import AccountConfig
 from libra.account import Account
 
-JSON_RPC_TIMEOUT = 5
+JSON_RPC_TIMEOUT = 10
 MAX_JSON_RPC_RETRY_COUNT = 2
 
 class JsonRpcClient():
@@ -77,7 +77,6 @@ class LibraClient():
         response = self.client.execute(batch)
         response = get_response_from_batch(0, response)
         self._handle_response(response)
-
 
     def get_account_state(self, account: bytes, with_state_proof: bool)-> AccountView:
         client_version = self.trusted_state.latest_version

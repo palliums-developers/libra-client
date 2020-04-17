@@ -91,7 +91,7 @@ class Client():
             return account_state.sequence_number
         return 0
 
-    def mint_coins(self, receiver_address, micro_coins, is_blocking=True, receiver_auth_key_prefix_opt=None):
+    def mint_coin(self, receiver_address, micro_coins, is_blocking=True, receiver_auth_key_prefix_opt=None):
         if self.faucet_account:
             script = Script.gen_mint_script(receiver_address, receiver_auth_key_prefix_opt, micro_coins)
             return self.association_transaction_with_local_faucet_account(script, is_blocking)
@@ -129,7 +129,7 @@ class Client():
         raise ViolasError(StatusCode.WAIT_TRANSACTION_TIME_OUT)
 
 
-    def transfer_coins(self, sender_account: Account, micro_coins, receiver_address:Union[bytes, str], is_blocking=False, data:str=None,
+    def transfer_coin(self, sender_account: Account, micro_coins, receiver_address:Union[bytes, str], is_blocking=False, data:str=None,
             receiver_auth_key_prefix_opt:Optional[Union[bytes, str]]=None,
             gas_unit_price:int=GAS_UNIT_PRICE, max_gas_amount:int=MAX_GAS_AMOUNT):
         program = Script.gen_transfer_script(receiver_address, micro_coins, data, receiver_auth_key_prefix_opt)
