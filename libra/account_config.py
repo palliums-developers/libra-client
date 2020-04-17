@@ -21,7 +21,7 @@ class AccountConfig:
     ACCOUNT_EVENT_HANDLE_GENERATOR_STRUCT_NAME = "EventHandleGenerator"
 
     # Hash
-    HASH_MODULE_NAME = "Hash";
+    HASH_MODULE_NAME = "Hash"
 
 
     @classmethod

@@ -38,7 +38,6 @@ class JsonRpcClient():
         ensure(len(batch.requests) == len(response), "received unexpected number of responses in batch")
         return response
 
-
     def send_with_retry(self, request):
         response = self.send(request)
         try_cnt = 0

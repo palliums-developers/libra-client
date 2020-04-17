@@ -56,7 +56,7 @@ NETWORKS = {
 
 class Client():
 
-    WAIT_TRANSACTION_COUNT = 10
+    WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
     def __init__(self, network="tianjin_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")

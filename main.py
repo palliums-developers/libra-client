@@ -7,28 +7,13 @@ from libra.transaction import Script, TransactionPayload, SignedTransaction
 from json_rpc.views import EventView, TransactionView
 from test import create_accounts, create_client, create_accounts_with_coins
 
-[a1, a2] = create_accounts_with_coins(2)
-client = create_client()
-client.transfer_coins(a1, 10, a2.address, is_blocking=True)
-client.transfer_coins(a1, 10, a2.address, is_blocking=True)
-events = client.get_sent_events(a1.address, 0, 10)
-assert len(events) == 2
-for event in events:
-    assert isinstance(event, EventView)
-
-events = client.get_received_events(a2.address, 0, 10)
-assert len(events) == 3
-for event in events:
-    assert isinstance(event, EventView)
-
-events = client.get_sent_events(a1.address, 10, 10)
-assert len(events) == 0
-
-events = client.get_received_events(a2.address, 10, 10)
-assert len(events) == 0
-
-[a3] = create_accounts(1)
-events = client.get_sent_events(a3.address, 10, 10)
-assert len(events) == 0
-events = client.get_received_events(a3.address, 10, 10)
-assert len(events) == 0
+file_name = "./recover"
+wallet = Wallet.new()
+a1 = wallet.new_account()
+wallet.write_recovery(file_name)
+wallet = Wallet.recover(file_name)
+assert a1.address == wallet.accounts[0].address
+a2 = wallet.get_account_by_address_or_refid(a1.address)
+a3 = wallet.get_account_by_address_or_refid(0)
+assert a2.address == a1.address
+assert a3.address == a1.address

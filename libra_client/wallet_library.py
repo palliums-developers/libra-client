@@ -43,8 +43,15 @@ class Wallet():
                 arr = data.split(Wallet.DELIMITER)
                 ensure(len(arr) == 2, "Format Error: Wallet must has child num")
                 wallet = Wallet.new_from_mnemonic(arr[0])
-                wallet.generate_addresses(arr[1])
+                wallet.generate_addresses(int(arr[1]))
                 return wallet
+
+    def generate_addresses(self, depth):
+        current = self.child_number
+        ensure(current <= depth, "Addresses already generated up to the supplied depth")
+        while self.child_number != depth:
+            self.new_account()
+
 
     def new_account(self):
         child = Account(self.key_factory.private_child(self.child_number))

@@ -1,4 +1,4 @@
-from canoser import Struct, Uint64
+from canoser import Struct, Uint64, StrT
 from datetime import datetime
 from libra import Address, AccountConfig
 from libra.hasher import gen_hasher, HashValue
@@ -23,7 +23,7 @@ class RawTransaction(Struct):
         ('payload', TransactionPayload),
         ('max_gas_amount', Uint64),
         ('gas_unit_price', Uint64),
-        ('gas_specifier', TypeTag),
+        ('gas_specifier', StrT),
         ('expiration_time', Uint64)
     ]
 
@@ -64,7 +64,7 @@ class RawTransaction(Struct):
             payload,
             max_gas_amount,
             gas_unit_price,
-            AccountConfig.lbr_type_tag(),
+            AccountConfig.LBR_MODULE_NAME,
             int(datetime.now().timestamp()) + txn_expiration
         )
 

@@ -1,4 +1,4 @@
-/venv/
+/venv
 /build/
 /dist/
 /libra_core.egg-info/

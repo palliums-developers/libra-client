@@ -41,11 +41,11 @@ class Account:
             faucet_account_file = cls.faucet_file_path()
         with open(faucet_account_file, 'rb') as f:
             data = f.read()
-            assert len(data) == 72
-            # assert 32 == data[0]
-            # assert 32 == data[33]
-            private_key = data[4:36]
-            public_key = data[40:72]
+            assert len(data) == 66
+            assert 32 == data[0]
+            assert 32 == data[33]
+            private_key = data[1:33]
+            public_key = data[34:66]
             return cls.faucet_account(private_key)
 
     @classmethod

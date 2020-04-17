@@ -119,6 +119,8 @@ class ScriptView(RustEnum):
             return cls("Mint", MintScript.from_value(value))
         if type == "peer_to_peer_transaction":
             return cls("PeerToPeer", PeerToPeerScript.from_value(value))
+        if type == "unknown_transaction":
+            return cls("Unknown", UnknownScript())
 
 
 class UserTransaction(Struct):
