@@ -1,5 +1,3 @@
-from libra_client import Client
-
 from test import create_accounts, create_client, create_accounts_with_coins
 from error import ViolasError
 from libra.transaction import Script, TransactionPayload, SignedTransaction

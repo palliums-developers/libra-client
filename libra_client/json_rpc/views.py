@@ -47,12 +47,30 @@ class ReceivedPaymentEvent(Struct):
         ("metadata", StrT),
     ]
 
+    def get_amount(self):
+        return self.amount
+
+    def get_sender(self):
+        return self.sender
+
+    def get_metadata(self):
+        return self.metadata
+
 class SentPaymentEvent(Struct):
     _fields = [
         ("amount", Uint64),
         ("receiver", StrT),
         ("metadata", StrT),
     ]
+
+    def get_amount(self):
+        return self.amount()
+
+    def get_receiver(self):
+        return self.receiver()
+
+    def get_metadata(self):
+        return self.metadata
 
 class EventDataView(RustEnum):
     _enums = [
@@ -76,8 +94,19 @@ class EventView(Struct):
         ("sequence_number", Uint64),
         ("transaction_version", Uint64),
         ("data", EventDataView),
-
     ]
+
+    def get_key(self):
+        return self.key
+
+    def get_sequence_number(self):
+        return self.sequence_number
+
+    def get_transaction_version(self):
+        return self.transaction_version
+
+    def get_data(self):
+        return self.data
 
     @classmethod
     def vec_from_response(cls, response):
@@ -93,6 +122,18 @@ class PeerToPeerScript(Struct):
         ("metadata", StrT),
     ]
 
+    def get_receiver(self):
+        return self.receiver
+
+    def get_auth_key_prefix(self):
+        return self.auth_key_prefix
+
+    def get_amount(self):
+        return self.amount
+
+    def get_metadata(self):
+        return self.metadata
+
 class MintScript(Struct):
     _fields = [
         ("receiver", StrT),
@@ -100,10 +141,18 @@ class MintScript(Struct):
         ("amount", Uint64),
     ]
 
+    def get_receiver(self):
+        return self.receiver
+
+    def get_auth_key_prefix(self):
+        return self.auth_key_prefix
+
+    def get_amount(self):
+        return self.amount
+
 class UnknownScript(Struct):
     _fields = [
     ]
-
 
 class ScriptView(RustEnum):
     _enums = [
@@ -137,6 +186,36 @@ class UserTransaction(Struct):
         ("script", ScriptView)
     ]
 
+    def get_sender(self):
+        return self.sender
+
+    def get_signature_scheme(self):
+        return self.signature_scheme
+
+    def get_signature(self):
+        return self.signature
+
+    def get_public_key(self):
+        return self.public_key
+
+    def get_sequence_number(self):
+        return self.sequence_number
+
+    def get_max_gas_amount(self):
+        return self.max_gas_amount
+
+    def get_gas_unit_price(self):
+        return self.gas_unit_price
+
+    def get_expiration_time(self):
+        return self.expiration_time
+
+    def get_script_hash(self):
+        return self.script_hash
+
+    def get_script(self):
+        return self.script
+
 class BlockMetadataView(Struct):
     _fields = [
         ("version", Uint64),
@@ -147,10 +226,19 @@ class BlockMetadataView(Struct):
     def from_response(cls, response):
         return response.value
 
+    def get_version(self):
+        return self.version
+
+    def get_timestamp(self):
+        return self.timestamp
+
 class BlockMetadata(Struct):
     _fields = [
         ("timestamp_usecs", Uint64)
     ]
+
+    def get_timestamp_usecs(self):
+        return self.timestamp_usecs
 
 class TransactionDataView(RustEnum):
     _enums = [
@@ -216,7 +304,7 @@ class StateProofView(Struct):
     @staticmethod
     def from_response(response):
         return response.value
-
+    
 class AccountStateWithProofView(Struct):
 
     def from_response(self, response):

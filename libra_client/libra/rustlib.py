@@ -1,7 +1,8 @@
 from canoser import Uint64
 import collections
-
+from error import ViolasError, StatusCode
 usize = Uint64
+
 
 def next_power_of_two(num):
     for i in range(99999999):
@@ -75,7 +76,7 @@ def assert_true(aa):
     assert aa
 
 def bail(message):
-    raise AssertionError(message)
+    raise ViolasError(StatusCode.ENSURE_ERROR, message=message)
 
 def ensure(exp, message):
     if not exp:
