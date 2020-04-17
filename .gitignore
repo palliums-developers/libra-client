@@ -2,8 +2,8 @@
 /build/
 /dist/
 /libra_core.egg-info/
-__pycache__/
 *.pyc
 *.swp
 client.mnemonic
 ignore/
+__pycache__
