@@ -6,4 +6,5 @@
 *.swp
 client.mnemonic
 ignore/
+recover
 __pycache__

@@ -36,13 +36,11 @@ NETWORKS = {
         'faucet_server': "faucet.testnet.libra.org"
     },
     'violas_testnet':{
-        "url": "http://52.27.228.84:50001",
-        "host": "125.39.5.57",
+        "url": "http://13.68.141.242:38889",
         "faucet_file": "/root/violas_toml/mint.key"
     },
     'tianjin_testnet': {
         "url": "http://125.39.5.57:50001",
-        "host": "125.39.5.57",
         "faucet_file": "/root/violas_toml/mint.key"
     }
 
@@ -52,7 +50,7 @@ class Client():
 
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
-    def __init__(self, network="tianjin_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -82,7 +80,7 @@ class Client():
     def get_balance(self, account_address: Union[bytes, str])-> Optional[int]:
         account_state = self.get_account_state(account_address)
         if account_state:
-            return account_state.balance
+            return account_state.get_balance()
         return 0
 
     def get_sequence_number(self, account_address: Union[bytes, str]) -> Optional[int]:

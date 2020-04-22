@@ -104,7 +104,7 @@ def test_get_transactions():
 def test_get_transaction():
     client = create_client()
     version = client.get_latest_version()
-    tx = client.get_transaction(version + 10, True)
+    tx = client.get_transaction(version + 10000, True)
     assert None == tx
     tx = client.get_transaction(version, True)
     assert isinstance(tx, TransactionView)

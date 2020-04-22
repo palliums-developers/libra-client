@@ -57,7 +57,8 @@ class Script(Struct):
                 TransactionArgument('U8Vector', auth_key_prefix),
                 TransactionArgument('U64', micro_libra)
             ]
-        return Script(code, [], args)
+        ty_args = [AccountConfig.lbr_type_tag()]
+        return Script(code, ty_args, args)
 
     @classmethod
     def gen_create_account_script(cls, fresh_address, auth_key_prefix, initial_balance=0):

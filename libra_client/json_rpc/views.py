@@ -3,9 +3,15 @@ from libra.account_resource import AccountResource, BalanceResource
 from libra.rustlib import ensure
 from libra.vm_error import StatusCode
 
+class AmountView(Struct):
+    _fields = [
+        ("amount", Uint64),
+        ("currency", StrT)
+    ]
+
 class AccountView(Struct):
     _fields = [
-        ("balance", Uint64),
+        ("balance", AmountView),
         ("sequence_number", Uint64),
         ("authentication_key", StrT),
         ("sent_events_key", StrT),
@@ -20,7 +26,11 @@ class AccountView(Struct):
         return response.value.value
 
     def get_balance(self):
-        return self.balance
+        return self.balance.amount
+
+    def get_currency_name(self):
+        return self.balance.currency
+
 
     def get_sequence_number(self):
         return self.sequence_number
@@ -42,7 +52,7 @@ class AccountView(Struct):
 
 class ReceivedPaymentEvent(Struct):
     _fields = [
-        ("amount", Uint64),
+        ("amount", AmountView),
         ("sender", StrT),
         ("metadata", StrT),
     ]
@@ -58,16 +68,16 @@ class ReceivedPaymentEvent(Struct):
 
 class SentPaymentEvent(Struct):
     _fields = [
-        ("amount", Uint64),
+        ("amount", AmountView),
         ("receiver", StrT),
         ("metadata", StrT),
     ]
 
     def get_amount(self):
-        return self.amount()
+        return self.amount
 
     def get_receiver(self):
-        return self.receiver()
+        return self.receiver
 
     def get_metadata(self):
         return self.metadata
