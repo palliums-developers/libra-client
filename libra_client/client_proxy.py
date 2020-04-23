@@ -50,7 +50,7 @@ class Client():
 
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
-    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="libra_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -221,7 +221,7 @@ class Client():
         sequence_number = int(body)
         if is_blocking:
             self.wait_for_transaction(AccountConfig.association_address(), sequence_number-1)
-        return sequence_number
+        return sequence_number-1
 
     @staticmethod
     def create_txn_to_submit(payload: TransactionPayload, sender_account: Account, sequence_number, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE) -> SignedTransaction:

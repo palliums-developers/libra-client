@@ -98,7 +98,7 @@ def test_get_transactions():
     for tx in txs:
         assert isinstance(tx, TransactionView)
 
-    txs = client.get_transactions(version+100, 10, True)
+    txs = client.get_transactions(version+10000, 10, True)
     assert len(txs) == 0
 
 def test_get_transaction():
