@@ -370,6 +370,12 @@ class TransactionView(Struct):
         tx["success"] = self.is_successful()
         return tx
 
+    def __str__(self):
+        import json
+        amap = self.to_json_serializable()
+        return json.dumps(amap, sort_keys=False, indent=2)
+
+
 class StateProofView(Struct):
     _fields = [
         ("ledger_info_with_signatures", StrT),

@@ -8,9 +8,11 @@ from json_rpc.views import EventView, TransactionView
 from test import create_accounts, create_client, create_accounts_with_coins
 
 client = create_client()
-[a1, a2] = create_accounts(2)
-seq = client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
-tx = client.get_account_transaction(AccountConfig.association_address(), seq-1, True)
-print(tx.to_json())
+tx = client.get_transaction(0, True)
+print(client.get_account_transaction(AccountConfig.association_address(), 1, True))
+# [a1, a2] = create_accounts(2)
+# seq = client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
+# tx = client.get_account_transaction(AccountConfig.association_address(), seq-1, True)
+# print(tx.to_json())
 # assert tx.get_sender() == AccountConfig.association_address()
 
