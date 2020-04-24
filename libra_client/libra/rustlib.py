@@ -76,7 +76,7 @@ def assert_true(aa):
     assert aa
 
 def bail(message):
-    raise ViolasError(StatusCode.ENSURE_ERROR, message=message)
+    raise ViolasError(data=StatusCode.ENSURE_ERROR, message=message)
 
 def ensure(exp, message):
     if not exp:

@@ -3,4 +3,4 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
 
 from .error import ViolasError
-from .status_code import StatusCode
+from .status_code import StatusCode, ServerCode

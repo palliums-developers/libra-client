@@ -55,24 +55,24 @@ def test_get_amount():
     tx = client.get_transaction(1)
     assert None == tx.get_amount()
 
-def test_get_metadata():
+def test_get_data():
     client = create_client()
     [a1, a2] = create_accounts(2)
     seq = client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
     tx = client.get_account_transaction(AccountConfig.association_address(), seq)
-    assert tx.get_metadata() == None
+    assert tx.get_data() == None
 
     data = b"data"
     seq = client.transfer_coin(a1, 10, a2.address, receiver_auth_key_prefix_opt=a2.auth_key_prefix, is_blocking=True, data=data)
     tx = client.get_account_transaction(a1.address, seq)
-    assert tx.get_metadata() == data.hex()
+    assert tx.get_data() == data.hex()
 
     seq = client.transfer_coin(a1, 10, a2.address, receiver_auth_key_prefix_opt=a2.auth_key_prefix, is_blocking=True)
     tx = client.get_account_transaction(a1.address, seq)
-    assert tx.get_metadata() == ""
+    assert tx.get_data() == ""
 
     tx = client.get_transaction(0)
-    assert None == tx.get_metadata()
+    assert None == tx.get_data()
 
     tx = client.get_transaction(1)
-    assert None == tx.get_metadata()
+    assert None == tx.get_data()

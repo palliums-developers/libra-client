@@ -3,7 +3,7 @@ import json
 
 from json_rpc.client import JsonRpcBatch, process_batch_response
 from libra.rustlib import ensure
-from error import ViolasError, StatusCode
+from error import ViolasError, StatusCode, ServerCode
 from libra.waypoint import Waypoint
 from typing import Optional, Union
 from libra.trusted_state import TrustedState
@@ -33,7 +33,7 @@ class JsonRpcClient():
         request = batch.json_request()
         response = self.send_with_retry(request)
         if response.status_code != 200:
-            raise ViolasError(StatusCode.FETCH_ERROR_MESSAGE, f"Server returned error: {response.status_code}")
+            raise ViolasError(ServerCode.DefaultServerError, message = f"Server returned error: {response.status_code}")
         response = process_batch_response(batch, response.json())
         ensure(len(batch.requests) == len(response), "received unexpected number of responses in batch")
         return response
@@ -45,7 +45,7 @@ class JsonRpcClient():
             response = self.send(request)
             try_cnt += 1
         if response is None:
-            raise ViolasError(StatusCode.WAIT_TIME_OUT)
+            raise ViolasError(ServerCode.WaitTimeoutError)
         return response
 
     def send(self,request):

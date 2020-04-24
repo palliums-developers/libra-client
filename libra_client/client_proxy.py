@@ -21,7 +21,7 @@ import requests
 from json_rpc.views import AccountView, TransactionView
 from libra.account import AccountStatus
 import time
-from error import ViolasError, StatusCode
+from error import ViolasError, StatusCode, ServerCode
 from libra.access_path import AccessPath
 from libra.account_config import AccountConfig
 
@@ -122,9 +122,9 @@ class Client():
                 continue
             if transaction.is_successful():
                 return
-            raise ViolasError(transaction.get_vm_status())
+            raise ViolasError(ServerCode.VmStatusError, transaction.get_vm_status())
 
-        raise ViolasError(StatusCode.WAIT_TRANSACTION_TIME_OUT)
+        raise ViolasError(ServerCode.VmStatusError, StatusCode.WAIT_TRANSACTION_TIME_OUT)
 
 
     def transfer_coin(self, sender_account: Account, micro_coins, receiver_address:Union[bytes, str], is_blocking=False, data:str=None,

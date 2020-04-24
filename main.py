@@ -7,12 +7,21 @@ from libra.transaction import Script, TransactionPayload, SignedTransaction
 from json_rpc.views import EventView, TransactionView
 from test import create_accounts, create_client, create_accounts_with_coins
 
+from error import ViolasError
+from error.status_code import StatusCode, ServerCode
+
+
+a1, a2 = create_accounts(2)
 client = create_client()
-[a1, a2] = create_accounts_with_coins(2)
-[a3] = create_accounts(1)
-seq = client.transfer_coin(a1, 10, a2.address, is_blocking=True, data="data")
-print(client.get_balance(a3.address))
-print(client.get_account_transaction(a1.address, seq, True))
+
+try:
+    client.transfer_coin(a1, 100, a2.address, is_blocking=True)
+    assert 0
+except ViolasError as e:
+    pass
+client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
+
+client.transfer_coin(a1, 10, a2.address, is_blocking=True)
 
 
 
