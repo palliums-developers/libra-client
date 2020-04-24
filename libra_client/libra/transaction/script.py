@@ -13,6 +13,15 @@ class Script(Struct):
         ('args', [TransactionArgument])
     ]
 
+    @staticmethod
+    def parse_data(data):
+        if data is None:
+            data = b""
+        if isinstance(data, str):
+            data = str.encode(data, encoding="utf-8")
+        return data
+
+
     @classmethod
     def gen_transfer_script(cls,
         receiver_address,
@@ -27,8 +36,7 @@ class Script(Struct):
         if auth_key_prefix is None:
             auth_key_prefix = b''
 
-        if metadata is None:
-            metadata = b""
+        metadata = cls.parse_data(metadata)
         #     code = bytecodes["peer_to_peer"]
         #     args = [
         #             TransactionArgument('Address', receiver_address),

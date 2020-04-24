@@ -27,7 +27,7 @@ from libra.account_config import AccountConfig
 
 CLIENT_WALLET_MNEMONIC_FILE = "client.mnemonic"
 GAS_UNIT_PRICE = 0
-MAX_GAS_AMOUNT = 400000
+MAX_GAS_AMOUNT = 1_000_000
 TX_EXPIRATION = 100
 
 NETWORKS = {
