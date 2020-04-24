@@ -30,8 +30,20 @@ class ViolasError(Exception):
         :class:`violas.error.status_code.StatusCode`
             status code of the error
         '''
-        code, _ = self.args
+        code, _, _ = self.args
         return code
+
+    @property
+    def data(self):
+        '''
+        Returns
+        -------
+        str
+            message of the error
+        '''
+        _, data, _ = self.args
+        return data
+
 
     @property
     def msg(self):
@@ -41,7 +53,7 @@ class ViolasError(Exception):
         str
             message of the error
         '''
-        _, msg = self.args
+        _, _, msg = self.args
         return msg
 
     @staticmethod
