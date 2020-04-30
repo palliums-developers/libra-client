@@ -84,6 +84,7 @@ class LibraClient():
         batch.add_get_account_state_request(account)
         if with_state_proof:
             batch.add_get_state_proof_request(client_version)
+
         responses = self.client.execute(batch)
         if with_state_proof:
             state_proof = get_response_from_batch(1, responses)

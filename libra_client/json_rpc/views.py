@@ -378,15 +378,14 @@ class TransactionView(Struct):
 
 class StateProofView(Struct):
     _fields = [
-        ("ledger_info_with_signatures", StrT),
-        ("validator_change_proof", StrT),
+        ("epoch_change_proof", StrT),
         ("ledger_consistency_proof", StrT),
+        ("ledger_info_with_signatures", StrT),
     ]
 
     @staticmethod
     def from_response(response):
         return response.value
-
 
 class AccountStateWithProofView(Struct):
 

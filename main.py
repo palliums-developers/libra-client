@@ -7,11 +7,12 @@ from libra.transaction import Script, TransactionPayload, SignedTransaction
 from json_rpc.views import EventView, TransactionView
 from test import create_accounts, create_client, create_accounts_with_coins
 
+
 from violas import Client as ViolasClient
-from violas.error.error import LibraError
+from violas.error.error import ViolasError
 
 from libra_client import Client as LibraClient
-from libra_client.error.error import LibraError as LibraError
+from libra_client.error.error import LibraError
 
 # [a1] = create_accounts(1)
 # client = create_client()

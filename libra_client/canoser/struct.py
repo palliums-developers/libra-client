@@ -89,7 +89,6 @@ class Struct(Base):
             prop = getattr(ret, name)
             mtype = type_mapping(atype)
             assert mtype == prop.expected_type
-
             v = mtype.from_value(value.get(name))
             prop.__set__(ret, v)
         return ret
