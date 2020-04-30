@@ -387,6 +387,7 @@ class StateProofView(Struct):
     def from_response(response):
         return response.value
 
+
 class AccountStateWithProofView(Struct):
 
     def from_response(self, response):

@@ -1,5 +1,5 @@
 from test import create_accounts, create_client, create_accounts_with_coins
-from error import ViolasError
+from error import LibraError
 from libra.transaction import Script, TransactionPayload, SignedTransaction
 from json_rpc.views import AccountView, TransactionView, EventView
 from libra.account_config import AccountConfig

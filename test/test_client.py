@@ -1,5 +1,5 @@
 from test import create_accounts, create_client, create_accounts_with_coins
-from error import ViolasError
+from error import LibraError
 from libra.transaction import Script, TransactionPayload, SignedTransaction
 from json_rpc.views import AccountView, TransactionView, EventView
 from libra.account_config import AccountConfig
@@ -32,7 +32,7 @@ def test_mint_coin():
     try:
         client.mint_coin(a1.address, 100, is_blocking=True)
         assert 0
-    except ViolasError as e:
+    except LibraError as e:
         print("Mint:", e)
     client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
     assert 100 == client.get_balance(a1.address)
@@ -44,20 +44,20 @@ def test_transfer_coin():
     try:
         client.transfer_coin(a1, 100, a2.address, is_blocking=True)
         assert 0
-    except ViolasError as e:
+    except LibraError as e:
         print("Transfer:", e)
     client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
 
     try:
         client.transfer_coin(a1, 10, a2.address, is_blocking=True)
         assert 0
-    except ViolasError as e:
+    except LibraError as e:
         print("Transfer:", e)
 
     try:
         client.transfer_coin(a1, 1000, a2.address, is_blocking=True)
         assert 0
-    except ViolasError as e:
+    except LibraError as e:
         print("Transfer:", e)
 
     client.transfer_coin(a1, 10, a2.address, receiver_auth_key_prefix_opt=a2.auth_key_prefix, is_blocking=True)

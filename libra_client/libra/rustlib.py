@@ -1,6 +1,6 @@
 from canoser import Uint64
 import collections
-from error import ViolasError, StatusCode
+from error import LibraError, StatusCode
 usize = Uint64
 
 
@@ -76,7 +76,7 @@ def assert_true(aa):
     assert aa
 
 def bail(message):
-    raise ViolasError(data=StatusCode.ENSURE_ERROR, message=message)
+    raise LibraError(data=StatusCode.ENSURE_ERROR, message=message)
 
 def ensure(exp, message):
     if not exp:

@@ -5,7 +5,7 @@ from canoser import RustEnum, RustOptional
 
 from json_rpc.views import AccountView, StateProofView, TransactionView, EventView, \
     BlockMetadataView, AccountStateWithProofView
-from error import ViolasError, StatusCode
+from error import LibraError, StatusCode
 from libra.transaction import SignedTransaction
 from libra.account_address import Address
 from libra.rustlib import ensure

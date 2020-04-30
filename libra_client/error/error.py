@@ -3,11 +3,11 @@ from enum import IntEnum
 from error.status_code import StatusCode, ServerCode
 from libra.vm_error import StatusCode as LibraStatusCode
 
-class ViolasError(Exception):
+class LibraError(Exception):
     def __init__(self, server_code=None, data=None, message=None):
-        server_code = ViolasError.parse_server_code(server_code)
-        data = ViolasError.parse_data(data)
-        message = ViolasError.parse_message(message)
+        server_code = LibraError.parse_server_code(server_code)
+        data = LibraError.parse_data(data)
+        message = LibraError.parse_message(message)
         super().__init__(server_code, data, message)
 
     @staticmethod

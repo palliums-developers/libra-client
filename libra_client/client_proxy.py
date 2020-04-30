@@ -21,7 +21,7 @@ import requests
 from json_rpc.views import AccountView, TransactionView
 from libra.account import AccountStatus
 import time
-from error import ViolasError, StatusCode, ServerCode
+from error import LibraError, StatusCode, ServerCode
 from libra.access_path import AccessPath
 from libra.account_config import AccountConfig
 
@@ -41,7 +41,7 @@ NETWORKS = {
     },
     'tianjin_testnet': {
         "url": "http://125.39.5.57:50001",
-        "faucet_file": "/root/violas_toml/mint.key"
+        "faucet_file": "/root/violas_toml/mint_tianjin.key"
     }
 
 }
@@ -50,7 +50,7 @@ class Client():
 
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
-    def __init__(self, network="libra_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="tianjin_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -122,9 +122,9 @@ class Client():
                 continue
             if transaction.is_successful():
                 return
-            raise ViolasError(ServerCode.VmStatusError, transaction.get_vm_status())
+            raise LibraError(ServerCode.VmStatusError, transaction.get_vm_status())
 
-        raise ViolasError(ServerCode.VmStatusError, StatusCode.WAIT_TRANSACTION_TIME_OUT)
+        raise LibraError(ServerCode.VmStatusError, StatusCode.WAIT_TRANSACTION_TIME_OUT)
 
 
     def transfer_coin(self, sender_account: Account, micro_coins, receiver_address:Union[bytes, str], is_blocking=False, data:str=None,
@@ -176,7 +176,7 @@ class Client():
     def get_transactions(self, start_version: int, limit: int, fetch_events: bool=True) -> [TransactionView]:
         try:
             return self.client.get_txn_by_range(start_version, limit, fetch_events)
-        except ViolasError as e:
+        except LibraError as e:
             return []
 
     def get_transaction(self, version, fetch_events:bool=True):
