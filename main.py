@@ -7,18 +7,7 @@ from libra.transaction import Script, TransactionPayload, SignedTransaction
 from json_rpc.views import EventView, TransactionView
 from test import create_accounts, create_client, create_accounts_with_coins
 
-
-from violas import Client as ViolasClient
-from violas.error.error import ViolasError
-
-from libra_client import Client as LibraClient
-from libra_client.error.error import LibraError
-
-# [a1] = create_accounts(1)
-# client = create_client()
-# balance = client.get_balance(a1.address)
-# assert balance == 0
-#
-# client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
-# balance = client.get_balance(a1.address)
-# assert balance == 100
+[a1] = create_accounts(1)
+client = create_client()
+client.mint_coin(a1.address, 100, receiver_auth_key_prefix_opt=a1.auth_key_prefix, is_blocking=True)
+assert 100 == client.get_balance(a1.address)

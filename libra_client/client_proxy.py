@@ -40,8 +40,8 @@ NETWORKS = {
         "faucet_file": "/root/violas_toml/mint.key"
     },
     'tianjin_testnet': {
-        "url": "http://125.39.5.57:50001",
-        "faucet_file": "/root/violas_toml/mint_tianjin.key"
+        "url": "http://125.39.5.57:5001",
+        "faucet_file": "/root/violas_toml/mint.key"
     }
 
 }
