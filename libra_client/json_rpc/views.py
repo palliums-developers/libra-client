@@ -308,6 +308,10 @@ class TransactionDataView(RustEnum):
         if self.enum_name == "UserTransaction":
             return self.value.get_sequence_number()
 
+    def get_expiration_time(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_expiration_time()
+
 class TransactionView(Struct):
     _fields = [
         ("version", Uint64),
@@ -359,6 +363,9 @@ class TransactionView(Struct):
     def get_sequence_number(self):
         return self.transaction.get_sequence_number()
 
+    def get_expiration_time(self):
+        return self.transaction.get_expiration_time()
+
     def to_json(self):
         tx = dict()
         tx["sender"] = self.get_sender()
@@ -368,6 +375,8 @@ class TransactionView(Struct):
         tx["major_status"] = self.get_vm_status()
         tx["version"] = self.get_version()
         tx["success"] = self.is_successful()
+        tx["expiration_time"] = self.get_expiration_time()
+
         return tx
 
     def __str__(self):
