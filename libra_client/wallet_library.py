@@ -1,11 +1,9 @@
 from mnemonic import Mnemonic
-from typing import Dict
 from libra_client.key_factory import KeyFactory
-from libra.rustlib import ensure
-from libra.account import Account
-from libra.account_address import Address
-from libra.transaction.raw_transaction import RawTransaction
-from libra.transaction.signed_transaction import SignedTransaction
+from lbrtypes.rustlib import ensure
+from libra_client.account import Account
+from lbrtypes.transaction import RawTransaction
+from lbrtypes.transaction import SignedTransaction
 import os
 
 class Wallet():

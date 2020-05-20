@@ -2,19 +2,17 @@ import requests
 import json
 
 from json_rpc.client import JsonRpcBatch, process_batch_response
-from libra.rustlib import ensure
+from lbrtypes.rustlib import ensure
 from error import ViolasError, StatusCode
-from libra.waypoint import Waypoint
-from typing import Optional, Union
-from libra.trusted_state import TrustedState
-from libra.ledger_info import LedgerInfoWithSignatures
-from libra.transaction import SignedTransaction
+from lbrtypes.waypoint import Waypoint
+from typing import Optional
+from lbrtypes.trusted_state import TrustedState
+from lbrtypes.ledger_info import LedgerInfoWithSignatures
+from lbrtypes.transaction import SignedTransaction
 from json_rpc.client import get_response_from_batch, JsonRpcResponse
-from json_rpc.views import AccountView, EventView, BlockMetadataView, TransactionView, TransactionDataView, StateProofView, AccountStateWithProofView
-from libra.account_state_blob import AccountStateBlob
-from libra.access_path import AccessPath
-from libra.account_config import AccountConfig
-from libra.account import Account
+from json_rpc.views import AccountView, EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView
+from lbrtypes.account_state_blob import AccountStateBlob
+from lbrtypes.access_path import AccessPath
 
 JSON_RPC_TIMEOUT = 10
 MAX_JSON_RPC_RETRY_COUNT = 2
@@ -63,10 +61,7 @@ class LibraClient():
 
     @classmethod
     def new(cls, url, waypoint: Optional[Waypoint]):
-        if waypoint is None:
-            initial_trusted_state = TrustedState.new_trust_any_genesis_WARNING_UNSAFE()
-        else:
-            initial_trusted_state = TrustedState.from_waypoint(waypoint)
+        initial_trusted_state = TrustedState.from_waypoint(waypoint)
         client = JsonRpcClient(url)
         return cls(client, initial_trusted_state, None)
 
@@ -79,7 +74,7 @@ class LibraClient():
         self._handle_response(response)
 
     def get_account_state(self, account: bytes, with_state_proof: bool)-> AccountView:
-        client_version = self.trusted_state.latest_version
+        client_version = self.trusted_state.get_latest_version()
         batch = JsonRpcBatch.new()
         batch.add_get_account_state_request(account)
         if with_state_proof:

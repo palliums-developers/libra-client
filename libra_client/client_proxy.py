@@ -1,29 +1,20 @@
-from enum import IntEnum
-from canoser import Struct
-from libra.account_address import Address
+from lbrtypes.move_core.account_address import AccountAddress as Address
 from libra_client.client import LibraClient
-from typing import Optional
-from libra.waypoint import Waypoint
-from libra.account_config import AccountConfig
-from typing import Optional, Tuple, List, Union
-from libra.account import Account
-import os
-from libra_client.wallet_library import Wallet
-from libra.crypto.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
-from libra.transaction.transaction_payload import TransactionPayload
-from libra.transaction.signed_transaction import SignedTransaction
-from libra.transaction.raw_transaction import RawTransaction
-from libra.transaction.authenticator import AuthenticationKey
-from libra.rustlib import ensure
-from libra.account_config import AccountConfig
-from libra.transaction.script import Script
+from lbrtypes.waypoint import Waypoint
+from typing import Optional, Union
+from libra_client.account import Account
+from lbrtypes.transaction import TransactionPayload
+from lbrtypes.transaction import SignedTransaction
+from lbrtypes.transaction import RawTransaction
+from lbrtypes.transaction.authenticator import AuthenticationKey
+from lbrtypes.rustlib import ensure
+from lbrtypes.transaction.script import Script
 import requests
-from json_rpc.views import AccountView, TransactionView
-from libra.account import AccountStatus
+from json_rpc.views import TransactionView
 import time
 from error import ViolasError, StatusCode
-from libra.access_path import AccessPath
-from libra.account_config import AccountConfig
+from lbrtypes.access_path import AccessPath
+# from lbrtypes.account_config import AccountConfig
 
 CLIENT_WALLET_MNEMONIC_FILE = "client.mnemonic"
 GAS_UNIT_PRICE = 0
@@ -32,24 +23,23 @@ TX_EXPIRATION = 100
 
 NETWORKS = {
     'libra_testnet':{
-        "url": "https://client.testnet.libra.org",
-        'faucet_server': "faucet.testnet.libra.org"
+        "url": "https://client.testnet.lbrtypes.org",
+        'faucet_server': "faucet.testnet.lbrtypes.org"
     },
     'violas_testnet':{
         "url": "http://52.27.228.84:50001",
         "host": "125.39.5.57",
-        "faucet_file": "/root/violas_toml/mint.key"
+        "faucet_file": "/root/palliums/violas_toml/mint.key"
     },
     'tianjin_testnet': {
         "url": "http://125.39.5.57:50001",
         "host": "125.39.5.57",
-        "faucet_file": "/root/violas_toml/mint.key"
+        "faucet_file": "/root/palliums/violas_toml/mint_tianjin.key"
     }
 
 }
 
 class Client():
-
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
     def __init__(self, network="tianjin_testnet", waypoint: Optional[Waypoint]=None):

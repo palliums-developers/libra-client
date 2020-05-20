@@ -1,8 +1,7 @@
 from test import create_accounts, create_client, create_accounts_with_coins
 from error import ViolasError
-from libra.transaction import Script, TransactionPayload, SignedTransaction
+from lbrtypes.transaction import Script, TransactionPayload
 from json_rpc.views import AccountView, TransactionView, EventView
-from libra.account_config import AccountConfig
 
 def test_get_balance():
     [a1] = create_accounts(1)

@@ -1,10 +1,10 @@
 from libra_client import Client, Wallet
 from typing import List
-from libra.account import Account
+from libra_client.account import Account
 
 def create_accounts(account_number)-> List[Account]:
     wallet = Wallet.new()
-    return [ wallet.new_account() for _ in range(account_number)]
+    return [wallet.new_account() for _ in range(account_number)]
 
 def create_accounts_with_coins(account_number)-> List[Account]:
     wallet = Wallet.new()
