@@ -1,8 +1,17 @@
 from canoser import Struct, Uint64, BoolT, StrT, RustEnum
+from lbrtypes.account_state import AccountState
+from error import LibraError
+from lbrtypes.vm_error import StatusCode
+
+class AmountView(Struct):
+    _fields = [
+        ("amount", Uint64),
+        ("currency", StrT)
+    ]
 
 class AccountView(Struct):
     _fields = [
-        ("balance", Uint64),
+        ("balances", [AmountView]),
         ("sequence_number", Uint64),
         ("authentication_key", StrT),
         ("sent_events_key", StrT),
@@ -16,8 +25,11 @@ class AccountView(Struct):
         #TODO:
         return response.value.value
 
-    def get_balance(self):
-        return self.balance
+    def get_balance(self, currency_code="LBR"):
+        for item in self.balances:
+            if item.currency == currency_code:
+                return item.amount
+        return 0
 
     def get_sequence_number(self):
         return self.sequence_number
@@ -39,7 +51,7 @@ class AccountView(Struct):
 
 class ReceivedPaymentEvent(Struct):
     _fields = [
-        ("amount", Uint64),
+        ("amount", AmountView),
         ("sender", StrT),
         ("metadata", StrT),
     ]
@@ -50,23 +62,23 @@ class ReceivedPaymentEvent(Struct):
     def get_sender(self):
         return self.sender
 
-    def get_metadata(self):
+    def get_data(self):
         return self.metadata
 
 class SentPaymentEvent(Struct):
     _fields = [
-        ("amount", Uint64),
+        ("amount", AmountView),
         ("receiver", StrT),
         ("metadata", StrT),
     ]
 
     def get_amount(self):
-        return self.amount()
+        return self.amount
 
     def get_receiver(self):
-        return self.receiver()
+        return self.receiver
 
-    def get_metadata(self):
+    def get_data(self):
         return self.metadata
 
 class EventDataView(RustEnum):
@@ -128,7 +140,7 @@ class PeerToPeerScript(Struct):
     def get_amount(self):
         return self.amount
 
-    def get_metadata(self):
+    def get_data(self):
         return self.metadata
 
 class MintScript(Struct):
@@ -176,9 +188,9 @@ class ScriptView(RustEnum):
         if self.enum_name != "Unknown":
             return self.value.get_amount()
 
-    def get_metadata(self):
+    def get_data(self):
         if self.enum_name == "PeerToPeer":
-            return self.value.get_metadata()
+            return self.value.get_data()
 
 
 class UserTransaction(Struct):
@@ -231,8 +243,8 @@ class UserTransaction(Struct):
     def get_amount(self):
         return self.script.get_amount()
 
-    def get_metadata(self):
-        return self.script.get_metadata()
+    def get_data(self):
+        return self.script.get_data()
 
 class BlockMetadataView(Struct):
     _fields = [
@@ -287,9 +299,17 @@ class TransactionDataView(RustEnum):
         if self.enum_name == "UserTransaction":
             return self.value.get_amount()
 
-    def get_metadata(self):
+    def get_data(self):
         if self.enum_name == "UserTransaction":
-            return self.value.get_metadata()
+            return self.value.get_data()
+
+    def get_sequence_number(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_sequence_number()
+
+    def get_expiration_time(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_expiration_time()
 
 class TransactionView(Struct):
     _fields = [
@@ -336,21 +356,93 @@ class TransactionView(Struct):
     def get_amount(self):
         return self.transaction.get_amount()
 
-    def get_metadata(self):
-        return self.transaction.get_metadata()
+    def get_data(self):
+        return self.transaction.get_data()
+
+    def get_sequence_number(self):
+        return self.transaction.get_sequence_number()
+
+    def get_expiration_time(self):
+        return self.transaction.get_expiration_time()
+
+    def to_json(self):
+        tx = dict()
+        tx["sender"] = self.get_sender()
+        tx["receiver"] = self.get_receiver()
+        tx["amount"] = self.get_amount()
+        tx["sequence_number"] = self.get_sequence_number()
+        tx["major_status"] = self.get_vm_status()
+        tx["version"] = self.get_version()
+        tx["success"] = self.is_successful()
+        tx["expiration_time"] = self.get_expiration_time()
+
+        return tx
+
+    def __str__(self):
+        import json
+        amap = self.to_json_serializable()
+        return json.dumps(amap, sort_keys=False, indent=2)
+
 
 class StateProofView(Struct):
     _fields = [
-        ("ledger_info_with_signatures", StrT),
-        ("validator_change_proof", StrT),
+        ("epoch_change_proof", StrT),
         ("ledger_consistency_proof", StrT),
+        ("ledger_info_with_signatures", StrT),
     ]
 
     @staticmethod
     def from_response(response):
         return response.value
 
-class AccountStateWithProofView(Struct):
+class AccountStateProofView(Struct):
+    _fields = [
+        ("ledger_info_to_transaction_info_proof", StrT),
+        ("transaction_info", StrT),
+        ("transaction_info_to_account_proof", StrT),
+    ]
 
-    def from_response(self, response):
-        return response.value
+
+
+class AccountStateBlobView(Struct):
+    _fields = [
+        ("blob", bytes)
+    ]
+
+
+class AccountStateWithProofView(Struct):
+    _fields = [
+        ("version", Uint64),
+        ("blob", AccountState),
+        ("proof", AccountStateProofView)
+    ]
+
+    @classmethod
+    def from_value(cls, value):
+        ret = cls()
+        ret.version = value.get("version")
+        blob = value.get("blob")
+        if blob:
+            blob = AccountStateBlobView.deserialize(bytes.fromhex(blob))
+            ret.blob = AccountState.deserialize(blob.blob)
+        else:
+            ret.blob = None
+
+        ret.proof = AccountStateProofView.from_value(value.get("proof"))
+        return ret
+
+
+    def to_json_serializable(self):
+        amap = {}
+        amap["version"] = self.version
+        amap["blob"] = self.blob.to_json_serializable() if self.blob else None
+        amap["proof"] = self.proof.to_json_serializable()
+        return amap
+
+    @classmethod
+    def from_response(cls, response):
+        value = response.value
+        if value.blob:
+            return value.blob
+        # raise LibraError(data=StatusCode.ACCOUNT_NOT_EXIST_ERROR)
+

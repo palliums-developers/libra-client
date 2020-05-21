@@ -10,9 +10,14 @@ class Module(Struct):
     def get_code(self):
         return self.code.hex()
 
-    @classmethod
-    def gen_module(cls, module_address):
+    @staticmethod
+    def gen_module(module_address, module_name=None):
         module_address = Address.normalize_to_bytes(module_address)
         code = get_code(CodeType.PUBLISH_MODULE, module_address)
+        if module_name:
+            if isinstance(module_name, str):
+                module_name = module_name.encode()
+            module_name = module_name.rjust(7, b"0")
+            code = code.replace(b"Violas1", module_name)
         return Module(code)
 

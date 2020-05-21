@@ -5,9 +5,9 @@ from typing import List, Tuple, Union
 from canoser import RustEnum, RustOptional
 from json_rpc.views import AccountView, StateProofView, TransactionView, EventView, \
     BlockMetadataView, AccountStateWithProofView
-from lbrtypes.transaction import SignedTransaction
 from lbrtypes.move_core.account_address import AccountAddress as Address
 from lbrtypes.rustlib import ensure
+from lbrtypes.transaction import SignedTransaction
 
 class JsonRpcBatch():
     def __init__(self, requests: List[Tuple[str, List]]):
@@ -58,7 +58,7 @@ class JsonRpcBatch():
     def add_get_state_proof_request(self, known_version: int):
         self.add_request("get_state_proof", [known_version])
 
-    def add_get_account_state_with_proof_request(self, account: Union[str, bytes], version: int, ledger_version: int):
+    def add_get_account_state_with_proof_request(self, account: Union[str, bytes], version: int=None, ledger_version: int=None):
         self.add_request("get_account_state_with_proof", [Address.normalize_to_bytes(account).hex(), version, ledger_version])
 
 class JsonRpcAsyncClient():

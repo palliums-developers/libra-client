@@ -17,6 +17,10 @@ class AccountState(Struct):
             return True
         return False
 
+    def get_item_counts(self):
+        if self.exists():
+            return len(self.ordered_map)
+
     def get_sequence_number(self):
         resource = self.get_account_resource()
         if resource:
@@ -78,8 +82,15 @@ class AccountState(Struct):
         if resource:
             return LibraBlockResource.deserialize(resource)
 
-    def get_event_handle_by_query_path(self):
-        pass
+    def get_event_handle_by_query_path(self, query_path):
+        from lbrtypes.block_metadata import NEW_BLOCK_EVENT_PATH
+        if self.exists():
+            if ACCOUNT_RECEIVED_EVENT_PATH == query_path:
+               return  self.get_account_resource().get_received_events()
+            elif ACCOUNT_SENT_EVENT_PATH == query_path:
+                return self.get_account_resource().get_sent_events()
+            elif NEW_BLOCK_EVENT_PATH == query_path:
+                return self.get_libra_block_resource()
 
     def get(self, key):
         if self.exists():
@@ -149,7 +160,8 @@ class AccountState(Struct):
 
     def get_registered_currencies(self):
         from lbrtypes.on_chain_config.registered_currencies import RegisteredCurrenciesResource
-        registered_currencies_resource = self.get(RegisteredCurrenciesResource.resource_path())
+        type_tag = TypeTag("Struct", StructTag(CORE_CODE_ADDRESS, "RegisteredCurrencies", "T", []))
+        registered_currencies_resource = self.get(RegisteredCurrenciesResource.resource_path_for(type_tag))
         if registered_currencies_resource:
             return RegisteredCurrenciesResource.deserialize(registered_currencies_resource)
 

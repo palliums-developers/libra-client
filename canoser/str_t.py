@@ -17,6 +17,8 @@ class StrT(Base):
     
     @classmethod
     def from_value(cls, value):
+        if value is None:
+            return ""
         return value
 
     @classmethod
@@ -25,6 +27,8 @@ class StrT(Base):
 
     @classmethod
     def check_value(cls, value):
+        if value is None:
+            return
         if not isinstance(value, str):
             raise TypeError('value {} is not string'.format(value))
 

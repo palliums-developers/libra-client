@@ -6,5 +6,6 @@
 *.swp
 client.mnemonic
 ignore/
+recover
 __pycache__
 /libra

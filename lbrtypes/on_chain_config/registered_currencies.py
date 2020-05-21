@@ -5,7 +5,6 @@ from lbrtypes.move_core.language_storage import StructTag, CORE_CODE_ADDRESS, Ty
 class RegisteredCurrenciesResource(Struct, MoveResource):
     MODULE_NAME = "LibraConfig"
     STRUCT_NAME = "T"
-    TYPE_TAG = TypeTag("Struct", StructTag(CORE_CODE_ADDRESS, "RegisteredCurrencies", "T", []))
 
     _fields = [
         ("currency_codes", [str])

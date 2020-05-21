@@ -49,6 +49,19 @@ class StructTag(Struct):
     def get_type_params(self):
         return self.type_params
 
+    @classmethod
+    def new(cls, module_address, module_name, struct_name=None, type_params=None):
+        if struct_name is None:
+            struct_name = "T"
+        if type_params is None:
+            type_params = []
+        ret = cls()
+        ret.address = AccountAddress.normalize_to_bytes(module_address)
+        ret.module = module_name
+        ret.name = struct_name
+        ret.type_params = type_params
+        return ret
+
 
 class ResourceKey(Struct):
     _fields = [

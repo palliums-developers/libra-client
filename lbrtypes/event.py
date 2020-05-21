@@ -16,7 +16,7 @@ class EventHandle(Struct):
         return self.count
 
     def get_key(self):
-        return self.key
+        return self.key.hex()
 
     def get_creator_address(self):
-        return self.key[EventKey.LENGTH - AccountAddress.LENGTH:]
+        return self.key[EventKey.LENGTH - AccountAddress.LENGTH:].hex()

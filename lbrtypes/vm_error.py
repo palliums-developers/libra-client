@@ -1,5 +1,4 @@
 from canoser import Struct, Uint64, RustEnum
-from typing import Optional
 from enum import IntEnum
 
 # The minimum status code for validation statuses
@@ -348,3 +347,41 @@ class VMStatus(Struct):
 
     def err_msg(self):
         return self.message
+
+
+class StatusType(IntEnum):
+    """
+    A status type is one of 5 different variants along with a fallback variant in the case that we
+    don't recognize the status code.
+    """
+    Validation = 0
+    Verification = 1
+    InvariantViolation = 2
+    Deserialization = 3
+    Execution = 4
+    Unknown = 5
+
+
+class SubStatus:
+    # Arithmetic sub status sub-codes
+    AEU_UNKNOWN_ARITHMETIC_ERROR = 0
+    AEU_UNDERFLOW = 1
+    AEO_OVERFLOW = 2
+    AED_DIVISION_BY_ZERO = 3
+
+    VSF_GAS_SCHEDULE_NOT_FOUND = 0
+
+    # Dynamic Reference status sub-codes
+    DRE_UNKNOWN_DYNAMIC_REFERENCE_ERROR = 0
+    DRE_MOVE_OF_BORROWED_RESOURCE = 1
+    DRE_GLOBAL_REF_ALREADY_RELEASED = 2
+    DRE_MISSING_RELEASEREF = 3
+    DRE_GLOBAL_ALREADY_BORROWED = 4
+
+    # Native Function Error sub-codes
+    NFE_VECTOR_ERROR_BASE = 0
+
+    GSE_UNABLE_TO_LOAD_MODULE = 0
+    GSE_UNABLE_TO_LOAD_RESOURCE = 1
+    GSE_UNABLE_TO_DESERIALIZE = 2
+

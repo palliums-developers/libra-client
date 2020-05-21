@@ -107,6 +107,8 @@ class Struct(Base):
 
     @classmethod
     def check_value(cls, value):
+        if value is None:
+            return
         if not isinstance(value, cls) and value is not None:
             raise TypeError('value {} is not {} type'.format(value, cls))
 

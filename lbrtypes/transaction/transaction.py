@@ -65,6 +65,12 @@ class SignedTransaction(Struct):
         shazer.update(self.serialize())
         return shazer.digest()
 
+    def get_sender(self):
+        return self.raw_txn.get_sender()
+
+    def get_sequence_number(self):
+        return self.raw_txn.get_sequence_number()
+
 
 class Transaction(RustEnum):
     _enums = [

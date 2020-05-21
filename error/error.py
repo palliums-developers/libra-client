@@ -1,17 +1,39 @@
-from error.status_code import StatusCode
+from enum import IntEnum
+from error.status_code import ServerCode
 from lbrtypes.vm_error import StatusCode as LibraStatusCode
 
-class ViolasError(Exception):
-    def __init__(self, status_code, data=None, message=None):
-        if status_code is None:
-            status_code = StatusCode.UNKNOWN_STATUS
-        status_code, message = self.handle_enum_code(status_code, message)
-        # if isinstance(status_code, AdmissionControlStatusCode):
-        #     status = f"ac_status:{status}"
-        # elif isinstance(status_code, MempoolAddTransactionStatusCode):
-        #     status = f"mem_status:{status}"
-        super().__init__(status_code, data, message)
+class LibraError(Exception):
+    def __init__(self, server_code=None, data=None, message=None):
+        server_code = LibraError.parse_server_code(server_code)
+        data = LibraError.parse_data(data)
+        message = LibraError.parse_message(message)
+        super().__init__(server_code, data, message)
 
+    @staticmethod
+    def parse_server_code(server_code):
+        if isinstance(server_code, IntEnum):
+            return server_code
+        if isinstance(server_code, int):
+            if server_code in ServerCode:
+                return ServerCode(server_code)
+        return server_code
+
+
+    @classmethod
+    def parse_data(cls, data):
+        if isinstance(data, IntEnum):
+            return {'major_status': data, 'message': data.name, 'sub_status': None}
+        if isinstance(data, int):
+            try:
+                data = LibraStatusCode(data)
+                return {'major_status': data, 'message': data.name, 'sub_status': None}
+            except:
+                return {'major_status': data, 'message': None, 'sub_status': None}
+        return data
+
+    @classmethod
+    def parse_message(cls, message):
+        return message
 
     @classmethod
     def from_response(cls, resp):
@@ -28,8 +50,20 @@ class ViolasError(Exception):
         :class:`violas.error.status_code.StatusCode`
             status code of the error
         '''
-        code, _ = self.args
+        code, _, _ = self.args
         return code
+
+    @property
+    def data(self):
+        '''
+        Returns
+        -------
+        str
+            message of the error
+        '''
+        _, data, _ = self.args
+        return data
+
 
     @property
     def msg(self):
@@ -39,7 +73,7 @@ class ViolasError(Exception):
         str
             message of the error
         '''
-        _, msg = self.args
+        _, _, msg = self.args
         return msg
 
     @staticmethod

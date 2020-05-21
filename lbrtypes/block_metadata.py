@@ -47,6 +47,12 @@ class LibraBlockResource(Struct, MoveResource):
         ("new_block_events", EventHandle)
     ]
 
+    def get_height(self):
+        return self.height
+
+    def get_new_block_events(self):
+        return self.new_block_events
+
 class NewBlockEvent(Struct):
     _fields = [
         ("round", Uint64),

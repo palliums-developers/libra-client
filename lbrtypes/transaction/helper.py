@@ -1,6 +1,6 @@
 import datetime
 from lbrtypes.transaction import TransactionPayload, RawTransaction, SignedTransaction
-from libra_client.lib import Account
+from libra_client.account import Account
 from crypto.ed25519 import ED25519_SIGNATURE_LENGTH
 from lbrtypes.transaction.authenticator import TransactionAuthenticator
 
