@@ -9,3 +9,4 @@ ignore/
 recover
 __pycache__
 /libra
+/violas-dex-core
