@@ -26,11 +26,11 @@ class ReserveResource(Struct, MoveResource):
     def get_liquidity_total_supply(self):
         return self.liquidity_total_supply
 
-    def get_token_reource(self):
-        return self.token
+    def get_token_amount(self):
+        return self.token.value
 
-    def get_violas_resource(self):
-        return self.violas
+    def get_violas_amount(self):
+        return self.violas.value
 
 class ExchangeInfoResource(Struct, MoveResource):
     MODULE_NAME = EXCHANGE_MODULE_NAME

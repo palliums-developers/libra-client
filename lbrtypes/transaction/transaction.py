@@ -31,6 +31,7 @@ class RawTransaction(Struct):
         ("payload", TransactionPayload),
         ("max_gas_amount", Uint64),
         ("gas_unit_price", Uint64),
+        ("gas_currency_code", str),
         ("expiration_time", Uint64),
     ]
 

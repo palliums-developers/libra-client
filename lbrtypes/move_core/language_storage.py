@@ -20,6 +20,7 @@ class TypeTag(RustEnum):
         ("U64", Uint64),
         ("U128", Uint128),
         ("Address", AccountAddress),
+        ("Signer", bytes),
         ("Vector", "lbrtypes.move_core.language_storage.TypeTag"),
         ("Struct", "lbrtypes.move_core.language_storage.StructTag")
     ]
@@ -51,6 +52,8 @@ class StructTag(Struct):
 
     @classmethod
     def new(cls, module_address, module_name, struct_name=None, type_params=None):
+        if module_address is None:
+            module_address = CORE_CODE_ADDRESS
         if struct_name is None:
             struct_name = "T"
         if type_params is None:

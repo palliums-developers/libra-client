@@ -10,6 +10,7 @@ def create_unsigned_txn(
     sender_sequence_number,
     max_gas_amount,
     gas_unit_price,
+    gas_currency_code,
     txn_expiration,
 ) -> RawTransaction:
     return RawTransaction(
@@ -18,6 +19,7 @@ def create_unsigned_txn(
         payload,
         max_gas_amount,
         gas_unit_price,
+        gas_currency_code,
         int(datetime.datetime.now().timestamp()) + txn_expiration
     )
 
@@ -27,6 +29,7 @@ def create_user_txn(
     sender_sequence_number,
     max_gas_amount,
     gas_unit_price,
+    gas_currency_code,
     txn_expiration,
 ) -> SignedTransaction:
     raw_txn = create_unsigned_txn(
@@ -35,6 +38,7 @@ def create_user_txn(
         sender_sequence_number,
         max_gas_amount,
         gas_unit_price,
+        gas_currency_code,
         txn_expiration,
     )
     tx_hash = raw_txn.hash()

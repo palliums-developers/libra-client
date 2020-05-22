@@ -53,6 +53,7 @@ class Client():
     GAS_UNIT_PRICE = 0
     TXN_EXPIRATION = 100
     RECONNECT_COUNT = 2
+    GAS_CURRENCY_CODE = "LBR"
 
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
@@ -83,7 +84,7 @@ class Client():
         ret.faucet_server = faucet_server
         return ret
 
-    def get_balance(self, account_address: Union[bytes, str], module_address=None, module_name=None)-> Optional[int]:
+    def get_balance(self, account_address: Union[bytes, str], module_name=None, module_address=None)-> Optional[int]:
         account_state = self.get_account_state(account_address)
         if account_state:
             return account_state.get_balance(module_address, module_name)
@@ -171,9 +172,8 @@ class Client():
         return self.submit_script(self.faucet_account, script, is_blocking, max_gas_amount, gas_unit_price,
                                   txn_expiration)
 
-    def add_currency_to_account(self, sender_account, module_address, module_name, is_blocking=True,
-                                max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
-                                txn_expiration=TXN_EXPIRATION):
+    def add_currency_to_account(self, sender_account, module_name, module_address=None, is_blocking=True,
+            max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,txn_expiration=TXN_EXPIRATION):
         args = []
         ty_args = self.get_type_args(module_address, module_name)
         script = Script.gen_script(CodeType.ADD_CURRENCY_TO_ACCOUNT, *args, ty_args=ty_args,
@@ -620,13 +620,13 @@ class Client():
 
     def submit_script(self, sender_account, script, is_blocking=True, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         sequence_number = self.get_sequence_number(sender_account.address)
-        signed_txn = create_user_txn(TransactionPayload("Script",script), sender_account, sequence_number, max_gas_amount, gas_unit_price, txn_expiration)
+        signed_txn = create_user_txn(TransactionPayload("Script",script), sender_account, sequence_number, max_gas_amount, gas_unit_price, self.GAS_CURRENCY_CODE, txn_expiration)
         self.submit_signed_transaction(signed_txn, is_blocking)
         return sequence_number
 
     def submit_module(self, sender_account, module, is_blocking=True, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         sequence_number = self.get_sequence_number(sender_account.address)
-        signed_txn = create_user_txn(TransactionPayload("Module", module), sender_account, sequence_number, max_gas_amount, gas_unit_price, txn_expiration)
+        signed_txn = create_user_txn(TransactionPayload("Module", module), sender_account, sequence_number, max_gas_amount, gas_unit_price, self.GAS_CURRENCY_CODE, txn_expiration)
         self.submit_signed_transaction(signed_txn, is_blocking)
         return sequence_number
 

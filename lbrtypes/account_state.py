@@ -48,9 +48,11 @@ class AccountState(Struct):
         account_resource = self.get_account_resource()
         if account_resource:
             if module_name is None:
-                module_name = account_resource.balance_currency_code
+                module_name = LBR_NAME
             currency_type_tag = type_tag_for_currency_code(module_name, module_address)
-            return BalanceResource.deserialize(self.get(BalanceResource.access_path_for(currency_type_tag)))
+            resource = self.get(BalanceResource.access_path_for(currency_type_tag))
+            if resource:
+                return BalanceResource.deserialize(resource)
 
     def get_configuration_resource(self) -> Optional[ConfigurationResource]:
         configuration_resource = self.get(ConfigurationResource.resource_path())

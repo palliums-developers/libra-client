@@ -10,14 +10,14 @@ class AccountState(LibraAccountState):
         ret.ordered_map = account_state.ordered_map
         return ret
 
-    def get_exchange_resource(self, module_address, module_name, exchange_address) -> Optional[ExchangeResource]:
-        type_tag = TypeTag("Struct", StructTag.new(module_address, module_name))
+    def get_exchange_resource(self, token_name, exchange_address, token_address=None) -> Optional[ExchangeResource]:
+        type_tag = TypeTag("Struct", StructTag.new(token_address, token_name))
         resource = self.get(ExchangeResource.resource_path_for(type_tag, module_address=exchange_address))
         if resource:
             return ExchangeResource.deserialize(resource)
 
-    def get_reserve_resource(self, module_address, module_name) -> Optional[ReserveResource]:
-        type_tag = TypeTag("Struct", StructTag.new(module_address, module_name))
+    def get_reserve_resource(self, token_name, token_address=None) -> Optional[ReserveResource]:
+        type_tag = TypeTag("Struct", StructTag.new(token_address, token_name))
         resource = self.get(ReserveResource.resource_path_for(type_tag, module_address=self.get_account_address()))
         if resource:
             return ReserveResource.deserialize(resource)
