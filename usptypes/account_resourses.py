@@ -13,6 +13,9 @@ class ExchangeResource(Struct, MoveResource):
         ("value", Uint64)
     ]
 
+    def get_amount(self):
+        return self.value
+
 class ReserveResource(Struct, MoveResource):
     MODULE_NAME = EXCHANGE_MODULE_NAME
     STRUCT_NAME = "Reserve"

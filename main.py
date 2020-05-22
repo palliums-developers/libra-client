@@ -19,22 +19,8 @@ client.add_currency_to_account(liquidity_account, "Coin1")
 client.mint_coin(liquidity_account.address, 10_000_000, module_name="Coin1",
                  auth_key_prefix=liquidity_account.auth_key_prefix,
                  is_blocking=True)
-client.add_liquidity(liquidity_account, 1, 1_000_000, 1_000_000, "Coin1")
-swap_account = liquidity_account
-violas_balance = client.get_balance(swap_account.address)
-token_blance = client.get_balance(swap_account.address, "Coin1")
+seq = client.add_liquidity(liquidity_account, 1, 1_000_000, 1_000_000, "Coin1")
 
-print(violas_balance, token_blance)
-
-client.violas_to_token_swap(swap_account, 100_000, 1, "Coin1", exchange_module_address=module_account.address)
-
-violas_balance = client.get_balance(swap_account.address)
-token_blance = client.get_balance(swap_account.address, "Coin1")
-
-print(violas_balance, token_blance)
-
-# assert client.get_balance(swap_account.address) == violas_balance - 10_000
-# assert client.get_balance(swap_account.address, "Coin1") == token_blance + 10_000 - 1
 
 
 

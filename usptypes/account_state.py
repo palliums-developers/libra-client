@@ -26,3 +26,4 @@ class AccountState(LibraAccountState):
         resource = self.get(ExchangeInfoResource.resource_path_for(module_address=self.get_account_address()))
         if resource:
             return ExchangeInfoResource.deserialize(resource)
+

@@ -1,7 +1,6 @@
+from typing import List
 from canoser import Struct, Uint64, BoolT, StrT, RustEnum
 from lbrtypes.account_state import AccountState
-from error import LibraError
-from lbrtypes.vm_error import StatusCode
 
 class AmountView(Struct):
     _fields = [
@@ -337,7 +336,6 @@ class TransactionView(Struct):
     def get_transaction_data(self) -> TransactionDataView:
         return self.transaction
 
-    from typing import List
     def get_events(self) -> List[EventView]:
         return self.events
 
