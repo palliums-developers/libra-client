@@ -96,10 +96,16 @@ class Client(LibraClient):
     def get_account_blob(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
         if blob:
-            return AccountState.new(blob)
+            state = AccountState.new(blob)
+            state.set_exchange_module_address(self.get_exchange_module_address())
+            return state
 
     def get_account_state(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
         if blob:
-            return AccountState.new(blob)
+            state = AccountState.new(blob)
+            state.set_exchange_module_address(self.get_exchange_module_address())
+            return state
+
+
 
