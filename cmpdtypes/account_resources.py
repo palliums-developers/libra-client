@@ -4,11 +4,20 @@ from lbrtypes.event import EventHandle
 from lbrtypes.move_core.account_address import AccountAddress
 from lbrtypes.move_core.move_resource import MoveResource
 
-class LibraTokenResource(Struct):
+class LibraTokenResource(Struct, MoveResource):
+    MODULE_NAME = "ViolasToken"
+    STRUCT_NAME = "LibraToken"
+
     _fields = [
         ("coin", LibraResource),
         ("index", Uint64)
     ]
+
+    def get_libra_amount(self):
+        return self.coin.value
+
+    def get_index(self):
+        return self.index
 
 class BankResource(Struct):
 
@@ -17,11 +26,23 @@ class BankResource(Struct):
         ("value", Uint64)
     ]
 
+    def get_index(self):
+        return self.index
+
+    def get_value(self):
+        return self.value
+
 class BorrowInfoResource(Struct):
     _fields = [
         ("principal", Uint64),
         ("interest_index", Uint64)
     ]
+
+    def get_principal(self):
+        return self.principal
+
+    def get_interest_index(self):
+        return self.interest_index
 
 class TokensResource(Struct, MoveResource):
     MODULE_NAME = "ViolasToken"
@@ -31,6 +52,7 @@ class TokensResource(Struct, MoveResource):
         ("ts", [BankResource]),
         ("borrows", [BorrowInfoResource])
     ]
+
 
 class OrderResource(Struct):
 

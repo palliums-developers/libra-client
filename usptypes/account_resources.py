@@ -44,3 +44,11 @@ class ExchangeInfoResource(Struct, MoveResource):
         ("burn_events", EventHandle),
         ("swap_events", EventHandle),
     ]
+
+class RegisteredCurrenciesResource(Struct, MoveResource):
+    MODULE_NAME = EXCHANGE_MODULE_NAME
+    STRUCT_NAME = "RegisteredCurrencies"
+
+    _fields = [
+        ("currency_codes", [str])
+    ]

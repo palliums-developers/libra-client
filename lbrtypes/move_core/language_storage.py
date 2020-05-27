@@ -58,6 +58,8 @@ class StructTag(Struct):
             struct_name = "T"
         if type_params is None:
             type_params = []
+        if module_name is None:
+            module_name = "LBR"
         ret = cls()
         ret.address = AccountAddress.normalize_to_bytes(module_address)
         ret.module = module_name

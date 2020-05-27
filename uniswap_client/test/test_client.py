@@ -64,6 +64,7 @@ def test_add_liquidity():
     client.mint_coin(liquidity_account.address, 10_000_000, module_name="Coin1", auth_key_prefix=liquidity_account.auth_key_prefix,
                      is_blocking=True)
     client.add_liquidity(liquidity_account, 1, 1_000_000, 1_000_000, "Coin1")
+
     coin1_balance = client.get_balance(liquidity_account.address, "Coin1")
     lbr_balance = client.get_balance(liquidity_account.address)
     assert coin1_balance == 10_000_000 - 1_000_000
