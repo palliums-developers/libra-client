@@ -25,8 +25,8 @@ class Script(Struct):
         return self.args
 
     @staticmethod
-    def gen_script(code_type, *args, ty_args=None, module_address=None):
-        code = get_code(code_type, module_address)
+    def gen_script(code_type, *args, ty_args=None, currency_module_address=None):
+        code = get_code(code_type, currency_module_address)
         if ty_args is None:
             ty_args = []
         return Script(code, ty_args, list(args))

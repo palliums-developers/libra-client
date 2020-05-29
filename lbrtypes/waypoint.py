@@ -1,6 +1,6 @@
-from canoser import Struct, Uint64, RustOptional
+from canoser import Struct, Uint64, Optional
 from lbrtypes.transaction import Version
-from lbrtypes.epoch_info import EpochInfoOptional
+from lbrtypes.epoch_info import EpochInfo
 from lbrtypes.ledger_info import LedgerInfo, LedgerInfoWithSignatures
 from crypto.hash import HashValue, gen_hasher
 from lbrtypes.rustlib import ensure
@@ -25,6 +25,7 @@ class Waypoint(Struct):
         ret.value = converter.hash()
         return ret
 
+
     def get_version(self):
         return self.version
 
@@ -32,7 +33,7 @@ class Waypoint(Struct):
         return self.value.hex()
 
     def verify(self, ledger_info: LedgerInfo):
-        ensure(ledger_info.get_version() == self.get_version(), f"Waypoint version mismatch: waypoint version = {self.get_version()}, given version = {ledger_info.get_version()}")
+        ensure(ledger_info.get_version() != self.get_version(), f"Waypoint version mismatch: waypoint version = {self.get_version()}, given version = {ledger_info.get_version()}")
         converter = Ledger2WaypointConverter.new(ledger_info)
         ensure(converter.hash() == self.value, f"Waypoint value mismatch: waypoint value = {self.value}, given value = {converter.hash()}")
 
@@ -48,7 +49,7 @@ class Ledger2WaypointConverter(Struct):
         ("root_hash", HashValue),
         ("version", Version),
         ("timestamp_usecs", Uint64),
-        ("next_epoch_info", EpochInfoOptional),
+        ("next_epoch_info", Optional.from_type(EpochInfo)),
     ]
 
     @classmethod
@@ -62,6 +63,6 @@ class Ledger2WaypointConverter(Struct):
         return ret
 
     def hash(self):
-        shazer = gen_hasher(b"Ledger2WaypointConverter::libra_types::waypoint")
+        shazer = gen_hasher(b"waypoint")
         shazer.update(self.serialize())
         return shazer.digest()

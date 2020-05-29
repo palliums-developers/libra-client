@@ -34,7 +34,7 @@ class StructTag(Struct):
     ]
 
     def hash(self):
-        shazer = gen_hasher(b"move_core_types::language_storage::StructTag")
+        shazer = gen_hasher(b"StructTag")
         shazer.update(self.serialize())
         return shazer.digest()
 
@@ -87,7 +87,7 @@ class ModuleId(Struct):
         return self.name
 
     def hash(self):
-        shazer = gen_hasher(b"move_core_types::language_storage::ModuleId")
+        shazer = gen_hasher(b"ModuleId")
         shazer.update(self.serialize())
         return shazer.digest()
 

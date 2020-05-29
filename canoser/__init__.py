@@ -2,6 +2,8 @@ from canoser.cursor import Cursor  # noqa: F401
 from canoser.struct import Struct  # noqa: F401
 from canoser.rust_enum import RustEnum  # noqa: F401
 from canoser.rust_optional import RustOptional  # noqa: F401
+from canoser.optional import Optional  # noqa: F401
+
 from canoser.delegate_t import DelegateT  # noqa: F401
 from canoser.tuple_t import TupleT  # noqa: F401
 from canoser.map_t import MapT  # noqa: F401

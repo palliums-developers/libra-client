@@ -24,11 +24,11 @@ def test_get_sender():
 def test_get_receiver():
     client = create_client()
     [a1, a2] = create_accounts(2)
-    seq = client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, is_blocking=True)
+    seq = client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, is_blocking=True, coin_currency="Coin1")
     tx = client.get_account_transaction(association_address(), seq)
     assert tx.get_receiver() == a1.address_hex
 
-    seq = client.transfer_coin(a1, a2.address, 10, auth_key_prefix=a2.auth_key_prefix, is_blocking=True)
+    seq = client.transfer_coin(a1, a2.address, 10, auth_key_prefix=a2.auth_key_prefix, is_blocking=True, coin_currency="Coin1")
     tx = client.get_account_transaction(a1.address, seq)
     assert tx.get_receiver() == a2.address_hex
 
@@ -41,11 +41,11 @@ def test_get_receiver():
 def test_get_amount():
     client = create_client()
     [a1, a2] = create_accounts(2)
-    seq = client.mint_coin(a1.address, 99, auth_key_prefix=a1.auth_key_prefix, is_blocking=True)
+    seq = client.mint_coin(a1.address, 99, auth_key_prefix=a1.auth_key_prefix, is_blocking=True, coin_currency="Coin1")
     tx = client.get_account_transaction(association_address(), seq)
     assert tx.get_amount() == 99
 
-    seq = client.transfer_coin(a1, a2.address, 88, auth_key_prefix=a2.auth_key_prefix, is_blocking=True)
+    seq = client.transfer_coin(a1, a2.address, 88, auth_key_prefix=a2.auth_key_prefix, is_blocking=True, coin_currency="Coin1")
     tx = client.get_account_transaction(a1.address, seq)
     assert tx.get_amount() == 88
 

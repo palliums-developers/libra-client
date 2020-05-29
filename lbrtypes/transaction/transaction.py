@@ -51,7 +51,7 @@ class RawTransaction(Struct):
         return self.expiration_time
 
     def hash(self):
-        shazer = gen_hasher(b"libra_types::transaction::RawTransaction")
+        shazer = gen_hasher(b"RawTransaction")
         shazer.update(self.serialize())
         return shazer.digest()
 
@@ -62,7 +62,7 @@ class SignedTransaction(Struct):
     ]
 
     def hash(self):
-        shazer = gen_hasher(b"libra_types::transaction::SignedTransaction")
+        shazer = gen_hasher(b"SignedTransaction")
         shazer.update(self.serialize())
         return shazer.digest()
 

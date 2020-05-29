@@ -10,6 +10,3 @@ class EpochInfo(Struct):
     @classmethod
     def empty(cls):
         return cls(0, ValidatorVerifier.new({}))
-
-class EpochInfoOptional(RustOptional):
-    _type = EpochInfo

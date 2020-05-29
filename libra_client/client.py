@@ -53,11 +53,10 @@ class Client():
     GAS_UNIT_PRICE = 0
     TXN_EXPIRATION = 100
     RECONNECT_COUNT = 2
-    GAS_CURRENCY_CODE = "LBR"
 
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
-    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="tianjin_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -84,10 +83,10 @@ class Client():
         ret.faucet_server = faucet_server
         return ret
 
-    def get_balance(self, account_address: Union[bytes, str], module_name=None, module_address=None)-> Optional[int]:
+    def get_balance(self, account_address: Union[bytes, str], coin_currency=None, currency_module_address=None)-> Optional[int]:
         account_state = self.get_account_state(account_address)
         if account_state:
-            return account_state.get_balance(module_address, module_name)
+            return account_state.get_balance(currency_module_address, coin_currency)
         return 0
 
     def get_sequence_number(self, account_address: Union[bytes, str]) -> Optional[int]:
@@ -146,8 +145,8 @@ class Client():
         state = self.get_account_state(config_address())
         return state.get_registered_currencies()
 
-    def get_type_args(self, module_address, module_name, struct_name=None):
-        coin_type = get_coin_type(module_address, module_name, struct_name)
+    def get_type_args(self, currency_module_address, coin_currency, struct_name=None):
+        coin_type = get_coin_type(currency_module_address, coin_currency, struct_name)
         if coin_type:
             return [coin_type]
         return []
@@ -156,8 +155,8 @@ class Client():
         ensure(self.faucet_account is not None, "facucet_account is not set")
 
     def add_currency(self, exchange_rate_denom, exchange_rate_num, is_synthetic, scaling_factor, fractional_part,
-                     currency_code, module_address, module_name, is_blocking=True,
-                     max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                     currency_code, currency_module_address, coin_currency, is_blocking=True,
+                     gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         self.require_faucet_account()
         args = []
         args.append(TransactionArgument.to_U64(exchange_rate_denom))
@@ -166,22 +165,22 @@ class Client():
         args.append(TransactionArgument.to_U64(scaling_factor))
         args.append(TransactionArgument.to_U64(fractional_part))
         args.append(TransactionArgument.to_U8Vector(currency_code, hex=False))
-        ty_args = self.get_type_args(module_address, module_name)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
 
-        script = Script.gen_script(CodeType.ADD_CURRENCY, *args, ty_args=ty_args, module_address=module_address)
+        script = Script.gen_script(CodeType.ADD_CURRENCY, *args, ty_args=ty_args, currency_module_address=currency_module_address)
         return self.submit_script(self.faucet_account, script, is_blocking, max_gas_amount, gas_unit_price,
                                   txn_expiration)
 
-    def add_currency_to_account(self, sender_account, module_name, module_address=None, is_blocking=True,
+    def add_currency_to_account(self, sender_account, coin_currency, currency_module_address=None, is_blocking=True,
             max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,txn_expiration=TXN_EXPIRATION):
         args = []
-        ty_args = self.get_type_args(module_address, module_name)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
         script = Script.gen_script(CodeType.ADD_CURRENCY_TO_ACCOUNT, *args, ty_args=ty_args,
-                                   module_address=module_address)
+                                   currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def add_validator(self, validator_address, is_blocking=True,
-                      max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                      gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         self.require_faucet_account()
         args = []
         args.append(TransactionArgument.to_address(validator_address))
@@ -243,63 +242,63 @@ class Client():
         script = Script.gen_script(CodeType.APPLY_FOR_ROOT_VASP, *args)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def approved_payment(self, sender_account, receiver_address, amount, metadata, signature, module_address=None,
-                         module_name=None, is_blocking=True,
-                         max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def approved_payment(self, sender_account, receiver_address, amount, metadata, signature, currency_module_address=None,
+                         coin_currency=None, is_blocking=True,
+                         gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_address(receiver_address))
         args.append(TransactionArgument.to_U8Vector(amount))
         args.append(TransactionArgument.to_U8Vector(metadata))
         args.append(TransactionArgument.to_U8Vector(signature))
 
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.APPROVED_PAYMENT, *args, ty_args=ty_args, module_address=module_address)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.APPROVED_PAYMENT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def burn(self, sender_account, preburn_address, module_address=None, module_name=None, is_blocking=True,
-             max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def burn(self, sender_account, preburn_address, currency_module_address=None, coin_currency=None, is_blocking=True,
+             gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_address(preburn_address))
 
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.BURN, *args, ty_args=ty_args, module_address=module_address)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.BURN, *args, ty_args=ty_args, currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def cancel_burn(self, sender_account, preburn_address, module_address=None, module_name=None, is_blocking=True,
-                    max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def cancel_burn(self, sender_account, preburn_address, currency_module_address=None, coin_currency=None, is_blocking=True,
+                    gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_address(preburn_address))
 
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.CANCEL_BURN, *args, ty_args=ty_args, module_address=module_address)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.CANCEL_BURN, *args, ty_args=ty_args, currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def create_account(self, sender_account, fresh_address, auth_key_prefix, initial_amount=0, module_address=None,
-                       module_name=None, is_blocking=True,
-                       max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def create_account(self, sender_account, fresh_address, auth_key_prefix, initial_amount=0, currency_module_address=None,
+                       coin_currency=None, is_blocking=True,
+                       gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_address(fresh_address))
         args.append(TransactionArgument.to_U8Vector(auth_key_prefix))
         args.append(TransactionArgument.to_U64(initial_amount))
 
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.CREATE_ACCOUNT, *args, ty_args=ty_args, module_address=module_address)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.CREATE_ACCOUNT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def create_empty_account(self, sender_account, fresh_address, auth_key_prefix, module_address=None,
-                             module_name=None, is_blocking=True,
+    def create_empty_account(self, sender_account, fresh_address, auth_key_prefix, currency_module_address=None,
+                             coin_currency=None, is_blocking=True,
                              max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
                              txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_address(fresh_address))
         args.append(TransactionArgument.to_U8Vector(auth_key_prefix))
 
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.CREATE_EMPTY_ACCOUNT, *args, ty_args=ty_args, module_address=module_address)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.CREATE_EMPTY_ACCOUNT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def empty_script(self, sender_account, is_blocking=True,
-                     max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                     gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
 
         script = Script.gen_script(CodeType.EMPTY_SCRIPT, *args)
@@ -314,14 +313,14 @@ class Client():
         script = Script.gen_script(CodeType.GRANT_ASSOCIATION_ADDRESS, *args)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def grant_association_privilege(self, sender_account, address, module_address=None, module_name=None,
+    def grant_association_privilege(self, sender_account, address, currency_module_address=None, coin_currency=None,
                                     is_blocking=True,
                                     max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
                                     txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_address(address))
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.GRANT_ASSOCIATION_PRIVILEGE, *args, ty_args=ty_args, module_address=address)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.GRANT_ASSOCIATION_PRIVILEGE, *args, ty_args=ty_args, currency_module_address=address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def grant_child_account(self, sender_account, child_address, is_blocking=True,
@@ -343,7 +342,7 @@ class Client():
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def grant_vasp_account(self, root_vasp_addr, is_blocking=True,
-                           max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                           gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         self.require_faucet_account()
         args = []
         args.append(TransactionArgument.to_address(root_vasp_addr))
@@ -352,18 +351,22 @@ class Client():
         return self.submit_script(self.faucet_account, script, is_blocking, max_gas_amount, gas_unit_price,
                                   txn_expiration)
 
-    def mint_coin(self, receiver_address, micro_coins, auth_key_prefix=None, is_blocking=True, module_address=None,
-                  module_name=None,
+    def mint_coin(self, receiver_address, micro_coins, auth_key_prefix=None, is_blocking=True, currency_module_address=None,
+                  coin_currency=None,
                   max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+        from lbrtypes.account_config import LBR_NAME
         if self.faucet_account:
             args = []
             args.append(TransactionArgument.to_address(receiver_address))
             args.append(TransactionArgument.to_U8Vector(auth_key_prefix))
             args.append(TransactionArgument.to_U64(micro_coins))
-            ty_args = self.get_type_args(module_address, module_name)
-            script = Script.gen_script(CodeType.MINT, *args, ty_args=ty_args, module_address=module_address)
+            if coin_currency in (None, LBR_NAME):
+                script = Script.gen_script(CodeType.MINT_LBR_TO_ADDRESS, *args, currency_module_address=currency_module_address)
+            else:
+                ty_args = self.get_type_args(currency_module_address, coin_currency)
+                script = Script.gen_script(CodeType.MINT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
 
-            return self.submit_script(self.faucet_account, script, is_blocking, max_gas_amount, gas_unit_price,
+            return self.submit_script(self.faucet_account, script, is_blocking, "LBR", max_gas_amount, gas_unit_price,
                                       txn_expiration)
         else:
             return self.mint_coin_with_faucet_service(receiver_address, micro_coins, is_blocking)
@@ -381,7 +384,7 @@ class Client():
         return sequence_number
 
     def mint_lbr(self, sender_account, amount_lbr, is_blocking=True,
-                 max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                 gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_U64(amount_lbr))
 
@@ -397,9 +400,9 @@ class Client():
         script = Script.gen_script(CodeType.MODIFY_PUBLISHING_OPTION, *args)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def transfer_coin(self, sender_account, receiver_address, micro_coins, auth_key_prefix=None, module_address=None,
-                      module_name=None, is_blocking=True, data=None,
-                      max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def transfer_coin(self, sender_account, receiver_address, micro_coins, auth_key_prefix=None, currency_module_address=None,
+                      coin_currency=None, is_blocking=True, data=None,
+                      gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_address(receiver_address))
         args.append(TransactionArgument.to_U8Vector(auth_key_prefix))
@@ -407,18 +410,17 @@ class Client():
         args.append(TransactionArgument.to_U8Vector(data, hex=False))
         args.append(TransactionArgument.to_U8Vector(""))
 
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.PEER_TO_PEER_WITH_METADATA, *args, ty_args=ty_args,
-                                   module_address=module_address)
-        return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.PEER_TO_PEER_WITH_METADATA, *args, ty_args=ty_args, currency_module_address=currency_module_address)
+        return self.submit_script(sender_account, script, is_blocking,self.get_gas_currency_code(coin_currency, gas_currency_code), max_gas_amount, gas_unit_price, txn_expiration)
 
-    def preburn(self, sender_account, amount, module_address=None, module_name=None, is_blocking=True,
-                max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def preburn(self, sender_account, amount, currency_module_address=None, coin_currency=None, is_blocking=True,
+                gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_U64(amount))
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.PREBURN, *args, ty_args=ty_args, module_address=module_address)
-        return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.PREBURN, *args, ty_args=ty_args, currency_module_address=currency_module_address)
+        return self.submit_script(sender_account, script, is_blocking,self.get_gas_currency_code(coin_currency, gas_currency_code), max_gas_amount, gas_unit_price, txn_expiration)
 
     def publish_shared_ed25519_public_key(self, sender_account, public_key, is_blocking=True,
                                           max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
@@ -447,19 +449,19 @@ class Client():
         script = Script.gen_script(CodeType.REGISTER_APPROVED_PAYMENT, *args)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def register_preburner(self, sender_account, module_address=None, module_name=None, is_blocking=True,
-                           max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def register_preburner(self, sender_account, currency_module_address=None, coin_currency=None, is_blocking=True,
+                           gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
-        ty_args = self.get_type_args(module_address, module_name)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
         script = Script.gen_script(CodeType.RECERTIFY_CHILD_ACCOUNT, *args, ty_args=ty_args,
-                                   module_address=module_address)
+                                   currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def register_validator(self, sender_account, consensus_pubkey, validator_network_signing_pubkey,
                            validator_network_identity_pubkey,
                            validator_network_address, fullnodes_network_identity_pubkey, fullnodes_network_address,
                            is_blocking=True,
-                           max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                           gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_U8Vector(consensus_pubkey))
         args.append(TransactionArgument.to_U8Vector(validator_network_signing_pubkey))
@@ -480,7 +482,7 @@ class Client():
         script = Script.gen_script(CodeType.REMOVE_ASSOCIATION_ADDRESS, *args)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def remove_association_privilege(self, sender_account, address, module_address=None, module_name=None,
+    def remove_association_privilege(self, sender_account, address, currency_module_address=None, coin_currency=None,
                                      is_blocking=True,
                                      max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
                                      txn_expiration=TXN_EXPIRATION):
@@ -509,7 +511,7 @@ class Client():
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def remove_validator(self, sender_account, new_validator, is_blocking=True,
-                         max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                         gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_address(new_validator))
 
@@ -544,7 +546,7 @@ class Client():
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def unmint_lbr(self, sender_account, amount_lbr, is_blocking=True,
-                   max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                   gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_U64(amount_lbr))
 
@@ -552,15 +554,15 @@ class Client():
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def update_exchange_rate(self, sender_account, new_exchange_rate_denominator, new_exchange_rate_numerator,
-                             module_address=None, module_name=None, is_blocking=True,
+                             currency_module_address=None, coin_currency=None, is_blocking=True,
                              max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
                              txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_U64(new_exchange_rate_denominator))
         args.append(TransactionArgument.to_U64(new_exchange_rate_numerator))
 
-        ty_args = self.get_type_args(module_address, module_name)
-        script = Script.gen_script(CodeType.UPDATE_EXCHANGE_RATE, *args, ty_args=ty_args, module_address=module_address)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
+        script = Script.gen_script(CodeType.UPDATE_EXCHANGE_RATE, *args, ty_args=ty_args, currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
     def update_libra_version(self, sender_account, major, is_blocking=True,
@@ -572,20 +574,20 @@ class Client():
         script = Script.gen_script(CodeType.UPDATE_LIBRA_VERSION, *args)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def update_minting_ability(self, sender_account, allow_minting, module_address=None, module_name=None,
+    def update_minting_ability(self, sender_account, allow_minting, currency_module_address=None, coin_currency=None,
                                is_blocking=True,
                                max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
                                txn_expiration=TXN_EXPIRATION):
         args = []
         args.append(TransactionArgument.to_bool(allow_minting))
-        ty_args = self.get_type_args(module_address, module_name)
+        ty_args = self.get_type_args(currency_module_address, coin_currency)
         script = Script.gen_script(CodeType.UPDATE_MINTING_ABILITY, *args, ty_args=ty_args,
-                                   module_address=module_address)
+                                   currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
-    def publish_token(self, sender_account: Account, module_name=None, is_blocking=True, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
+    def publish_token(self, sender_account: Account, coin_currency=None, is_blocking=True, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,
                        txn_expiration=TXN_EXPIRATION):
-        module = Module.gen_module(sender_account.address, module_name)
+        module = Module.gen_module(sender_account.address, coin_currency)
         return self.submit_module(sender_account, module, is_blocking, max_gas_amount, gas_unit_price, txn_expiration)
 
 
@@ -618,17 +620,27 @@ class Client():
             self.wait_for_transaction(sender_address, sequence_number)
         return sequence_number
 
-    def submit_script(self, sender_account, script, is_blocking=True, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def submit_script(self, sender_account, script, is_blocking=True, gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+        gas_currency_code = self.get_gas_currency_code(gas_currency_code=gas_currency_code)
         sequence_number = self.get_sequence_number(sender_account.address)
-        signed_txn = create_user_txn(TransactionPayload("Script",script), sender_account, sequence_number, max_gas_amount, gas_unit_price, self.GAS_CURRENCY_CODE, txn_expiration)
+        signed_txn = create_user_txn(TransactionPayload("Script",script), sender_account, sequence_number, max_gas_amount, gas_unit_price, gas_currency_code, txn_expiration)
         self.submit_signed_transaction(signed_txn, is_blocking)
         return sequence_number
 
-    def submit_module(self, sender_account, module, is_blocking=True, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+    def submit_module(self, sender_account, module,  is_blocking=True, gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+        gas_currency_code = self.get_gas_currency_code(gas_currency_code=gas_currency_code)
         sequence_number = self.get_sequence_number(sender_account.address)
-        signed_txn = create_user_txn(TransactionPayload("Module", module), sender_account, sequence_number, max_gas_amount, gas_unit_price, self.GAS_CURRENCY_CODE, txn_expiration)
+        signed_txn = create_user_txn(TransactionPayload("Module", module), sender_account, sequence_number, max_gas_amount, gas_unit_price, gas_currency_code, txn_expiration)
         self.submit_signed_transaction(signed_txn, is_blocking)
         return sequence_number
+
+    def get_gas_currency_code(self, coin_currency=None, gas_currency_code=None):
+        if gas_currency_code:
+            return gas_currency_code
+        if coin_currency:
+            return coin_currency
+        from lbrtypes.account_config import LBR_NAME
+        return LBR_NAME
 
 
 

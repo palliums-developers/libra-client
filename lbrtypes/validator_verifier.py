@@ -1,7 +1,6 @@
 from canoser import Struct, RustEnum, Uint64
 from lbrtypes.move_core.account_address import AccountAddress as Address
 from crypto.ed25519 import Ed25519PublicKey
-from lbrtypes.validator_info import ValidatorInfo
 
 class VerifyError(RustEnum):
     _enums = [
@@ -45,7 +44,6 @@ class ValidatorVerifier(Struct):
     @classmethod
     def from_validator_set(cls, vset):
         pass
-
 
 
     def batch_verify_aggregated_signature(self, ledger_info_hash, signatures):

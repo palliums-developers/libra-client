@@ -48,6 +48,46 @@ class AccountView(Struct):
     def get_delegated_withdrawal_capability(self):
         return self.delegated_withdrawal_capability
 
+class BurnEvent(Struct):
+    _fields = [
+        ("amount", AmountView),
+        ("preburn_address", str)
+    ]
+
+class CancelBurnEvent(Struct):
+    _fields = [
+        ("amount", AmountView),
+        ("preburn_address", str)
+    ]
+
+class MintEvent(Struct):
+    _fields = [
+        ("amount", AmountView),
+    ]
+
+class PreburnEvent(Struct):
+    _fields = [
+        ("amount", AmountView),
+        ("preburn_address", str)
+    ]
+
+class UpgradeEvent(Struct):
+    _fields = [
+        ("write_set", str)
+    ]
+
+class NewEpochEvent(Struct):
+    _fields = [
+        ("epoch", Uint64),
+    ]
+
+class NewBlockEvent(Struct):
+    _fields = [
+        ("round", Uint64),
+        ("proposer", str),
+        ("proposed_time", Uint64),
+    ]
+
 class ReceivedPaymentEvent(Struct):
     _fields = [
         ("amount", AmountView),
@@ -82,17 +122,38 @@ class SentPaymentEvent(Struct):
 
 class EventDataView(RustEnum):
     _enums = [
+        ("Burn", BurnEvent),
+        ("CancelBurn", CancelBurnEvent),
+        ("Mint", MintEvent),
+        ("Preburn", PreburnEvent),
         ("ReceivedPayment", ReceivedPaymentEvent),
         ("SentPayment", SentPaymentEvent),
+        ("Upgrade", UpgradeEvent),
+        ("NewEpoch", NewEpochEvent),
+        ("NewBlock", NewBlockEvent),
         ("Unknown", None)
     ]
 
     @classmethod
     def from_value(cls, value):
-        if value["type"] == "sentpayment":
-            return cls("SentPayment", SentPaymentEvent.from_value(value))
+        if value["type"] == "burn":
+            return cls("Burn", BurnEvent.from_value(value))
+        if value["type"] == "cancelburn":
+            return cls("CancelBurn", CancelBurnEvent.from_value(value))
+        if value["type"] == "mint":
+            return cls("Mint", MintEvent.from_value(value))
+        if value["type"] == "preburn":
+            return cls("Preburn", PreburnEvent.from_value(value))
         if value["type"] == "receivedpayment":
             return cls("ReceivedPayment", ReceivedPaymentEvent.from_value(value))
+        if value["type"] == "sentpayment":
+            return cls("SentPayment", SentPaymentEvent.from_value(value))
+        if value["type"] == "upgrade":
+            return cls("Upgrade", UpgradeEvent.from_value(value))
+        if value["type"] == "newepoch":
+            return cls("NewEpoch", NewEpochEvent.from_value(value))
+        if value["type"] == "newblock":
+            return cls("NewBlock", NewBlockEvent.from_value(value))
         if value["type"] == "unknown":
             return cls("Unknown", None)
 
