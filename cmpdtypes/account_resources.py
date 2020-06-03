@@ -5,7 +5,7 @@ from lbrtypes.move_core.account_address import AccountAddress
 from lbrtypes.move_core.move_resource import MoveResource
 
 class LibraTokenResource(Struct, MoveResource):
-    MODULE_NAME = "ViolasToken"
+    MODULE_NAME = "ViolasBank"
     STRUCT_NAME = "LibraToken"
 
     _fields = [
@@ -45,7 +45,7 @@ class BorrowInfoResource(Struct):
         return self.interest_index
 
 class TokensResource(Struct, MoveResource):
-    MODULE_NAME = "ViolasToken"
+    MODULE_NAME = "ViolasBank"
     STRUCT_NAME = "Tokens"
 
     _fields = [
@@ -63,7 +63,7 @@ class OrderResource(Struct):
     ]
 
 class UserInfoResource(Struct, MoveResource):
-    MODULE_NAME = "ViolasToken"
+    MODULE_NAME = "ViolasBank"
     STRUCT_NAME = "UserInfo"
 
     _fields = [
@@ -76,6 +76,7 @@ class UserInfoResource(Struct, MoveResource):
 
 class TokenInfoResource(Struct):
     _fields = [
+        ("currency_code", str),
         ("owner", AccountAddress),
         ("total_supply", Uint64),
         ("total_reserves", Uint64),
@@ -91,7 +92,7 @@ class TokenInfoResource(Struct):
     ]
 
 class TokenInfoStoreResource(Struct, MoveResource):
-    MODULE_NAME = "ViolasToken"
+    MODULE_NAME = "ViolasBank"
     STRUCT_NAME = "TokenInfoStore"
 
     _fields = [
