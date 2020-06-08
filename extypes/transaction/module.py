@@ -1,6 +1,6 @@
 from lbrtypes.transaction.module import Module as LibraModule
 from lbrtypes.move_core.account_address import AccountAddress as Address
-from usptypes.bytecode import get_code, CodeType
+from extypes.bytecode import get_code, CodeType
 
 class Module(LibraModule):
     @staticmethod

@@ -1,10 +1,10 @@
 from typing import Optional
 from libra_client import Client as LibraClient
-from usptypes.transaction.module import Module
-from usptypes.transaction.script import Script
+from extypes.transaction.module import Module
+from extypes.transaction.script import Script
 from lbrtypes.transaction.transaction_argument import TransactionArgument
-from usptypes.bytecode import CodeType
-from usptypes.account_state import AccountState
+from extypes.bytecode import CodeType
+from extypes.account_state import AccountState
 
 class Client(LibraClient):
 

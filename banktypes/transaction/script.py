@@ -1,5 +1,5 @@
 from lbrtypes.transaction.script import Script as LibraScript
-from cmpdtypes.bytecode import get_code
+from banktypes.bytecode import get_code
 
 class Script(LibraScript):
 
