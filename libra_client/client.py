@@ -41,8 +41,7 @@ NETWORKS = {
     },
 
     'bj_testnet': {
-        "url": "http://47.93.114.230:50001",
-        "host": "47.93.114.230",
+        "url": "http://47.93.114.230:46659",
         "faucet_file": "/root/palliums/violas_toml/mint_bj.key"
     }
 }
@@ -56,7 +55,7 @@ class Client():
 
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
-    def __init__(self, network="tianjin_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")

@@ -1,7 +1,6 @@
 from canoser import Struct, Uint64, Optional
 from lbrtypes.transaction import Version
-from lbrtypes.epoch_info import EpochInfo
-from lbrtypes.ledger_info import LedgerInfo, LedgerInfoWithSignatures
+from lbrtypes.ledger_info import LedgerInfo
 from crypto.hash import HashValue, gen_hasher
 from lbrtypes.rustlib import ensure
 
@@ -25,7 +24,6 @@ class Waypoint(Struct):
         ret.value = converter.hash()
         return ret
 
-
     def get_version(self):
         return self.version
 
@@ -44,12 +42,13 @@ class Waypoint(Struct):
         return ledger_info.get_version() < self.get_version()
 
 class Ledger2WaypointConverter(Struct):
+    from lbrtypes.epoch_state import EpochState
     _fields = [
         ("epoch", Uint64),
         ("root_hash", HashValue),
         ("version", Version),
         ("timestamp_usecs", Uint64),
-        ("next_epoch_info", Optional.from_type(EpochInfo)),
+        ("next_epoch_info", Optional.from_type(EpochState)),
     ]
 
     @classmethod

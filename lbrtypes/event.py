@@ -5,6 +5,10 @@ class EventKey(DelegateT):
     LENGTH = AccountAddress.LENGTH + 8
     delegate_type = BytesT(LENGTH)
 
+    @staticmethod
+    def get_creator_address(key):
+        return key[EventKey.LENGTH - AccountAddress.LENGTH:].hex()
+
 
 class EventHandle(Struct):
     _fields = [
@@ -18,5 +22,3 @@ class EventHandle(Struct):
     def get_key(self):
         return self.key.hex()
 
-    def get_creator_address(self):
-        return self.key[EventKey.LENGTH - AccountAddress.LENGTH:].hex()

@@ -23,3 +23,17 @@ class StatusCode(IntEnum):
     FETCH_ERROR_MESSAGE = 10001
     WAIT_TIME_OUT = 10002
     ENSURE_ERROR = 10003
+
+    UnknownAuthor = 20001
+    TooLittleVotePower = 2002
+    TooManySignatures = 20003
+    InvalidSignature = 20004
+
+    SerializationError = 30001
+    DeserializationError= 30002
+    ValidationError = 30003
+    WrongLengthError = 3004
+    CanonicalRepresentationError = 30005
+    SmallSubgroupError = 30006
+    PointNotOnCurveError = 30007
+    BitVecError = 30008

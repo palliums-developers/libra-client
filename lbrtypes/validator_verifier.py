@@ -1,14 +1,8 @@
 from canoser import Struct, RustEnum, Uint64
 from lbrtypes.move_core.account_address import AccountAddress as Address
-from crypto.ed25519 import Ed25519PublicKey
-
-class VerifyError(RustEnum):
-    _enums = [
-        ("UnknownAuthor", None),
-        ("TooLittleVotingPower", None),
-        ("TooManySignatures", None),
-        ("InvalidSignature", None),
-    ]
+from crypto.ed25519 import Ed25519PublicKey, Ed25519Signature
+from lbrtypes.rustlib import ensure
+from error import LibraError, StatusCode
 
 class ValidatorConsensusInfo(Struct):
     _fields = [
@@ -42,27 +36,72 @@ class ValidatorVerifier(Struct):
         return ret
 
     @classmethod
-    def from_validator_set(cls, vset):
-        pass
+    def new_with_quorum_voting_power(cls, address_to_validaotr_info, quorum_voting_power):
+        total_voting_power = 0
+        for voting_power in address_to_validaotr_info.values():
+            total_voting_power += voting_power
+        ensure(quorum_voting_power <= total_voting_power,
+                f"Quorum voting power is greater than the sum of all voting power of authors: {quorum_voting_power}, quorum_size: {quorum_voting_power}.")
+        return cls(address_to_validaotr_info, quorum_voting_power, total_voting_power)
 
+    @classmethod
+    def new_single(cls, author: Address, public_key: Ed25519PublicKey):
+        author_to_validator_info = dict()
+        author_to_validator_info[author] = ValidatorConsensusInfo(public_key, 1)
+        return cls.new(author_to_validator_info)
 
-    def batch_verify_aggregated_signature(self, ledger_info_hash, signatures):
-        pass
+    def verify_signature(self, author: Address, hash: bytes, signature: Ed25519Signature):
+        public_key = self.get_public_key(author)
+        ensure(Ed25519PublicKey.verify_signature(bytes.fromhex(public_key), hash, signature),
+               f"signature:{signature.hex()} mismatch public_key: {public_key}")
 
-    def check_num_of_signatures(self, signatures):
-        pass
+    def verify_aggregated_signature(self, hash, aggregated_signature: {Address: Ed25519Signature}):
+        self.check_num_of_signatures(aggregated_signature)
+        self.check_voting_power(aggregated_signature.keys())
+        for author, signature in aggregated_signature:
+            self.verify_signature(author, hash, signature)
 
-    def check_voting_power(self, signatures):
-        pass
+    def batch_verify_aggregated_signature(self, hash, aggregated_signature: {Address: Ed25519Signature}):
+        self.check_num_of_signatures(aggregated_signature)
+        self.check_voting_power(aggregated_signature.keys())
+        keys_and_signatures = {bytes.fromhex(self.get_public_key(address)): signature for address, signature in aggregated_signature}
+        if Ed25519PublicKey.batch_verify_signatures(hash, keys_and_signatures):
+            self.verify_aggregated_signature(hash, aggregated_signature)
 
-    def get_voting_power(self, address):
-        pass
+    def check_num_of_signatures(
+        self,
+        aggregated_signature: {Address: Ed25519Signature},
+    ):
+        num_of_signatures = len(aggregated_signature)
+        if num_of_signatures > len(self):
+            raise LibraError(data = StatusCode.TOO_MANY_SIGNATURES)
 
-    def check_keys(self, signatures):
-        pass
+    def check_voting_power(self, authors):
+        aggregated_voting_power = 0
+        for account_address in authors:
+            voting_power = self.get_voting_power(account_address)
+            aggregated_voting_power += voting_power
 
-    def verify_aggregated_signature(self, ledger_info_hash, signatures):
-        pass
+        if aggregated_voting_power < self.quorum_voting_power:
+            raise LibraError(data=StatusCode.TOO_LITTLE_VOTE_POWER)
 
-    def verify_signature(self, address, ledger_info_hash, signature):
-        pass
+    def get_public_key(self, author: Address):
+        validator_info = self.address_to_validator_info.get(author)
+        if validator_info:
+            return validator_info.get_public_key()
+        raise LibraError(data=StatusCode.UnknownAuthor, message=f"Address:{author} is not a validator")
+
+    def get_voting_power(self, author: Address):
+        validator_info = self.address_to_validator_info.get(author)
+        if validator_info:
+            return validator_info.get_voting_power()
+        raise LibraError(data=StatusCode.UnknownAuthor, message=f"Address:{author} is not a validator")
+
+    def __len__(self):
+        return self.address_to_validator.__len__()
+
+    def is_empty(self):
+        return len(self) == 0
+
+    def quorum_voting_power(self):
+        return self.quorum_voting_power

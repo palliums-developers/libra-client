@@ -61,4 +61,16 @@ class NewBlockEvent(Struct):
         ("timestamp", Uint64),
     ]
 
+    def get_round(self):
+        return self.round
+
+    def get_proposer(self):
+        return self.proposer.hex()
+
+    def get_votes(self):
+        return [vote.hex() for vote in self.votes]
+
+    def get_timestamp(self):
+        return self.timestamp
+
 

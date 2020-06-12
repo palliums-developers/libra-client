@@ -32,9 +32,31 @@ class TransactionAuthenticator(RustEnum):
         ("MultiEd25519", MultiEd25519)
     ]
 
+    def scheme(self):
+        if self.enum_name == "Ed25519":
+            return Scheme.Ed25519
+        if self.enum_name == "MultiEd25519":
+            return Scheme.MultiEd25519
+
     @classmethod
     def ed25519(cls, public_key: Ed25519PublicKey, signature: Ed25519Signature):
         return cls("Ed25519", Ed25519(public_key, signature))
+
+    @classmethod
+    def multi_ed25519(cls, public_key: MultiEd25519PublicKey, signature: MultiEd25519Signature):
+        return cls(public_key, signature)
+
+    def verify_signature(self, message: HashValue):
+        if self.enum_name == "Ed25519":
+            Ed25519Signature.verify(message, self.value.signature, self.value.public_key)
+        if self.enum_name == "MultiEd25519":
+            MultiEd25519Signature.verify(message, self.value.public_key)
+
+    def authentication_key_preimage(self):
+        return AuthenticationKeyPreimage.new(self.public_key.to_bytes(), self.scheme())
+
+    def authentication_key(self):
+        return AuthenticationKey.from_preimage(self.authentication_key_preimage())
 
 class AuthenticationKeyPreimage(bytes):
 
