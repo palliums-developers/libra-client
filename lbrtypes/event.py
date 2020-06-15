@@ -22,3 +22,6 @@ class EventHandle(Struct):
     def get_key(self):
         return self.key.hex()
 
+    def get_creator_address(self):
+        return EventKey.get_creator_address(self.key)
+

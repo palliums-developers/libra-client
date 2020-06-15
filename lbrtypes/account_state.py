@@ -17,18 +17,14 @@ class AccountState(Struct):
             return True
         return False
 
-    def get_item_counts(self):
-        if self.exists():
-            return len(self.ordered_map)
-
     def get_sequence_number(self):
         resource = self.get_account_resource()
         if resource:
             return resource.get_sequence_number()
         return 0
 
-    def get_balance(self, module_address=None, module_name=None):
-        balance_resource = self.get_balance_resource(module_address, module_name)
+    def get_balance(self, currency_code=None, currency_module_address=None):
+        balance_resource = self.get_balance_resource(currency_module_address, currency_code)
         if balance_resource:
             return balance_resource.get_coin()
         return 0
@@ -38,18 +34,36 @@ class AccountState(Struct):
         if account_resource:
             return account_resource.sent_events.get_creator_address()
 
+    def is_published(self, currency_code=None, currency_module_address=None):
+        return self.get_balance_resource(currency_code, currency_module_address) is not None
+
+    def get_code(self, currency_code):
+        currency_module_address = self.get_account_address()
+        if currency_module_address is None:
+            currency_module_address = CORE_CODE_ADDRESS
+        key = ModuleId(currency_module_address, currency_code)
+        path = AccessPath.code_access_path_vec(key)
+        return self.ordered_map.get(path)
+
+    def get_registered_currencies(self):
+        from lbrtypes.on_chain_config.registered_currencies import RegisteredCurrenciesResource
+        type_tag = TypeTag("Struct", StructTag(CORE_CODE_ADDRESS, "RegisteredCurrencies", "T", []))
+        registered_currencies_resource = self.get(RegisteredCurrenciesResource.resource_path_for(type_tag))
+        if registered_currencies_resource:
+            return RegisteredCurrenciesResource.deserialize(registered_currencies_resource).currency_codes
+
     def get_account_resource(self) -> Optional[AccountResource]:
         if self.exists():
             resource = self.get(AccountResource.resource_path())
             if resource:
                 return AccountResource.deserialize(resource)
 
-    def get_balance_resource(self, module_address=None, module_name=None) -> Optional[BalanceResource]:
+    def get_balance_resource(self, currency_code=None, currency_module_address=None) -> Optional[BalanceResource]:
         account_resource = self.get_account_resource()
         if account_resource:
-            if module_name is None:
-                module_name = LBR_NAME
-            currency_type_tag = type_tag_for_currency_code(module_name, module_address)
+            if currency_code is None:
+                currency_code = LBR_NAME
+            currency_type_tag = type_tag_for_currency_code(currency_code, currency_module_address)
             resource = self.get(BalanceResource.access_path_for(currency_type_tag))
             if resource:
                 return BalanceResource.deserialize(resource)
@@ -69,8 +83,8 @@ class AccountState(Struct):
         if validator_config_resource:
             return ValidatorConfigResource.deserialize(validator_config_resource)
 
-    def get_currency_info_resource(self, currency_code, module_address=None) -> Optional[CurrencyInfoResource]:
-        resource = self.get(CurrencyInfoResource.access_path_for(currency_code, module_address))
+    def get_currency_info_resource(self, currency_code, currency_module_address=None) -> Optional[CurrencyInfoResource]:
+        resource = self.get(CurrencyInfoResource.access_path_for(currency_code, currency_module_address))
         if resource:
             return CurrencyInfoResource.deserialize(resource)
 
@@ -100,14 +114,6 @@ class AccountState(Struct):
 
     def is_empty(self):
         return not self.exists()
-
-    def get_code(self, module_name):
-        module_address = self.get_account_address()
-        if module_address is None:
-            module_address = CORE_CODE_ADDRESS
-        key = ModuleId(module_address, module_name)
-        path = AccessPath.code_access_path_vec(key)
-        return self.ordered_map.get(path)
 
     def __str__(self):
         import json
@@ -146,27 +152,6 @@ class AccountState(Struct):
         if resource:
             return RootVASPAccountType.deserialize(resource)
 
-    def get_account_type(self):
-        from lbrtypes.account_config import vasp_account_type_struct_tag
-        resource = self.get_resource(vasp_account_type_struct_tag())
-        if resource:
-            resource = RootVASPAccountType.deserialize(resource)
-            if resource.is_certified:
-                return resource
-        resource = self.get_resource(empty_account_type_struct_tag())
-        if resource:
-            resource = EmptyAccountType.deserialize(resource)
-            if resource.is_certified:
-                return resource
-
-
-    def get_registered_currencies(self):
-        from lbrtypes.on_chain_config.registered_currencies import RegisteredCurrenciesResource
-        type_tag = TypeTag("Struct", StructTag(CORE_CODE_ADDRESS, "RegisteredCurrencies", "T", []))
-        registered_currencies_resource = self.get(RegisteredCurrenciesResource.resource_path_for(type_tag))
-        if registered_currencies_resource:
-            return RegisteredCurrenciesResource.deserialize(registered_currencies_resource)
-
     def get_root_vasp_transition_capability(self):
         from lbrtypes.on_chain_config.account_type import TransitionCapability
         resource = self.get_resource(root_vasp_transition_capability_struct_tag())
@@ -190,3 +175,7 @@ class AccountState(Struct):
         resource = self.get_resource(child_vasp_granting_capability_struct_tag())
         if resource:
             return GrantingCapability.deserialize(resource)
+
+    def get_item_counts(self):
+        if self.exists():
+            return len(self.ordered_map)

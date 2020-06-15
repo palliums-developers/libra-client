@@ -1,7 +1,13 @@
 import sys
 import json
 import os
-from canoser import bytes_to_int_list
+import struct
+
+
+def bytes_to_int_list(bytes_str):
+    tp = struct.unpack("<{}B".format(len(bytes_str)), bytes_str)
+    return list(tp)
+
 
 file_name = sys.argv[1]
 file = open(file_name, "a+")

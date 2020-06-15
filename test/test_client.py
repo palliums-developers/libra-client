@@ -4,6 +4,7 @@ from lbrtypes.account_state import AccountState
 from error import LibraError
 from lbrtypes.account_config import association_address
 
+
 def test_get_balance():
     [a1] = create_accounts(1)
     client = create_client()
@@ -14,6 +15,16 @@ def test_get_balance():
     balance = client.get_balance(a1.address)
     assert balance == 100
 
+def test_get_balances():
+    [a1] = create_accounts(1)
+    client = create_client()
+    client.mint_coin(a1.address_hex, 11, auth_key_prefix=a1.auth_key_prefix, currency_code="LBR")
+    client.add_currency_to_account(a1, currency_code="Coin1")
+    client.mint_coin(a1.address_hex, 22, auth_key_prefix=a1.auth_key_prefix, currency_code="Coin1")
+    balances = client.get_balances(a1.address_hex)
+    assert balances["LBR"] == 11
+    assert balances["Coin1"] == 22
+
 def test_get_sequence_number():
     a1, a2 = create_accounts(2)
     client = create_client()
@@ -21,10 +32,28 @@ def test_get_sequence_number():
     assert 0 == seq
     client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, is_blocking=True)
     seq = client.get_sequence_number(a1.address)
+
+    client.mint_coin(a2.address, 100, auth_key_prefix=a2.auth_key_prefix, is_blocking=True)
+
     assert 0 == seq
-    client.transfer_coin(a1, a2.address, 10,  auth_key_prefix=a2.auth_key_prefix, is_blocking=True)
+    client.transfer_coin(a1, a2.address, 10, is_blocking=True)
     seq = client.get_sequence_number(a1.address)
     assert 1 == seq
+
+def test_get_latest_version():
+    import time
+    client = create_client()
+    v1 = client.get_latest_version()
+    time.sleep(1)
+    v2 = client.get_latest_version()
+    assert v1 < v2
+
+def test_get_registered_currencies():
+    import time
+    client = create_client()
+    cs = client.get_registered_currencies()
+    assert len(cs) >=3
+
 
 def test_mint_coin():
     [a1] = create_accounts(1)
@@ -59,10 +88,10 @@ def test_transfer_coin():
         assert 0
     except LibraError as e:
         print("Transfer:", e)
-
-    client.transfer_coin(a1, a2.address, 10, auth_key_prefix=a2.auth_key_prefix, is_blocking=True)
+    client.mint_coin(a2.address, 10, auth_key_prefix=a2.auth_key_prefix, is_blocking=True)
+    client.transfer_coin(a1, a2.address, 10, is_blocking=True)
     assert 90 == client.get_balance(a1.address)
-    assert 10 == client.get_balance(a2.address)
+    assert 20 == client.get_balance(a2.address)
 
 def test_get_account_state():
     [a1] = create_accounts(1)

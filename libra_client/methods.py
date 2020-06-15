@@ -9,7 +9,7 @@ from lbrtypes.trusted_state import TrustedState
 from lbrtypes.ledger_info import LedgerInfoWithSignatures
 from lbrtypes.transaction import SignedTransaction
 from json_rpc.client import get_response_from_batch, JsonRpcResponse
-from json_rpc.views import EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView
+from json_rpc.views import EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView, AccountView
 from lbrtypes.access_path import AccessPath
 from error.error import ServerCode, LibraError
 from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH
@@ -78,18 +78,17 @@ class LibraClient():
     def get_account_state(self, account: bytes, with_state_proof: bool)-> Optional[AccountState]:
         client_version = self.trusted_state.get_latest_version()
         batch = JsonRpcBatch.new()
-        # batch.add_get_account_state_request(account)
-        batch.add_get_account_state_with_proof_request(account)
-        # if with_state_proof:
-        #     batch.add_get_state_proof_request(client_version)
+        batch.add_get_account_state_request(account)
+        if with_state_proof:
+            batch.add_get_state_proof_request(client_version)
 
         responses = self.client.execute(batch)
-        # if with_state_proof:
-        #     state_proof = get_response_from_batch(1, responses)
-        #     self.process_state_proof_response(state_proof)
+        if with_state_proof:
+            state_proof = get_response_from_batch(1, responses)
+            self.process_state_proof_response(state_proof)
         response = get_response_from_batch(0, responses)
         ensure(isinstance(response, JsonRpcResponse), f"Failed to get account state for account address {account} with error: {response}")
-        account_view = AccountStateWithProofView.from_response(response)
+        account_view = AccountView.from_response(response)
         return account_view
 
     def get_events(self, event_key, start: int, limit: int) -> EventView:

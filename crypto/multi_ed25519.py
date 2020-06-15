@@ -108,3 +108,6 @@ def bitmap_last_set_bit(input: bitarray):
         if b:
             return MAX_NUM_OF_KEYS-1-index
 
+class Multiaddr(bytes):
+    pass
+

@@ -44,7 +44,7 @@ class JsonRpcBatch():
         self.add_request("get_account_state", [Address.normalize_to_bytes(address).hex()])
 
     def add_get_metadata_request(self):
-        self.add_request("get_metadata", [])
+        self.add_request("get_metadata", [None])
 
     def add_get_transactions_request(self, start_version: int, limit: int, include_events: bool):
         self.add_request("get_transactions", [start_version, limit, include_events])

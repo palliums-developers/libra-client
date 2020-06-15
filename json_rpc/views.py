@@ -1,6 +1,7 @@
 from typing import List
 from canoser import Struct, Uint64, BoolT, StrT, RustEnum
 from lbrtypes.account_state import AccountState
+from lbrtypes.bytecode import hash_to_type_map, CodeType
 
 class AmountView(Struct):
     _fields = [
@@ -54,16 +55,28 @@ class BurnEvent(Struct):
         ("preburn_address", str)
     ]
 
+    def get_amount(self):
+        if hasattr(self, "amount"):
+            return self.amount
+
 class CancelBurnEvent(Struct):
     _fields = [
         ("amount", AmountView),
         ("preburn_address", str)
     ]
 
+    def get_amount(self):
+        if hasattr(self, "amount"):
+            return self.amount
+
 class MintEvent(Struct):
     _fields = [
         ("amount", AmountView),
     ]
+
+    def get_amount(self):
+        if hasattr(self, "amount"):
+            return self.amount
 
 class PreburnEvent(Struct):
     _fields = [
@@ -71,15 +84,27 @@ class PreburnEvent(Struct):
         ("preburn_address", str)
     ]
 
+    def get_amount(self):
+        if hasattr(self, "amount"):
+            return self.amount
+
 class UpgradeEvent(Struct):
     _fields = [
         ("write_set", str)
     ]
 
+    def get_amount(self):
+        if hasattr(self, "amount"):
+            return self.amount
+
 class NewEpochEvent(Struct):
     _fields = [
         ("epoch", Uint64),
     ]
+
+    def get_amount(self):
+        if hasattr(self, "amount"):
+            return self.amount
 
 class NewBlockEvent(Struct):
     _fields = [
@@ -87,6 +112,10 @@ class NewBlockEvent(Struct):
         ("proposer", str),
         ("proposed_time", Uint64),
     ]
+
+    def get_amount(self):
+        if hasattr(self, "amount"):
+            return self.amount
 
 class ReceivedPaymentEvent(Struct):
     _fields = [
@@ -96,7 +125,8 @@ class ReceivedPaymentEvent(Struct):
     ]
 
     def get_amount(self):
-        return self.amount
+        if hasattr(self, "amount"):
+            return self.amount
 
     def get_sender(self):
         return self.sender
@@ -112,7 +142,8 @@ class SentPaymentEvent(Struct):
     ]
 
     def get_amount(self):
-        return self.amount
+        if hasattr(self, "amount"):
+            return self.amount
 
     def get_receiver(self):
         return self.receiver
@@ -157,6 +188,11 @@ class EventDataView(RustEnum):
         if value["type"] == "unknown":
             return cls("Unknown", None)
 
+    def get_amount(self):
+        if self.enum_name != "Unknown":
+            return self.value.get_amount()
+
+
 class EventView(Struct):
     _fields = [
         ("key", StrT),
@@ -182,23 +218,32 @@ class EventView(Struct):
         #TODO
         return response.value
 
+    def get_address(self):
+        from lbrtypes.move_core.account_address import AccountAddress
+        key = self.get_key()
+        return key[len(key) - AccountAddress.HEX_LENGTH:]
+
+    def get_amount(self):
+        return self.data.get_amount()
+
 
 class PeerToPeerScript(Struct):
     _fields = [
         ("receiver", StrT),
-        ("auth_key_prefix", StrT),
         ("amount", Uint64),
+        ("currency", StrT),
         ("metadata", StrT),
+        ("metadata_signature", StrT)
     ]
 
     def get_receiver(self):
         return self.receiver
 
-    def get_auth_key_prefix(self):
-        return self.auth_key_prefix
-
     def get_amount(self):
         return self.amount
+
+    def get_currency_code(self):
+        return self.currency
 
     def get_data(self):
         return self.metadata
@@ -208,6 +253,7 @@ class MintScript(Struct):
         ("receiver", StrT),
         ("auth_key_prefix", StrT),
         ("amount", Uint64),
+        ("currency", StrT),
     ]
 
     def get_receiver(self):
@@ -218,6 +264,9 @@ class MintScript(Struct):
 
     def get_amount(self):
         return self.amount
+
+    def get_currency_code(self):
+        return self.currency
 
 class UnknownScript(Struct):
     _fields = [
@@ -247,6 +296,10 @@ class ScriptView(RustEnum):
     def get_amount(self):
         if self.enum_name != "Unknown":
             return self.value.get_amount()
+
+    def get_currency_code(self):
+        if self.enum_name != "Unknown":
+            return self.value.get_currency_code()
 
     def get_data(self):
         if self.enum_name == "PeerToPeer":
@@ -303,8 +356,14 @@ class UserTransaction(Struct):
     def get_amount(self):
         return self.script.get_amount()
 
+    def get_currency_code(self):
+        return self.script.get_currency_code()
+
     def get_data(self):
         return self.script.get_data()
+
+    def get_code_type(self):
+        return hash_to_type_map.get(self.get_script_hash())
 
 class BlockMetadataView(Struct):
     _fields = [
@@ -359,6 +418,10 @@ class TransactionDataView(RustEnum):
         if self.enum_name == "UserTransaction":
             return self.value.get_amount()
 
+    def get_currency_code(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_currency_code()
+
     def get_data(self):
         if self.enum_name == "UserTransaction":
             return self.value.get_data()
@@ -370,6 +433,16 @@ class TransactionDataView(RustEnum):
     def get_expiration_time(self):
         if self.enum_name == "UserTransaction":
             return self.value.get_expiration_time()
+
+    def get_code_type(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_code_type()
+        if self.enum_name == "BlockMetadata":
+            return CodeType.BLOCK_METADATA
+        if self.enum_name == "WriteSet":
+            return CodeType.CHANGE_SET
+        if self.enum_name == "UnknownTransaction":
+            return CodeType.UNKNOWN
 
 class TransactionView(Struct):
     _fields = [
@@ -409,11 +482,32 @@ class TransactionView(Struct):
     def get_sender(self):
         return self.transaction.get_sender()
 
+    def get_code_type(self):
+        return self.transaction.get_code_type()
+
     def get_receiver(self):
-        return self.transaction.get_receiver()
+        receiver = self.transaction.get_receiver()
+        if receiver is None and self.get_code_type() in (CodeType.MINT, CodeType.MINT_LBR_TO_ADDRESS):
+            for event in self.events:
+                if event.data.enum_name == "ReceivedPayment":
+                    return event.get_address()
+        return receiver
 
     def get_amount(self):
-        return self.transaction.get_amount()
+        amount = self.transaction.get_amount()
+        if amount is None and self.get_code_type() in (CodeType.MINT, CodeType.MINT_LBR_TO_ADDRESS):
+            for event in self.events:
+                if event.data.enum_name == "Mint":
+                    return event.get_amount().amount
+        return amount
+
+    def get_currency_code(self):
+        currency = self.transaction.get_currency_code()
+        if currency is None and self.get_code_type() in (CodeType.MINT, CodeType.MINT_LBR_TO_ADDRESS):
+            for event in self.events:
+                if event.data.enum_name == "Mint":
+                    return event.get_amount().currency
+        return currency
 
     def get_data(self):
         return self.transaction.get_data()
@@ -429,19 +523,20 @@ class TransactionView(Struct):
         tx["sender"] = self.get_sender()
         tx["receiver"] = self.get_receiver()
         tx["amount"] = self.get_amount()
+        tx["currency_code"] = self.get_currency_code()
         tx["sequence_number"] = self.get_sequence_number()
         tx["major_status"] = self.get_vm_status()
         tx["version"] = self.get_version()
         tx["success"] = self.is_successful()
         tx["expiration_time"] = self.get_expiration_time()
-
+        tx["data"] = self.get_data()
+        tx["code_type"] = self.get_code_type()
         return tx
 
     def __str__(self):
         import json
         amap = self.to_json_serializable()
         return json.dumps(amap, sort_keys=False, indent=2)
-
 
 class StateProofView(Struct):
     _fields = [

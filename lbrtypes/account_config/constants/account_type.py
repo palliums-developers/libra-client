@@ -89,7 +89,7 @@ def vasp_account_type_struct_tag() -> StructTag :
         [],
 
     )
-    
+
     return StructTag(
         CORE_CODE_ADDRESS,
         account_type_module_name(),
@@ -155,8 +155,6 @@ def root_vasp_transition_capability_struct_tag() ->StructTag:
         transition_capability_struct_name(),
         [TypeTag("Struct", inner_struct_tag)]
     )
-
-
 
 def child_vasp_granting_capability_struct_tag() -> StructTag:
     inner_struct_tag = StructTag(

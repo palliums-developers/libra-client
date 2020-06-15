@@ -1,5 +1,5 @@
 import argparse
-from compound_client import Client
+from bank_client import Client
 
 module_address=""
 

@@ -38,3 +38,4 @@ class AccountResource(Struct, MoveResource):
 
     def get_balance_currency_code(self):
         return self.balance_currency_code
+

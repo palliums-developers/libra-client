@@ -70,7 +70,6 @@ def common_prefix_bits_len(bytes1, bytes2):
             return idx
     return len(bit_str1)
 
-
 def hash_seed(clazz_name):
     sha3 = new_sha3_256()
     sha3.update(LIBRA_HASH_PREFIX + clazz_name)
