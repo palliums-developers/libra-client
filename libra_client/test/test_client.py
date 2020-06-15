@@ -1,9 +1,27 @@
-from test import create_accounts, create_client, create_accounts_with_coins
 from json_rpc.views import TransactionView, EventView
 from lbrtypes.account_state import AccountState
 from error import LibraError
 from lbrtypes.account_config import association_address
+from libra_client import Client, Wallet
+from typing import List
+from libra_client.account import Account
 
+def create_accounts(account_number)-> List[Account]:
+    wallet = Wallet.new()
+    return [wallet.new_account() for _ in range(account_number)]
+
+def create_accounts_with_coins(account_number)-> List[Account]:
+    wallet = Wallet.new()
+    client = create_client()
+    accounts = []
+    for _ in range(account_number):
+        account = wallet.new_account()
+        client.mint_coin(account.address, 100, auth_key_prefix=account.auth_key_prefix, is_blocking=True)
+        accounts.append(account)
+    return accounts
+
+def create_client() -> Client:
+    return Client()
 
 def test_get_balance():
     [a1] = create_accounts(1)

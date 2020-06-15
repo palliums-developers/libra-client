@@ -166,14 +166,16 @@ class LibraClient():
             return []
         path = access_path.path
         ensure(path in (ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH), "Unexpected event path found in access path")
-        # if path == ACCOUNT_SENT_EVENT_PATH:
-        #     event_key = account_view.sent_events_key
-        # elif path == ACCOUNT_RECEIVED_EVENT_PATH:
-        #     event_key = account_view.received_events_key
-        event_handle = account_view.get_event_handle_by_query_path(path)
-        if event_handle is None:
+        if path == ACCOUNT_SENT_EVENT_PATH:
+            event_key = account_view.sent_events_key
+        elif path == ACCOUNT_RECEIVED_EVENT_PATH:
+            event_key = account_view.received_events_key
+        else:
             return []
-        event_key = event_handle.get_key()
+        # event_handle = account_view.get_event_handle_by_query_path(path)
+        # if event_handle is None:
+        #     return []
+        # event_key = event_handle.get_key()
         events = self.get_events(event_key, start_event_seq_num, limit)
         return events
 
