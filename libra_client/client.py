@@ -6,7 +6,7 @@ from typing import Optional, Union
 from lbrtypes.move_core.account_address import AccountAddress as Address
 from libra_client.methods import LibraClient
 from lbrtypes.waypoint import Waypoint
-from libra_client.account import Account
+from .account import Account
 from lbrtypes.transaction import TransactionPayload, SignedTransaction
 from lbrtypes.transaction.script import Script
 from lbrtypes.rustlib import ensure
