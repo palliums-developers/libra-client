@@ -59,12 +59,12 @@ def test_get_receiver():
 def test_get_amount():
     client = create_client()
     [a1, a2] = create_accounts(2)
-    seq = client.mint_coin(a1.address, 99, auth_key_prefix=a1.auth_key_prefix, is_blocking=True, currency_code="Coin1")
+    seq = client.mint_coin(a1.address, 99, auth_key_prefix=a1.auth_key_prefix, is_blocking=True)
     tx = client.get_account_transaction(association_address(), seq)
     assert tx.get_amount() == 99
 
-    seq = client.mint_coin(a2.address, 100, auth_key_prefix=a2.auth_key_prefix, is_blocking=True, currency_code="Coin1")
-    seq = client.transfer_coin(a1, a2.address, 88, is_blocking=True, currency_code="Coin1")
+    seq = client.mint_coin(a2.address, 100, auth_key_prefix=a2.auth_key_prefix, is_blocking=True)
+    seq = client.transfer_coin(a1, a2.address, 88, is_blocking=True)
     tx = client.get_account_transaction(a1.address, seq)
     assert tx.get_amount() == 88
 
