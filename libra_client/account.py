@@ -1,7 +1,7 @@
 from nacl.signing import SigningKey
 from enum import Enum
 
-from lbrtypes.move_core.account_address import AccountAddress
+from move_core_types.account_address import AccountAddress
 from lbrtypes.account_config import association_address
 from lbrtypes.transaction.authenticator import AuthenticationKey
 

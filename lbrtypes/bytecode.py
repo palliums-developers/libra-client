@@ -1,6 +1,5 @@
 from enum import IntEnum
 from move_core_types.account_address import AccountAddress
-from crypto.hash import HashValue
 
 class TransactionType(IntEnum):
     SIGNED_TRANSACTION = 0
@@ -126,7 +125,14 @@ type_to_code_map = {
 }
 
 code_to_type_map = { v:k for k, v in type_to_code_map.items()}
-hash_to_type_map = { HashValue.from_keccak(v): k for k, v in type_to_code_map.items()}
+
+import hashlib
+def gen_hex_hash(code):
+    m = hashlib.sha3_256()
+    m.update(code)
+    return m.hexdigest()
+
+hash_to_type_map = { gen_hex_hash(v): k for k, v in type_to_code_map.items()}
 
 default_currency_module_address = bytes.fromhex("7257c2417e4d1038e1817c8f283ace2e")
 

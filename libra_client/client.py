@@ -3,7 +3,9 @@ import requests
 from json_rpc.views import TransactionView
 from typing import Optional, Union
 
-from lbrtypes.move_core.account_address import AccountAddress as Address
+from lbrtypes.account_config.constants.lbr import LBR_NAME, CORE_CODE_ADDRESS
+from move_core_types.language_storage import TypeTag, StructTag
+from move_core_types.account_address import AccountAddress as Address
 from libra_client.methods import LibraClient
 from lbrtypes.waypoint import Waypoint
 from account import Account
@@ -14,7 +16,7 @@ from lbrtypes.access_path import AccessPath
 from error import LibraError, StatusCode, ServerCode
 from lbrtypes.bytecode import CodeType
 from lbrtypes.transaction.transaction_argument import TransactionArgument
-from lbrtypes.account_config import get_coin_type, ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH, association_address, config_address
+from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH, association_address
 from lbrtypes.transaction.helper import create_user_txn
 from lbrtypes.account_state import AccountState
 
@@ -55,6 +57,7 @@ class Client():
 
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
+
     def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
@@ -152,7 +155,19 @@ class Client():
         return self.client.get_state_proof()
 
     def get_type_args(self, currency_module_address, currency_code, struct_name=None):
-        coin_type = get_coin_type(currency_module_address, currency_code, struct_name)
+        if currency_module_address is None:
+            currency_module_address = CORE_CODE_ADDRESS
+        if currency_code is None:
+            currency_code = LBR_NAME
+        if struct_name is None:
+            struct_name = currency_code
+        currency_module_address = Address.normalize_to_bytes(currency_module_address)
+        coin_type =  TypeTag("Struct", StructTag(
+            currency_module_address,
+            currency_code,
+            struct_name,
+            []
+        ))
         if coin_type:
             return [coin_type]
         return []

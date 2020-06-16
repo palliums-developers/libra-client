@@ -1,5 +1,4 @@
-from violas_client import Client, Wallet
-
+from libra_client import Client, Wallet
 
 client = Client()
 wallet = Wallet.new()
