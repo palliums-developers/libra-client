@@ -505,7 +505,7 @@ class TransactionView(Struct):
         currency = self.transaction.get_currency_code()
         if currency is None and self.get_code_type() in (CodeType.MINT, CodeType.MINT_LBR_TO_ADDRESS):
             for event in self.events:
-                if event.data.enum_name == "Mint":
+                if event.data.enum_name == "ReceivedPayment":
                     return event.get_amount().currency
         return currency
 
