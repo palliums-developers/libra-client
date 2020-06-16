@@ -538,6 +538,9 @@ class TransactionView(Struct):
         amap = self.to_json_serializable()
         return json.dumps(amap, sort_keys=False, indent=2)
 
+    def __repr__(self):
+        return self.__str__()
+
 class StateProofView(Struct):
     _fields = [
         ("epoch_change_proof", StrT),

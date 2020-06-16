@@ -28,8 +28,8 @@ TX_EXPIRATION = 100
 
 NETWORKS = {
     'libra_testnet':{
-        "url": "https://client.testnet.lbrtypes.org",
-        'faucet_server': "faucet.testnet.lbrtypes.org"
+        "url": "https://client.testnet.libra.org",
+        'faucet_server': "http://faucet.testnet.libra.org"
     },
     'violas_testnet':{
         "url": "http://52.27.228.84:50001",
@@ -172,6 +172,8 @@ class Client():
                   currency_code=None,
                   max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         from lbrtypes.account_config import LBR_NAME
+        if currency_code is None:
+            currency_code = LBR_NAME
         if self.faucet_account:
             args = []
             args.append(TransactionArgument.to_address(receiver_address))
@@ -186,12 +188,18 @@ class Client():
             return self.submit_script(self.faucet_account, script, is_blocking, "LBR", max_gas_amount, gas_unit_price,
                                       txn_expiration)
         else:
-            return self.mint_coin_with_faucet_service(receiver_address, micro_coins, is_blocking)
+            return self.mint_coin_with_faucet_service(receiver_address, auth_key_prefix, micro_coins, currency_code, is_blocking)
 
-    def mint_coin_with_faucet_service(self, receiver, micro_coins: int, is_blocking=True):
+    def mint_coin_with_faucet_service(self, receiver, auth_key_prefix, micro_coins: int, currency_code, is_blocking=True):
+        receiver = Address.normalize_to_bytes(receiver)
+        auth_key_prefix = Address.normalize_to_bytes(auth_key_prefix)
         ensure(self.faucet_server is not None, "Require faucet server")
-        url = f"http://{self.faucet_server}?amount={micro_coins}&auth_key={receiver.hex()}"
-        response = requests.post(url)
+        params = {
+            "amount": micro_coins,
+            "auth_key": (auth_key_prefix+receiver).hex(),
+            "currency_code": currency_code
+        }
+        response = requests.post(self.faucet_server, params=params)
         body = response.text
         status = response.status_code
         ensure(status == requests.codes.ok, f"Failed to query remote faucet server[status={status}]: {body}")
