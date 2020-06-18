@@ -219,7 +219,7 @@ class EventView(Struct):
         return response.value
 
     def get_address(self):
-        from lbrtypes.move_core.account_address import AccountAddress
+        from move_core_types.account_address import AccountAddress
         key = self.get_key()
         return key[len(key) - AccountAddress.HEX_LENGTH:]
 
@@ -487,7 +487,7 @@ class TransactionView(Struct):
 
     def get_receiver(self):
         receiver = self.transaction.get_receiver()
-        if receiver is None and self.get_code_type() in (CodeType.MINT, CodeType.MINT_LBR_TO_ADDRESS):
+        if receiver is None and self.get_code_type() in (CodeType.MINT, ):
             for event in self.events:
                 if event.data.enum_name == "ReceivedPayment":
                     return event.get_address()
@@ -495,17 +495,17 @@ class TransactionView(Struct):
 
     def get_amount(self):
         amount = self.transaction.get_amount()
-        if amount is None and self.get_code_type() in (CodeType.MINT, CodeType.MINT_LBR_TO_ADDRESS):
+        if amount is None and self.get_code_type() in (CodeType.MINT, ):
             for event in self.events:
-                if event.data.enum_name == "Mint":
+                if event.data.enum_name == "ReceivedPayment":
                     return event.get_amount().amount
         return amount
 
     def get_currency_code(self):
         currency = self.transaction.get_currency_code()
-        if currency is None and self.get_code_type() in (CodeType.MINT, CodeType.MINT_LBR_TO_ADDRESS):
+        if currency is None and self.get_code_type() in (CodeType.MINT, ):
             for event in self.events:
-                if event.data.enum_name == "Mint":
+                if event.data.enum_name == "ReceivedPayment":
                     return event.get_amount().currency
         return currency
 

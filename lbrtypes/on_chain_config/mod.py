@@ -28,7 +28,10 @@ class OnChainConfig():
     ADDRESS = "0xF1A95"
     IDENTIFIER = ""
     CONFIG_ID = ConfigID(ADDRESS, IDENTIFIER)
-    pass
+
+    @classmethod
+    def resource_path(cls)-> AccessPath:
+        return access_path_for_config(cls.ADDRESS, cls.IDENTIFIER)
 
 
 def new_epoch_event_key() -> EventKey:
@@ -38,13 +41,13 @@ def access_path_for_config(address, config_name: str) -> AccessPath:
     tag = StructTag(
         CORE_CODE_ADDRESS,
         config_name,
-        "T",
+        config_name,
         []
     )
     tag = StructTag(
         CORE_CODE_ADDRESS,
         "LibraConfig",
-        "T",
+        "LibraConfig",
         [TypeTag("Struct",tag)]
     )
     address = AccountAddress.normalize_to_bytes(address)

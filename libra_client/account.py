@@ -2,7 +2,7 @@ from nacl.signing import SigningKey
 from enum import Enum
 
 from move_core_types.account_address import AccountAddress
-from lbrtypes.account_config import association_address
+from lbrtypes.account_config import treasury_compliance_account_address
 from lbrtypes.transaction.authenticator import AuthenticationKey
 
 
@@ -32,7 +32,7 @@ class Account:
 
     @classmethod
     def faucet_account(cls, private_key):
-        return cls(private_key, association_address())
+        return cls(private_key, treasury_compliance_account_address())
 
     @classmethod
     def load_faucet_account_file(cls, faucet_account_file):

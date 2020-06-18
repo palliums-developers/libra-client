@@ -7,7 +7,7 @@ from crypto.hash import gen_hasher
 CODE_TAG = 0
 RESOURCE_TAG = 1
 
-CORE_CODE_ADDRESS: AccountAddress = b"1".rjust(AccountAddress.LENGTH)
+CORE_CODE_ADDRESS: AccountAddress = b"\x01".rjust(AccountAddress.LENGTH, b"\x00")
 
 def core_code_address():
     return CORE_CODE_ADDRESS
@@ -21,8 +21,8 @@ class TypeTag(RustEnum):
         ("U128", Uint128),
         ("Address", AccountAddress),
         ("Signer", bytes),
-        ("Vector", "lbrtypes.move_core.language_storage.TypeTag"),
-        ("Struct", "lbrtypes.move_core.language_storage.StructTag")
+        ("Vector", "move_core_types.language_storage.TypeTag"),
+        ("Struct", "move_core_types.language_storage.StructTag")
     ]
 
 class StructTag(Struct):

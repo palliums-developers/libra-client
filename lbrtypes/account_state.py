@@ -5,6 +5,8 @@ from lbrtypes.validator_config import ValidatorConfigResource
 from lbrtypes.libra_timestamp import LibraTimestampResource
 from lbrtypes.on_chain_config.validator_set import ValidatorSet
 from lbrtypes.block_metadata import LibraBlockResource
+from lbrtypes.access_path import AccessPath
+
 
 class AccountState(Struct):
     _fields = [
@@ -45,11 +47,10 @@ class AccountState(Struct):
         return self.ordered_map.get(path)
 
     def get_registered_currencies(self):
-        from lbrtypes.on_chain_config.registered_currencies import RegisteredCurrenciesResource
-        type_tag = TypeTag("Struct", StructTag(CORE_CODE_ADDRESS, "RegisteredCurrencies", "T", []))
-        registered_currencies_resource = self.get(RegisteredCurrenciesResource.resource_path_for(type_tag))
+        from lbrtypes.on_chain_config.registered_currencies import RegisteredCurrencies
+        registered_currencies_resource = self.get(RegisteredCurrencies.resource_path().path)
         if registered_currencies_resource:
-            return RegisteredCurrenciesResource.deserialize(registered_currencies_resource).currency_codes
+            return RegisteredCurrencies.deserialize(registered_currencies_resource).currency_codes
 
     def get_account_resource(self) -> Optional[AccountResource]:
         if self.exists():
@@ -82,8 +83,8 @@ class AccountState(Struct):
         if validator_config_resource:
             return ValidatorConfigResource.deserialize(validator_config_resource)
 
-    def get_currency_info_resource(self, currency_code, currency_module_address=None) -> Optional[CurrencyInfoResource]:
-        resource = self.get(CurrencyInfoResource.access_path_for(currency_code, currency_module_address))
+    def get_currency_info_resource(self, currency_code) -> Optional[CurrencyInfoResource]:
+        resource = self.get(CurrencyInfoResource.access_path_for(currency_code))
         if resource:
             return CurrencyInfoResource.deserialize(resource)
 

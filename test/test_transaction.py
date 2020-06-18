@@ -1,4 +1,4 @@
-from lbrtypes.account_config import association_address
+from lbrtypes.account_config import treasury_compliance_account_address
 from libra_client import Client, Wallet
 from typing import List
 from libra_client.account import Account
@@ -24,8 +24,8 @@ def test_get_sender():
     client = create_client()
     [a1, a2] = create_accounts(2)
     seq = client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, is_blocking=True)
-    tx = client.get_account_transaction(association_address(), seq)
-    assert tx.get_sender() == association_address().hex()
+    tx = client.get_account_transaction(treasury_compliance_account_address(), seq)
+    assert tx.get_sender() == treasury_compliance_account_address().hex()
 
     seq = client.mint_coin(a2.address, 100, auth_key_prefix=a2.auth_key_prefix, is_blocking=True)
     seq = client.transfer_coin(a1, a2.address, 10, is_blocking=True)
@@ -42,7 +42,7 @@ def test_get_receiver():
     client = create_client()
     [a1, a2] = create_accounts(2)
     seq = client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, is_blocking=True, currency_code="Coin1")
-    tx = client.get_account_transaction(association_address(), seq)
+    tx = client.get_account_transaction(treasury_compliance_account_address(), seq)
     assert tx.get_receiver() == a1.address_hex
 
     seq = client.mint_coin(a2.address, 100, auth_key_prefix=a2.auth_key_prefix, is_blocking=True, currency_code="Coin1")
@@ -60,7 +60,7 @@ def test_get_amount():
     client = create_client()
     [a1, a2] = create_accounts(2)
     seq = client.mint_coin(a1.address, 99, auth_key_prefix=a1.auth_key_prefix, is_blocking=True, currency_code="Coin1")
-    tx = client.get_account_transaction(association_address(), seq)
+    tx = client.get_account_transaction(treasury_compliance_account_address(), seq)
     assert tx.get_amount() == 99
 
     seq = client.mint_coin(a2.address, 100, auth_key_prefix=a2.auth_key_prefix, is_blocking=True, currency_code="Coin1")
@@ -78,7 +78,7 @@ def test_get_currency_code():
     client = create_client()
     [a1, a2] = create_accounts(2)
     seq = client.mint_coin(a1.address, 99, auth_key_prefix=a1.auth_key_prefix, is_blocking=True, currency_code="Coin1")
-    tx = client.get_account_transaction(association_address(), seq)
+    tx = client.get_account_transaction(treasury_compliance_account_address(), seq)
     assert tx.get_currency_code() == "Coin1"
 
     seq = client.mint_coin(a2.address, 100, auth_key_prefix=a2.auth_key_prefix, is_blocking=True, currency_code="Coin1")
@@ -96,7 +96,7 @@ def test_get_data():
     client = create_client()
     [a1, a2] = create_accounts(2)
     seq = client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, is_blocking=True)
-    tx = client.get_account_transaction(association_address(), seq)
+    tx = client.get_account_transaction(treasury_compliance_account_address(), seq)
     assert tx.get_data() == None
 
     data = b"data"

@@ -1,8 +1,0 @@
-from lbrtypes.move_core.language_storage import ModuleId, CORE_CODE_ADDRESS
-
-GENESIS_MODULE_NAME = "Genesis"
-GENESIS_MODULE = ModuleId(CORE_CODE_ADDRESS, GENESIS_MODULE_NAME)
-
-DEBUG_MODULE_NAME = "Debug"
-
-DEBUG_MODULE = ModuleId(CORE_CODE_ADDRESS, DEBUG_MODULE_NAME)

@@ -19,6 +19,7 @@ from lbrtypes.transaction.transaction_argument import TransactionArgument
 from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH, association_address
 from lbrtypes.transaction.helper import create_user_txn
 from lbrtypes.account_state import AccountState
+from lbrtypes.account_config import config_address
 
 import os
 pre_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../key'))
@@ -37,9 +38,9 @@ NETWORKS = {
         "url": "http://52.27.228.84:50001",
         "faucet_file": f"{pre_path}/mint_test.key"
     },
-    'tianjin_testnet': {
-        "url": "http://125.39.5.57:50001",
-        "faucet_file": "/root/key/mint_tianjin.key"
+    'local_testnet': {
+        "url": "http://localhost:37619",
+        "faucet_file": "/tmp/ada66acf39936c3801964711948fb017/mint.key"
     },
 
     'bj_testnet': {
@@ -58,7 +59,7 @@ class Client():
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
 
-    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="local_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -109,9 +110,12 @@ class Client():
         return metadata.version
 
     def get_registered_currencies(self):
-        from lbrtypes.account_config import config_address
         state = self.get_account_state(config_address())
         return state.get_registered_currencies()
+
+    def get_currency_info(self, currency_code):
+        state = self.get_account_state(association_address())
+        return state.get_currency_info_resource(currency_code)
 
     def get_account_state(self, account_address: Union[bytes, str]) -> Optional[AccountState]:
         return self.get_account_blob(account_address)
@@ -194,11 +198,8 @@ class Client():
             args.append(TransactionArgument.to_address(receiver_address))
             args.append(TransactionArgument.to_U8Vector(auth_key_prefix))
             args.append(TransactionArgument.to_U64(micro_coins))
-            if currency_code in (None, LBR_NAME):
-                script = Script.gen_script(CodeType.MINT_LBR_TO_ADDRESS, *args, currency_module_address=currency_module_address)
-            else:
-                ty_args = self.get_type_args(currency_module_address, currency_code)
-                script = Script.gen_script(CodeType.MINT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
+            ty_args = self.get_type_args(currency_module_address, currency_code)
+            script = Script.gen_script(CodeType.MINT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
 
             return self.submit_script(self.faucet_account, script, is_blocking, "LBR", max_gas_amount, gas_unit_price,
                                       txn_expiration)

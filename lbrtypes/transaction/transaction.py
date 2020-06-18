@@ -18,7 +18,6 @@ MAX_TRANSACTION_SIZE_IN_BYTES = 4096
 
 class TransactionPayload(RustEnum):
     _enums = [
-        ("Program", None),
         ("WriteSet", ChangeSet),
         ("Script", Script),
         ("Module", Module),
