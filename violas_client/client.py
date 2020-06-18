@@ -20,6 +20,7 @@ from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EV
 from lbrtypes.transaction.helper import create_user_txn
 from lbrtypes.account_state import AccountState
 from lbrtypes.account_config import config_address
+from lbrtypes.account_config import LBR_NAME
 
 import os
 pre_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../key'))
@@ -180,16 +181,16 @@ class Client():
         ensure(self.faucet_account is not None, "facucet_account is not set")
 
     def add_currency_to_account(self, sender_account, currency_code, currency_module_address=None, is_blocking=True,
-            max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,txn_expiration=TXN_EXPIRATION):
+            max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,txn_expiration=TXN_EXPIRATION, gas_currency_code=None):
         args = []
         ty_args = self.get_type_args(currency_module_address, currency_code)
         script = Script.gen_script(CodeType.ADD_CURRENCY_TO_ACCOUNT, *args, ty_args=ty_args,
                                    currency_module_address=currency_module_address)
-        return self.submit_script(sender_account, script, is_blocking, max_gas_amount=max_gas_amount, gas_unit_price=gas_unit_price, txn_expiration=txn_expiration)
+        return self.submit_script(sender_account, script, is_blocking, max_gas_amount=max_gas_amount, gas_unit_price=gas_unit_price, txn_expiration=txn_expiration, gas_currency_code=gas_currency_code)
 
     def mint_coin(self, receiver_address, micro_coins, auth_key_prefix=None, is_blocking=True, currency_module_address=None,
                   currency_code=None,
-                  max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+                  max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION, gas_currency_code=None):
         from lbrtypes.account_config import LBR_NAME
         if currency_code is None:
             currency_code = LBR_NAME
@@ -201,7 +202,7 @@ class Client():
             ty_args = self.get_type_args(currency_module_address, currency_code)
             script = Script.gen_script(CodeType.MINT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
 
-            return self.submit_script(self.faucet_account, script, is_blocking, "LBR", max_gas_amount, gas_unit_price,
+            return self.submit_script(self.faucet_account, script, is_blocking, gas_currency_code, max_gas_amount, gas_unit_price,
                                       txn_expiration)
         else:
             return self.mint_coin_with_faucet_service(receiver_address, auth_key_prefix, micro_coins, currency_code, is_blocking)
@@ -284,5 +285,4 @@ class Client():
             return gas_currency_code
         if currency_code:
             return currency_code
-        from lbrtypes.account_config import LBR_NAME
         return LBR_NAME
