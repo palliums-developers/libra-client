@@ -6,7 +6,7 @@ from typing import Optional, Union
 from lbrtypes.account_config.constants.lbr import LBR_NAME, CORE_CODE_ADDRESS
 from move_core_types.language_storage import TypeTag, StructTag
 from move_core_types.account_address import AccountAddress as Address
-from libra_client.methods import LibraClient
+from methods import LibraClient
 from lbrtypes.waypoint import Waypoint
 from account import Account
 from lbrtypes.transaction import TransactionPayload, SignedTransaction

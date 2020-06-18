@@ -1,5 +1,5 @@
 from mnemonic import Mnemonic
-from libra_client.key_factory import KeyFactory
+from key_factory import KeyFactory
 from lbrtypes.rustlib import ensure
 from account import Account
 from lbrtypes.transaction import RawTransaction
