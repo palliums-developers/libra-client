@@ -5,7 +5,7 @@ from typing import Optional, Union
 from lbrtypes.account_config import LBR_NAME
 
 from lbrtypes.move_core.account_address import AccountAddress as Address
-from libra_client.methods import LibraClient
+from methods import LibraClient
 from lbrtypes.waypoint import Waypoint
 from account import Account
 from lbrtypes.transaction import TransactionPayload, SignedTransaction
@@ -273,5 +273,4 @@ class Client():
             return gas_currency_code
         if currency_code:
             return currency_code
-        from lbrtypes.account_config import LBR_NAME
         return LBR_NAME
