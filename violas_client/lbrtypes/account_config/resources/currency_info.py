@@ -35,6 +35,9 @@ class CurrencyInfoResource(Struct, MoveResource):
     def get_fractional_part(self):
         return self.fractional_part
 
+    def get_to_lbr_exchange_rate(self):
+        return self.to_lbr_exchange_rate / 2**32
+
     def convert_to_lbr(self, amount):
         mult = amount * self.to_lbr_exchange_rate
         mult >>= 32

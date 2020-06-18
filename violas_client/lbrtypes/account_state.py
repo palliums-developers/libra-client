@@ -83,8 +83,8 @@ class AccountState(Struct):
         if validator_config_resource:
             return ValidatorConfigResource.deserialize(validator_config_resource)
 
-    def get_currency_info_resource(self, currency_code, currency_module_address=None) -> Optional[CurrencyInfoResource]:
-        resource = self.get(CurrencyInfoResource.access_path_for(currency_code, currency_module_address))
+    def get_currency_info_resource(self, currency_code) -> Optional[CurrencyInfoResource]:
+        resource = self.get(CurrencyInfoResource.access_path_for(currency_code))
         if resource:
             return CurrencyInfoResource.deserialize(resource)
 

@@ -110,6 +110,11 @@ class Client():
         state = self.get_account_state(config_address())
         return state.get_registered_currencies()
 
+    def get_currency_info(self, currency_code):
+        from lbrtypes.account_config import association_address
+        state = self.get_account_state(association_address())
+        return state.get_currency_info_resource(currency_code)
+
     def get_account_state(self, account_address: Union[bytes, str]) -> Optional[AccountState]:
         return self.get_account_blob(account_address)
         # address = Address.normalize_to_bytes(account_address)
