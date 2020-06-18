@@ -16,7 +16,7 @@ from lbrtypes.access_path import AccessPath
 from error import LibraError, StatusCode, ServerCode
 from lbrtypes.bytecode import CodeType
 from lbrtypes.transaction.transaction_argument import TransactionArgument
-from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH, association_address
+from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH, association_address, treasury_compliance_account_address
 from lbrtypes.transaction.helper import create_user_txn
 from lbrtypes.account_state import AccountState
 from lbrtypes.account_config import config_address
@@ -222,7 +222,7 @@ class Client():
         ensure(status == requests.codes.ok, f"Failed to query remote faucet server[status={status}]: {body}")
         sequence_number = int(body)
         if is_blocking:
-            self.wait_for_transaction(association_address(), sequence_number - 1)
+            self.wait_for_transaction(treasury_compliance_account_address(), sequence_number - 1)
         return sequence_number
 
     def transfer_coin(self, sender_account, receiver_address, micro_coins, currency_module_address=None,
