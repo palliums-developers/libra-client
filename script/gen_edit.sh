@@ -16,6 +16,8 @@ git rm violas_client/error -rf
 git rm violas_client/json_rpc -rf
 git rm violas_client/move_core_types -rf
 git rm violas_client/lbrtypes -rf
+git rm violas_client/test -rf
+
 
 rm violas_client/canoser -rf
 rm violas_client/crypto -rf
@@ -23,6 +25,8 @@ rm violas_client/error -rf
 rm violas_client/json_rpc -rf
 rm violas_client/move_core_types -rf
 rm violas_client/lbrtypes -rf
+rm violas_client/test -rf
+
 
 git rm violas_client/account.py -f
 git rm violas_client/client.py -f
@@ -32,6 +36,7 @@ git rm violas_client/wallet_library.py -f
 git rm violas_client/__init__.py -f
 
 
+cd ./script
 
 
 
