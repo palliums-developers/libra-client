@@ -3,11 +3,13 @@ from canoser import Struct, Uint64, BoolT, StrT, RustEnum
 from lbrtypes.account_state import AccountState
 from lbrtypes.bytecode import hash_to_type_map, CodeType
 
+
 class AmountView(Struct):
     _fields = [
         ("amount", Uint64),
         ("currency", StrT)
     ]
+
 
 class AccountView(Struct):
     _fields = [
@@ -22,7 +24,7 @@ class AccountView(Struct):
 
     @staticmethod
     def from_response(response):
-        #TODO:
+        # TODO:
         return response.value.value
 
     def get_balance(self, currency_code="LBR"):
@@ -49,6 +51,7 @@ class AccountView(Struct):
     def get_delegated_withdrawal_capability(self):
         return self.delegated_withdrawal_capability
 
+
 class BurnEvent(Struct):
     _fields = [
         ("amount", AmountView),
@@ -58,6 +61,7 @@ class BurnEvent(Struct):
     def get_amount(self):
         if hasattr(self, "amount"):
             return self.amount
+
 
 class CancelBurnEvent(Struct):
     _fields = [
@@ -69,6 +73,7 @@ class CancelBurnEvent(Struct):
         if hasattr(self, "amount"):
             return self.amount
 
+
 class MintEvent(Struct):
     _fields = [
         ("amount", AmountView),
@@ -77,6 +82,7 @@ class MintEvent(Struct):
     def get_amount(self):
         if hasattr(self, "amount"):
             return self.amount
+
 
 class PreburnEvent(Struct):
     _fields = [
@@ -88,6 +94,7 @@ class PreburnEvent(Struct):
         if hasattr(self, "amount"):
             return self.amount
 
+
 class UpgradeEvent(Struct):
     _fields = [
         ("write_set", str)
@@ -97,6 +104,7 @@ class UpgradeEvent(Struct):
         if hasattr(self, "amount"):
             return self.amount
 
+
 class NewEpochEvent(Struct):
     _fields = [
         ("epoch", Uint64),
@@ -105,6 +113,7 @@ class NewEpochEvent(Struct):
     def get_amount(self):
         if hasattr(self, "amount"):
             return self.amount
+
 
 class NewBlockEvent(Struct):
     _fields = [
@@ -116,6 +125,7 @@ class NewBlockEvent(Struct):
     def get_amount(self):
         if hasattr(self, "amount"):
             return self.amount
+
 
 class ReceivedPaymentEvent(Struct):
     _fields = [
@@ -134,6 +144,7 @@ class ReceivedPaymentEvent(Struct):
     def get_data(self):
         return self.metadata
 
+
 class SentPaymentEvent(Struct):
     _fields = [
         ("amount", AmountView),
@@ -150,6 +161,7 @@ class SentPaymentEvent(Struct):
 
     def get_data(self):
         return self.metadata
+
 
 class EventDataView(RustEnum):
     _enums = [
@@ -215,7 +227,7 @@ class EventView(Struct):
 
     @classmethod
     def vec_from_response(cls, response):
-        #TODO
+        # TODO
         return response.value
 
     def get_address(self):
@@ -248,6 +260,7 @@ class PeerToPeerScript(Struct):
     def get_data(self):
         return self.metadata
 
+
 class MintScript(Struct):
     _fields = [
         ("receiver", StrT),
@@ -268,9 +281,11 @@ class MintScript(Struct):
     def get_currency_code(self):
         return self.currency
 
+
 class UnknownScript(Struct):
     _fields = [
     ]
+
 
 class ScriptView(RustEnum):
     _enums = [
@@ -321,6 +336,9 @@ class UserTransaction(Struct):
         ("script", ScriptView)
     ]
 
+    def get_gas_currency(self):
+        return self.gas_currency
+
     def get_sender(self):
         return self.sender
 
@@ -366,6 +384,7 @@ class UserTransaction(Struct):
     def get_code_type(self):
         return hash_to_type_map.get(self.get_script_hash())
 
+
 class BlockMetadataView(Struct):
     _fields = [
         ("version", Uint64),
@@ -382,6 +401,7 @@ class BlockMetadataView(Struct):
     def get_timestamp(self):
         return self.timestamp
 
+
 class BlockMetadata(Struct):
     _fields = [
         ("timestamp_usecs", Uint64)
@@ -389,6 +409,7 @@ class BlockMetadata(Struct):
 
     def get_timestamp_usecs(self):
         return self.timestamp_usecs
+
 
 class TransactionDataView(RustEnum):
     _enums = [
@@ -406,6 +427,10 @@ class TransactionDataView(RustEnum):
             return cls("BlockMetadata", BlockMetadata.from_value(value))
         if value.get("type") == "writeset":
             return cls("WriteSet", None)
+
+    def get_gas_currency(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_gas_currency()
 
     def get_sender(self):
         if self.enum_name == "UserTransaction":
@@ -444,6 +469,7 @@ class TransactionDataView(RustEnum):
             return CodeType.CHANGE_SET
         if self.enum_name == "UnknownTransaction":
             return CodeType.UNKNOWN
+
 
 class TransactionView(Struct):
     _fields = [
@@ -542,6 +568,7 @@ class TransactionView(Struct):
     def __repr__(self):
         return self.__str__()
 
+
 class StateProofView(Struct):
     _fields = [
         ("epoch_change_proof", StrT),
@@ -553,13 +580,13 @@ class StateProofView(Struct):
     def from_response(response):
         return response.value
 
+
 class AccountStateProofView(Struct):
     _fields = [
         ("ledger_info_to_transaction_info_proof", StrT),
         ("transaction_info", StrT),
         ("transaction_info_to_account_proof", StrT),
     ]
-
 
 
 class AccountStateBlobView(Struct):
@@ -588,7 +615,6 @@ class AccountStateWithProofView(Struct):
 
         ret.proof = AccountStateProofView.from_value(value.get("proof"))
         return ret
-
 
     def to_json_serializable(self):
         amap = {}

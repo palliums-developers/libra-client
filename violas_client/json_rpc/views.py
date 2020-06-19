@@ -321,6 +321,9 @@ class UserTransaction(Struct):
         ("script", ScriptView)
     ]
 
+    def get_gas_currency(self):
+        return self.gas_currency
+
     def get_sender(self):
         return self.sender
 
@@ -406,6 +409,10 @@ class TransactionDataView(RustEnum):
             return cls("BlockMetadata", BlockMetadata.from_value(value))
         if value.get("type") == "writeset":
             return cls("WriteSet", None)
+
+    def get_gas_currency(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_gas_currency()
 
     def get_sender(self):
         if self.enum_name == "UserTransaction":
