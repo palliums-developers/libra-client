@@ -315,6 +315,7 @@ class UserTransaction(Struct):
         ("sequence_number", Uint64),
         ("max_gas_amount", Uint64),
         ("gas_unit_price", Uint64),
+        ("gas_currency", str),
         ("expiration_time", Uint64),
         ("script_hash", StrT),
         ("script", ScriptView)
