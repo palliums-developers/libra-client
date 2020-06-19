@@ -315,10 +315,14 @@ class UserTransaction(Struct):
         ("sequence_number", Uint64),
         ("max_gas_amount", Uint64),
         ("gas_unit_price", Uint64),
+        ("gas_currency", str),
         ("expiration_time", Uint64),
         ("script_hash", StrT),
         ("script", ScriptView)
     ]
+
+    def get_gas_currency(self):
+        return self.gas_currency
 
     def get_sender(self):
         return self.sender
@@ -406,6 +410,10 @@ class TransactionDataView(RustEnum):
         if value.get("type") == "writeset":
             return cls("WriteSet", None)
 
+    def get_gas_currency(self):
+        if self.enum_name == "UserTransaction":
+            return self.value.get_gas_currency()
+
     def get_sender(self):
         if self.enum_name == "UserTransaction":
             return self.value.get_sender()
@@ -478,6 +486,9 @@ class TransactionView(Struct):
 
     def get_gas_used(self) -> int:
         return self.gas_used
+
+    def get_gas_currency(self):
+        return self.transaction.get_gas_currency()
 
     def get_sender(self):
         return self.transaction.get_sender()
