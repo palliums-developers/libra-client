@@ -45,7 +45,7 @@ NETWORKS = {
     },
 
     'bj_testnet': {
-        "url": "http://47.93.114.230:46659",
+        "url": "http://47.93.114.230:50001",
         "faucet_file": f"{pre_path}/mint_bj.key"
     }
 }
@@ -60,7 +60,7 @@ class Client():
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
 
-    def __init__(self, network="local_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -159,7 +159,7 @@ class Client():
     def get_state_proof(self):
         return self.client.get_state_proof()
 
-    def get_type_args(self, currency_module_address, currency_code, struct_name=None):
+    def get_type_args(self, currency_code, currency_module_address=None, struct_name=None):
         if currency_module_address is None:
             currency_module_address = CORE_CODE_ADDRESS
         if currency_code is None:
@@ -167,7 +167,7 @@ class Client():
         if struct_name is None:
             struct_name = currency_code
         currency_module_address = Address.normalize_to_bytes(currency_module_address)
-        coin_type =  TypeTag("Struct", StructTag(
+        coin_type = TypeTag("Struct", StructTag(
             currency_module_address,
             currency_code,
             struct_name,
@@ -183,7 +183,7 @@ class Client():
     def add_currency_to_account(self, sender_account, currency_code, currency_module_address=None, is_blocking=True,
             max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE,txn_expiration=TXN_EXPIRATION, gas_currency_code=None):
         args = []
-        ty_args = self.get_type_args(currency_module_address, currency_code)
+        ty_args = self.get_type_args(currency_code, currency_module_address)
         script = Script.gen_script(CodeType.ADD_CURRENCY_TO_ACCOUNT, *args, ty_args=ty_args,
                                    currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount=max_gas_amount, gas_unit_price=gas_unit_price, txn_expiration=txn_expiration, gas_currency_code=gas_currency_code)
@@ -199,7 +199,7 @@ class Client():
             args.append(TransactionArgument.to_address(receiver_address))
             args.append(TransactionArgument.to_U8Vector(auth_key_prefix))
             args.append(TransactionArgument.to_U64(micro_coins))
-            ty_args = self.get_type_args(currency_module_address, currency_code)
+            ty_args = self.get_type_args(currency_code, currency_module_address)
             script = Script.gen_script(CodeType.MINT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
 
             return self.submit_script(self.faucet_account, script, is_blocking, gas_currency_code, max_gas_amount, gas_unit_price,
@@ -234,9 +234,19 @@ class Client():
         args.append(TransactionArgument.to_U8Vector(data, hex=False))
         args.append(TransactionArgument.to_U8Vector(""))
 
-        ty_args = self.get_type_args(currency_module_address, currency_code)
+        ty_args = self.get_type_args(currency_code, currency_module_address)
         script = Script.gen_script(CodeType.PEER_TO_PEER_WITH_METADATA, *args, ty_args=ty_args, currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking,self.get_gas_currency_code(currency_code, gas_currency_code), max_gas_amount, gas_unit_price, txn_expiration)
+
+    def modify_publishing_option(self, option, is_blocking=True,
+                      gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
+        args = []
+        args.append(TransactionArgument.to_U8Vector(option, hex=False))
+
+        ty_args = []
+        script = Script.gen_script(CodeType.MODIFY_PUBLISHING_OPTION, *args, ty_args=ty_args)
+        return self.submit_script(self.faucet_account, script, is_blocking, self.get_gas_currency_code(None, gas_currency_code), max_gas_amount, gas_unit_price, txn_expiration)
+
 
 
     '''Called by the object'''
