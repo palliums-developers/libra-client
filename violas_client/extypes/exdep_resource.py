@@ -19,11 +19,8 @@ class WithdrawCapability(Struct):
 
 class MintEvent(Struct):
     _fields = [
-        ("etype", Uint8),
-        ("ida", Uint64),
         ("coina", str),
         ("deposit_amounta", Uint64),
-        ("idb", Uint64),
         ("coinb", str),
         ("deposit_amountb", Uint64),
         ("mint_amount", Uint64),
@@ -31,11 +28,8 @@ class MintEvent(Struct):
 
 class BurnEvent(Struct):
     _fields = [
-        ("etype", Uint8),
-        ("ida", Uint64),
         ("coina", str),
         ("withdraw_amounta", Uint64),
-        ("idb", Uint64),
         ("coinb", str),
         ("withdraw_amountb", Uint64),
         ("burn_amount", Uint64),
@@ -43,11 +37,8 @@ class BurnEvent(Struct):
 
 class SwapEvent(Struct):
     _fields = [
-        ("etype", Uint8),
-        ("input_id", Uint64),
         ("input_name", str),
         ("input_amount", Uint64),
-        ("output_id", Uint64),
         ("output_name", str),
         ("output_amount", Uint64),
     ]

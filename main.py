@@ -1,7 +1,7 @@
-# from violas_client import Client, Wallet
-# from violas_client.lbrtypes.account_config import treasury_compliance_account_address, association_address
-from exchange_client import Client, Wallet
-from lbrtypes.account_config import treasury_compliance_account_address, association_address
+from violas_client import Client, Wallet
+from violas_client.lbrtypes.account_config import treasury_compliance_account_address, association_address
+# from exchange_client import Client, Wallet
+# from lbrtypes.account_config import treasury_compliance_account_address, association_address
 
 wallet = Wallet.new()
 client = Client()
@@ -41,7 +41,8 @@ client.mint_coin(swap_account.address, 10_000_000, currency_code="Coin2",
 
 client.swap_add_liquidity(liquidity_account, "LBR", "Coin1", 200_000, 100_000)
 expected_amount = client.swap_get_expected_liquidity_amount("Coin1", "LBR", 100)
-client.swap_add_liquidity(liquidity_account, "Coin1", "LBR", 100, 100_000)
-assert client.get_balance(liquidity_account.address, "LBR") == 10_000_000 - 200_000 - expected_amount
+seq = client.swap_add_liquidity(liquidity_account, "Coin1", "LBR", 100, 100_000)
+print(client.get_account_transaction(liquidity_account.address, seq).get_code_type())
+# assert client.get_balance(liquidity_account.address, "LBR") == 10_000_000 - 200_000 - expected_amount
 
 
