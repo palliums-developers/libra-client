@@ -112,8 +112,6 @@ def test_remove_liquidity():
 
     client.swap_add_liquidity(liquidity_account, "LBR", "Coin1", 1_000_000, 321_432)
     client.swap_remove_liquidity(liquidity_account, "Coin1", "LBR", int((1_000_000 * 321_432) ** 0.5), amounta_min=321_432, amountb_min=1_000_000)
-    # liquidity_balance = client.swap_get_liquidity_balances(liquidity_account.address)
-    # assert liquidity_balance[0]["liquidity"] == int((1_000_000 * 321_432) ** 0.5) - 100_000
 
 def test_swap():
     wallet = Wallet.new()
