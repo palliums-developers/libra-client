@@ -21,6 +21,8 @@ from lbrtypes.transaction.helper import create_user_txn
 from lbrtypes.account_state import AccountState
 from lbrtypes.account_config import config_address
 from lbrtypes.account_config import LBR_NAME
+from lbrtypes.event import EventKey
+
 
 import os
 pre_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../key'))
@@ -143,15 +145,18 @@ class Client():
 
     def get_sent_events(self, address: Union[bytes, str], start: int, limit: int):
         address = Address.normalize_to_bytes(address)
-        path = ACCOUNT_SENT_EVENT_PATH
-        access_path = AccessPath(address, path)
-        return self.client.get_events_by_access_path(access_path, start, limit)
+        event_key = EventKey.new_from_address(address, 0)
+        return self.client.get_events_by_access_path(event_key, start, limit)
 
     def get_received_events(self, address: Union[bytes, str], start: int, limit: int):
         address = Address.normalize_to_bytes(address)
-        path = ACCOUNT_RECEIVED_EVENT_PATH
-        access_path = AccessPath(address, path)
-        return self.client.get_events_by_access_path(access_path, start, limit)
+        event_key = EventKey.new_from_address(address, 1)
+        return self.client.get_events_by_access_path(event_key, start, limit)
+
+    def get_specific_events(self, address: Union[bytes, str], id, start: int, limit: int):
+        address = Address.normalize_to_bytes(address)
+        event_key = EventKey.new_from_address(address, id)
+        return self.client.get_events_by_access_path(event_key, start, limit)
 
     def get_metadata(self):
         return self.client.get_metadata()

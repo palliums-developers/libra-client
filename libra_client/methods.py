@@ -160,22 +160,24 @@ class LibraClient():
         if state:
             return state.sequence_number
 
-    def get_events_by_access_path(self, access_path: AccessPath, start_event_seq_num: int, limit: int):
-        account_view = self.get_account_state(access_path.address, False)
-        if account_view is None:
-            return []
-        path = access_path.path
-        ensure(path in (ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH), "Unexpected event path found in access path")
-        if path == ACCOUNT_SENT_EVENT_PATH:
-            event_key = account_view.sent_events_key
-        elif path == ACCOUNT_RECEIVED_EVENT_PATH:
-            event_key = account_view.received_events_key
-        else:
-            return []
+    def get_events_by_access_path(self, event_key, start_event_seq_num: int, limit: int):
+        # account_view = self.get_account_state(access_path.address, False)
+        # if account_view is None:
+        #     return []
+        # path = access_path.path
+        # ensure(path in (ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH), "Unexpected event path found in access path")
+        # if path == ACCOUNT_SENT_EVENT_PATH:
+        #     event_key = account_view.sent_events_key
+        # elif path == ACCOUNT_RECEIVED_EVENT_PATH:
+        #     event_key = account_view.received_events_key
+        # else:
+        #     return []
         # event_handle = account_view.get_event_handle_by_query_path(path)
         # if event_handle is None:
         #     return []
         # event_key = event_handle.get_key()
+        if isinstance(event_key, bytes):
+            event_key = event_key.hex()
         events = self.get_events(event_key, start_event_seq_num, limit)
         return events
 
