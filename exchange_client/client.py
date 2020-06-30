@@ -9,7 +9,6 @@ from extypes.view import TransactionView
 from extypes.bytecode import update_hash_to_type_map
 from lbrtypes.rustlib import ensure
 from extypes.exchange_resource import ReservesResource
-from dijkstra import Graph, DijkstraSPF
 from extypes.exchange_error import ExchangeError
 from error import LibraError
 from extypes.base import Base
