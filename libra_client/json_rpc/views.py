@@ -388,7 +388,7 @@ class BlockMetadataView(Struct):
         return self.version
 
     def get_timestamp(self):
-        return self.timestamp
+        return self.timestamp // 10**6
 
 class BlockMetadata(Struct):
     _fields = [

@@ -35,6 +35,10 @@ class Account:
         return cls(private_key, treasury_compliance_account_address())
 
     @classmethod
+    def association_account(cls, private_key):
+        return cls(private_key, association_address())
+
+    @classmethod
     def load_faucet_account_file(cls, faucet_account_file):
         with open(faucet_account_file, 'rb') as f:
             data = f.read()
@@ -42,6 +46,15 @@ class Account:
             assert 32 == data[0]
             private_key = data[1:33]
             return cls.faucet_account(private_key)
+
+    @classmethod
+    def load_associate_account_file(cls, associate_account_file):
+        with open(associate_account_file, 'rb') as f:
+            data = f.read()
+            assert len(data) == 33
+            assert 32 == data[0]
+            private_key = data[1:33]
+            return cls.association_account(private_key)
 
     def sign(self, message):
         return self._signing_key.sign(message)
