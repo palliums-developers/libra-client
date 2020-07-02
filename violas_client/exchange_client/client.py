@@ -182,7 +182,8 @@ class Client(LibraClient, Base):
         pairs = self.get_pairs(reserves)
         ret = self.best_trade_exact_in(reserves, pairs, index_in, index_out, amount_in, amount_in)
         assert len(ret) >= 1
-        return ret[0][1]
+        out_without_fee = self.get_output_amounts_without_fee(amount_in, ret[0][0])[-1]
+        return ret[0][1], out_without_fee - ret[0][1]
 
     def swap_get_swap_input_amount(self, currency_in, currency_out, amount_out):
         index_in = self.swap_get_currency_index(currency_in)
@@ -191,7 +192,8 @@ class Client(LibraClient, Base):
         pairs = self.get_pairs(reserves)
         ret = self.best_trade_exact_out(reserves, pairs, index_in, index_out, amount_out, amount_out)
         assert len(ret) >= 1
-        return ret[0][1]
+        out_without_fee = self.get_output_amounts_without_fee(ret[0][1], ret[0][0])[-1]
+        return ret[0][1], out_without_fee - amount_out
 
     def swap_get_liquidity_output_amount(self, currency_in, currency_out, amount_in):
         index_in = self.swap_get_currency_index(currency_in)
@@ -258,7 +260,8 @@ class Client(LibraClient, Base):
         amounts.append(amount_in)
         reserves = self.swap_get_reserves_resource()
         for i in range(len(path) - 1):
-            (reserve_in, reserve_out) = self.get_reserve(reserves, path[i], path[i + 1])
+            reserve = self.get_reserve(reserves, path[i], path[i + 1])
+            reserve_in, reserve_out = reserve.get_amountA(), reserve.get_amountB()
             assert reserve_in > 0 and reserve_out > 0
             amount_out = self.get_output_amount_without_fee(amounts[i], reserve_in, reserve_out)
             amounts.append(amount_out)

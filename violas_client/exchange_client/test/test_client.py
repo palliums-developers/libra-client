@@ -107,7 +107,7 @@ def test_swap():
     client.swap_add_liquidity(liquidity_account, "LBR", "Coin1", 123_321, 321_432)
     client.swap_add_liquidity(liquidity_account, "Coin2", "Coin1", 321_432, 321_432)
 
-    expected_amount = client.swap_get_swap_output_amount("Coin1", "LBR", 1000)
+    (expected_amount, out) = client.swap_get_swap_output_amount("Coin1", "LBR", 1000)
     before_amount = client.get_balance(swap_account.address, "LBR")
     client.swap(swap_account, "Coin1", "LBR", 1000, expected_amount)
     after_amount = client.get_balance(swap_account.address, "LBR")
@@ -179,7 +179,7 @@ def test_swap_get_swap_output_amount():
 
     client.swap_add_liquidity(liquidity_account, "LBR", "Coin1", 342423, 435435)
     client.swap_add_liquidity(liquidity_account, "Coin2", "Coin1", 453452, 243244)
-    out = client.swap_get_swap_output_amount("Coin2", "LBR", 100_000)
+    out, _ = client.swap_get_swap_output_amount("Coin2", "LBR", 100_000)
     bb = client.get_balance(swap_account.address, "LBR")
     client.swap(swap_account, "Coin2", "LBR", 100_000)
     ab = client.get_balance(swap_account.address, "LBR")
@@ -213,7 +213,7 @@ def test_swap_get_swap_input_amount():
 
     client.swap_add_liquidity(liquidity_account, "LBR", "Coin1", 3243244, 4354435)
     client.swap_add_liquidity(liquidity_account, "Coin2", "Coin1", 4534452, 2443244)
-    out = client.swap_get_swap_input_amount("Coin2", "LBR", 243444)
+    out, _ = client.swap_get_swap_input_amount("Coin2", "LBR", 243444)
     bb = client.get_balance(swap_account.address, "LBR")
     client.swap(swap_account, "Coin2", "LBR", out)
     ab = client.get_balance(swap_account.address, "LBR")
