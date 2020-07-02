@@ -396,7 +396,7 @@ class BlockMetadata(Struct):
     ]
 
     def get_timestamp_usecs(self):
-        return self.timestamp_usecs
+        return self.timestamp_usecs // 10**6
 
 class TransactionDataView(RustEnum):
     _enums = [
@@ -470,6 +470,18 @@ class TransactionView(Struct):
 
     def is_user_transaction(self):
         return self.transaction.enum_name == "UserTransaction"
+
+    def get_public_key(self):
+        if self.is_user_transaction():
+            return self.transaction.value.get_public_key()
+
+    def get_signature(self):
+        if self.is_user_transaction():
+            return self.transaction.value.get_signature()
+
+    def get_signature_scheme(self):
+        if self.is_user_transaction():
+            return self.transaction.value.get_signature_scheme()
 
     @classmethod
     def from_response(cls, response):
