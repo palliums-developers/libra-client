@@ -171,11 +171,7 @@ class Client(LibraClient, Base):
                 amounts = self.liquidity_to_coins(reserves, indexA, indexB, value)
                 if amounts is not None:
                     codes = self.swap_get_currency_codes(indexA, indexB)
-                    result = {
-                        codes[0]: amounts[0],
-                        codes[1]: amounts[1],
-                        "liquidity": amounts[2]
-                    }
+                    result = [(codes[0],amounts[0]), (codes[1], amounts[1]), amounts[2]]
                     currencies.append(result)
             return currencies
 
