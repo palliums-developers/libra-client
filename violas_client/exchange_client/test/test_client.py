@@ -113,6 +113,12 @@ def test_swap():
     after_amount = client.get_balance(swap_account.address, "LBR")
     assert after_amount - before_amount == expected_amount
 
+    (expected_amount, out) = client.swap_get_swap_output_amount("Coin1", "LBR", 1000)
+    before_amount = client.get_balance(liquidity_account.address, "LBR")
+    client.swap(swap_account, "Coin1", "LBR", 1000, expected_amount, receiver_address=liquidity_account.address)
+    after_amount = client.get_balance(liquidity_account.address, "LBR")
+    assert after_amount - before_amount == expected_amount
+
 def test_swap_get_liquidity_balances():
     wallet = Wallet.new()
     client = Client()

@@ -83,17 +83,22 @@ class Client(LibraClient, Base):
         script = Script.gen_script(CodeType.REMOVE_LIQUIDITY, *args, ty_args=ty_args, module_address=exchange_module_address)
         return self.submit_script(sender_account, script, is_blocking, **kwargs)
 
-    def swap(self, sender_account, currency_in, currency_out, amount_in, amount_out_min=0, is_blocking=True, **kwargs):
+    def swap(self, sender_account, currency_in, currency_out, amount_in, amount_out_min=0, receiver_address=None, is_blocking=True, data=None, **kwargs):
         exchange_module_address = self.get_exchange_module_address()
         indexA = self.swap_get_currency_index(currency_in)
         indexB = self.swap_get_currency_index(currency_out)
         if indexA > indexB:
             currency_in, currency_out = currency_out, currency_in
         path = self.get_index_max_output_path(indexA, indexB, amount_in)
+        if receiver_address is None:
+            receiver_address = sender_account.address
         args = []
+        args.append(TransactionArgument.to_address(receiver_address))
         args.append(TransactionArgument.to_U64(amount_in))
         args.append(TransactionArgument.to_U64(amount_out_min))
         args.append(TransactionArgument.to_U8Vector(bytes(path)))
+        args.append(TransactionArgument.to_U8Vector(data, hex=False))
+
 
         ty_args = self.get_type_args(currency_in)
         ty_args.extend(self.get_type_args(currency_out))

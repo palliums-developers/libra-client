@@ -41,5 +41,6 @@ class SwapEvent(Struct):
         ("input_amount", Uint64),
         ("output_name", str),
         ("output_amount", Uint64),
+        ("data", bytes)
     ]
 
