@@ -51,6 +51,13 @@ class TransactionView(LibraTransactionView):
         if hasattr(self, "swap_event"):
             return self.swap_event
 
+    def get_receiver(self):
+        receiver = super().get_receiver()
+        if receiver is None and self.get_code_type() in (CodeType.SWAP, ):
+            if len(self.events) > 0:
+                return self.events[-1].get_address()
+        return receiver
+
     def __str__(self):
         import json
         amap = self.to_json_serializable()

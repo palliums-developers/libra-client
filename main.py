@@ -44,6 +44,6 @@ assert after_amount - before_amount == expected_amount
 
 (expected_amount, out) = client.swap_get_swap_output_amount("Coin1", "LBR", 1000)
 before_amount = client.get_balance(liquidity_account.address, "LBR")
-seq = client.swap(swap_account, "Coin1", "LBR", 1000, expected_amount, receiver_address=liquidity_account.address, data="nihao")
-after_amount = client.get_balance(liquidity_account.address, "LBR")
-assert after_amount - before_amount == expected_amount
+for i in range(10):
+    seq = client.swap(swap_account, "Coin1", "LBR", 1000, receiver_address=liquidity_account.address, data="nihao")
+    assert client.get_account_transaction(swap_account.address, seq).get_receiver() == liquidity_account.address_hex
