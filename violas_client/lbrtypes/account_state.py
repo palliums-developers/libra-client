@@ -25,7 +25,7 @@ class AccountState(Struct):
         return 0
 
     def get_balance(self, currency_code=None, currency_module_address=None):
-        balance_resource = self.get_balance_resource(currency_module_address, currency_code)
+        balance_resource = self.get_balance_resource(currency_code, currency_module_address)
         if balance_resource:
             return balance_resource.get_coin()
 

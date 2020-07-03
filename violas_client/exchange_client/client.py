@@ -316,6 +316,7 @@ class Client(LibraClient, Base):
             path = []
         if len(path) == 0:
             path.append(index_in)
+        start_path = path[:]
         for i in range(0, len(pairs)):
             pair = pairs[i]
             if index_in == pair[0]:
@@ -324,6 +325,8 @@ class Client(LibraClient, Base):
                 tmp_out = pair[0]
             else:
                 continue
+            if tmp_out in path:
+                continue
             reserve = self.get_reserve(reserves, index_in, tmp_out)
             reserve_in, reserve_out = reserve.get_amountA(), reserve.get_amountB()
             if reserve_in == 0 or reserve_out == 0:
@@ -331,13 +334,13 @@ class Client(LibraClient, Base):
             amount_out = self.get_output_amount(amount_in, reserve_in, reserve_out)
             if index_out == pair[0] or index_out == pair[1]:
                 path.append(index_out)
-                best_trades.append((path, amount_out))
+                best_trades.append((path[:], amount_out))
+                path = start_path[:]
             elif len(pairs) > 1:
                 pairsExcludingThisPair = pairs[:]
                 del (pairsExcludingThisPair[i])
                 newPath = path + [tmp_out]
                 self.best_trade_exact_in(reserves, pairsExcludingThisPair, tmp_out, index_out, amount_out, original_amount_in, newPath, best_trades)
-
         return sorted(best_trades, key=lambda k: k[1], reverse=True)
 
     def best_trade_exact_out(self, reserves, pairs, index_in, index_out, amount_out, original_amount_out, path=None, best_trades=None):
@@ -349,6 +352,8 @@ class Client(LibraClient, Base):
             path = []
         if len(path) == 0:
             path.append(index_out)
+
+        start_path = path[:]
         for i in range(0, len(pairs)):
             pair = pairs[i]
             if index_out == pair[0]:
@@ -357,6 +362,8 @@ class Client(LibraClient, Base):
                 tmp_in = pair[0]
             else:
                 continue
+            if tmp_in in path:
+                continue
             reserve = self.get_reserve(reserves, tmp_in, index_out)
             reserve_in, reserve_out = reserve.get_amountA(), reserve.get_amountB()
             if reserve_in == 0 or reserve_out == 0:
@@ -364,7 +371,8 @@ class Client(LibraClient, Base):
             amount_in = self.get_input_amount(amount_out, reserve_in, reserve_out)
             if index_in in pair:
                 path.insert(0, index_in)
-                best_trades.append((path, amount_in))
+                best_trades.append((path[:], amount_in))
+                path = start_path[:]
             elif len(pairs) > 1:
                 pairsExcludingThisPair = pairs[:]
                 del (pairsExcludingThisPair[i])

@@ -483,6 +483,10 @@ class TransactionView(Struct):
         if self.is_user_transaction():
             return self.transaction.value.get_signature_scheme()
 
+    def get_script_hash(self):
+        if self.is_user_transaction():
+            return self.transaction.value.get_script_hash()
+
     @classmethod
     def from_response(cls, response):
         return response.value.value

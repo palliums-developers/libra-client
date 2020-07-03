@@ -95,7 +95,7 @@ class Client():
     def get_balance(self, account_address: Union[bytes, str], currency_code=None, currency_module_address=None)-> Optional[int]:
         account_state = self.get_account_state(account_address)
         if account_state:
-            return account_state.get_balance(currency_module_address, currency_code)
+            return account_state.get_balance(currency_code, currency_module_address)
         return 0
 
     def get_balances(self, account_address: Union[bytes, str]):
