@@ -135,6 +135,7 @@ def gen_hex_hash(code):
     m.update(code)
     return m.hexdigest()
 
+
 hash_to_type_map = { gen_hex_hash(v): k for k, v in type_to_code_map.items()}
 
 default_currency_module_address = bytes.fromhex("7257c2417e4d1038e1817c8f283ace2e")
@@ -166,8 +167,8 @@ def gen_type_to_code_map():
 
 
 if __name__ == "__main__":
-    gen_code_type()
-    gen_type_to_code_map()
+        gen_code_type()
+        gen_type_to_code_map()
 
 
 

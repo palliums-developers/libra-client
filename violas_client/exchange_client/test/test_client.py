@@ -80,7 +80,7 @@ def test_remove_liquidity():
 
 def test_swap():
     wallet = Wallet.new()
-    client = Client()
+    client = Client("violas_testnet")
     module_account = wallet.new_account()
     client.mint_coin(module_account.address, 10_000_000, auth_key_prefix=module_account.auth_key_prefix, is_blocking=True)
     client.swap_publish_contract(module_account)

@@ -59,6 +59,9 @@ class BurnEvent(Struct):
         if hasattr(self, "amount"):
             return self.amount
 
+    def get_data(self):
+        return None
+
 class CancelBurnEvent(Struct):
     _fields = [
         ("amount", AmountView),
@@ -69,6 +72,9 @@ class CancelBurnEvent(Struct):
         if hasattr(self, "amount"):
             return self.amount
 
+    def get_data(self):
+        return None
+
 class MintEvent(Struct):
     _fields = [
         ("amount", AmountView),
@@ -77,6 +83,9 @@ class MintEvent(Struct):
     def get_amount(self):
         if hasattr(self, "amount"):
             return self.amount
+
+    def get_data(self):
+        return None
 
 class PreburnEvent(Struct):
     _fields = [
@@ -88,6 +97,9 @@ class PreburnEvent(Struct):
         if hasattr(self, "amount"):
             return self.amount
 
+    def get_data(self):
+        return None
+
 class UpgradeEvent(Struct):
     _fields = [
         ("write_set", str)
@@ -97,6 +109,9 @@ class UpgradeEvent(Struct):
         if hasattr(self, "amount"):
             return self.amount
 
+    def get_data(self):
+        return None
+
 class NewEpochEvent(Struct):
     _fields = [
         ("epoch", Uint64),
@@ -105,6 +120,9 @@ class NewEpochEvent(Struct):
     def get_amount(self):
         if hasattr(self, "amount"):
             return self.amount
+
+    def get_data(self):
+        return None
 
 class NewBlockEvent(Struct):
     _fields = [
@@ -116,6 +134,9 @@ class NewBlockEvent(Struct):
     def get_amount(self):
         if hasattr(self, "amount"):
             return self.amount
+
+    def get_data(self):
+        return None
 
 class ReceivedPaymentEvent(Struct):
     _fields = [

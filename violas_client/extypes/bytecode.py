@@ -77,5 +77,6 @@ def gen_type_to_code_map():
 
 
 if __name__ == "__main__":
-    gen_code_type()
-    gen_type_to_code_map()
+    print(get_code_type("a4872a3dc46381c8e4c1f22f089e35428768e72e1edc25583f53894dced193e9", "e8f5ebfc0aebd0d7bf8c94a992a16038"))
+    # gen_code_type()
+    # gen_type_to_code_map()

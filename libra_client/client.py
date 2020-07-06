@@ -38,7 +38,7 @@ NETWORKS = {
         'faucet_server': "http://faucet.testnet.libra.org",
     },
     'violas_testnet':{
-        "url": "http://52.27.228.84:50001",
+        "url": "http://51.140.241.96:50001",
         "faucet_file": f"{pre_path}/mint_test.key"
     },
     'local_testnet': {
