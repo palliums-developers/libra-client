@@ -467,7 +467,7 @@ class BlockMetadata(Struct):
     ]
 
     def get_timestamp_usecs(self):
-        return self.timestamp_usecs // 10**6
+        return self.timestamp_usecs
 
 class TransactionDataView(RustEnum):
     _enums = [
