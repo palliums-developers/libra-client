@@ -30,18 +30,16 @@ class AccountRoleView(RustEnum):
 
     @classmethod
     def from_value(cls, value):
-        if value.get("unknown") is not None:
+        if value == "unknown":
             return cls("unknown", None)
-        if value.get("unhosted") is not None:
+        if value == "unhosted":
             return cls("unhosted", None)
-        if value.get("empty") is not None:
+        if value == "empty":
             return cls("empty", None)
         if value.get("child_vasp") is not None:
             return cls("child_vasp", value.get("child_vasp"))
         if value.get("parent_vasp") is not None:
             return cls("parent_vasp", ParentVASPView.from_value(value.get("parent_vasp")))
-        if value.get("unknown") is not None:
-            return cls("unknown", None)
 
 class AccountView(Struct):
     _fields = [
