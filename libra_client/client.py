@@ -148,12 +148,12 @@ class Client():
 
     def get_sent_events(self, address: Union[bytes, str], start: int, limit: int):
         address = Address.normalize_to_bytes(address)
-        event_key = EventKey.new_from_address(address, 0)
+        event_key = EventKey.new_from_address(address, 1)
         return self.client.get_events_by_access_path(event_key, start, limit)
 
     def get_received_events(self, address: Union[bytes, str], start: int, limit: int):
         address = Address.normalize_to_bytes(address)
-        event_key = EventKey.new_from_address(address, 1)
+        event_key = EventKey.new_from_address(address, 0)
         return self.client.get_events_by_access_path(event_key, start, limit)
 
     def get_specific_events(self, address: Union[bytes, str], id, start: int, limit: int):
