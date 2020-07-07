@@ -4,8 +4,8 @@ from exchange_client import Client, Wallet
 from lbrtypes.account_config import treasury_compliance_account_address, association_address
 import time
 wallet = Wallet.new()
-client = Client()
-print(client.get_transaction(1).get_expiration_time())
+client = Client("violas_testnet")
+print(client.get_transaction(1))
 # module_account = wallet.new_account()
 # client.mint_coin(module_account.address, 10_000_000, auth_key_prefix=module_account.auth_key_prefix, is_blocking=True)
 # client.swap_publish_contract(module_account)
