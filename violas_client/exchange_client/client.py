@@ -179,7 +179,6 @@ class Client(LibraClient, Base):
                     currencies.append(result)
             return currencies
 
-
     def swap_get_swap_output_amount(self, currency_in, currency_out, amount_in):
         index_in = self.swap_get_currency_index(currency_in)
         index_out = self.swap_get_currency_index(currency_out)
@@ -199,6 +198,13 @@ class Client(LibraClient, Base):
         assert len(ret) >= 1
         out_without_fee = self.get_output_amounts_without_fee(ret[0][1], ret[0][0])[-1]
         return ret[0][1], out_without_fee - amount_out
+
+    def swap_get_liquidity_out_amounts(self, currencyA, currencyB, liquidity_amount):
+        indexA = self.swap_get_currency_index(currencyA)
+        indexB = self.swap_get_currency_index(currencyB)
+        reserves = self.swap_get_reserves_resource()
+        amounts = self.liquidity_to_coins(reserves, indexA, indexB, liquidity_amount)
+        return amounts[0], amounts[1]
 
     def swap_get_liquidity_output_amount(self, currency_in, currency_out, amount_in):
         index_in = self.swap_get_currency_index(currency_in)
@@ -246,7 +252,7 @@ class Client(LibraClient, Base):
                     reserve_copy.coina, reserve_copy.coinb = reserve.coinb, reserve.coina
                     return reserve_copy
                 return reserve
-        raise LibraError(data=ExchangeError.PATH_ERROR, message=f"Can not find path from {indexA} to {indexB}")
+        raise LibraError(data=ExchangeError.PAIR_ERROR, message=f"Can not find pair from {indexA} to {indexB}")
 
     
     def quote(self, amountA, reserveA, reserveB):
