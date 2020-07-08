@@ -144,13 +144,13 @@ def get_code_type(code_hash: bytes):
     if isinstance(code_hash, bytes):
         code_hash = code_hash.hex()
     type = hash_to_type_map.get(code_hash)
-    if type:
+    if type is not None:
         return type
     return CodeType.UNKNOWN
 
 def get_code(type, currency_module_address=None):
     code = type_to_code_map.get(type)
-    if code:
+    if code is not None:
         if currency_module_address:
             currency_module_address = AccountAddress.normalize_to_bytes(currency_module_address)
             code = code.replace(default_currency_module_address, currency_module_address)
@@ -166,8 +166,10 @@ def gen_type_to_code_map():
 
 
 if __name__ == "__main__":
-        gen_code_type()
-        gen_type_to_code_map()
+    print(get_code_type("4302069de7cd03f8975484333f0474b3e16075a75d9b5e8ea4504daf18674177"))
+    # print(hash_to_type_map)
+        # gen_code_type()
+        # gen_type_to_code_map()
 
 
 

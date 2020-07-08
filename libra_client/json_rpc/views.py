@@ -586,6 +586,14 @@ class TransactionView(Struct):
     def get_gas_used(self) -> int:
         return self.gas_used
 
+    def get_gas_unit_price(self) ->int:
+        if self.is_user_transaction():
+            return self.transaction.value.get_gas_unit_price()
+        return 0
+
+    def get_gas_used_price(self):
+        return self.get_gas_unit_price()*self.get_gas_used()
+
     def get_gas_currency(self):
         return self.transaction.get_gas_currency()
 

@@ -54,14 +54,14 @@ def get_code_type(code_hash: bytes, module_address=None):
         m = {gen_hex_hash(v.replace(default_module_address, module_address)): k for k, v in
                             type_to_code_map.items()}
     type = m.get(code_hash)
-    if type:
+    if type is not None:
         return type
     return LibraCodeType.UNKNOWN
 
 
 def get_code(type, module_address=None):
     code = type_to_code_map.get(type)
-    if code:
+    if code is not None:
         if module_address:
             module_address = AccountAddress.normalize_to_bytes(module_address)
             code = code.replace(default_module_address, module_address)
