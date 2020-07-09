@@ -1,6 +1,7 @@
+import copy
 from typing import Optional
 from lbrtypes.account_state import AccountState as LibraAccountState
-from lbrtypes.move_core.language_storage import TypeTag, StructTag
+from move_core_types.language_storage import TypeTag, StructTag
 from banktypes.account_resources import TokensResource, UserInfoResource, TokenInfoStoreResource, LibraTokenResource
 from error import get_exception
 
@@ -8,8 +9,8 @@ class AccountState(LibraAccountState):
 
     @classmethod
     def new(cls, account_state: LibraAccountState):
-        ret = cls()
-        ret.ordered_map = account_state.ordered_map
+        ret = copy.deepcopy(account_state)
+        ret.__class__ = cls
         return ret
 
     @get_exception

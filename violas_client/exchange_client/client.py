@@ -130,7 +130,20 @@ class Client(LibraClient, Base):
     def set_exchange_module_address(self, exchange_module_address):
         self.exchange_module_address = exchange_module_address
         update_hash_to_type_map(exchange_module_address)
-        self.swap_update_registered_currencies()
+        # self.swap_update_registered_currencies()
+
+    def get_exchange_owner_address(self, exchange_owner_address=None):
+        if exchange_owner_address:
+            return exchange_owner_address
+        if hasattr(self, "exchange_owner_address"):
+            return self.exchange_owner_address
+        if hasattr(self, "exchange_module_address"):
+            return self.exchange_module_address
+        ensure(False, "Not set exchange_owner_address")
+
+    def set_exchange_owner_address(self, exchange_owner_address):
+        self.exchange_owner_address = exchange_owner_address
+        # self.swap_update_registered_currencies()
 
     def get_account_blob(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
@@ -150,10 +163,11 @@ class Client(LibraClient, Base):
 
     def swap_get_reserves_resource(self) -> Optional[ReservesResource]:
         exchange_module_address = self.get_exchange_module_address()
-        blob = super().get_account_blob(exchange_module_address)
+        exchange_owner_address = self.get_exchange_owner_address()
+        blob = super().get_account_blob(exchange_owner_address)
         if blob:
             state = AccountState.new(blob)
-            return state.swap_get_reserves_resource()
+            return state.swap_get_reserves_resource(exchange_module_address)
         return []
 
     def swap_get_liquidity_balances(self, liquidity_address):
@@ -327,6 +341,9 @@ class Client(LibraClient, Base):
             path = []
         if len(path) == 0:
             path.append(index_in)
+        if len(path) >= 3:
+            return
+
         start_path = path[:]
         for i in range(0, len(pairs)):
             pair = pairs[i]
@@ -363,7 +380,8 @@ class Client(LibraClient, Base):
             path = []
         if len(path) == 0:
             path.append(index_out)
-
+        if len(path) >= 3:
+            return
         start_path = path[:]
         for i in range(0, len(pairs)):
             pair = pairs[i]
@@ -398,7 +416,8 @@ class Client(LibraClient, Base):
 
     def swap_update_registered_currencies(self):
         exchange_module_address = self.get_exchange_module_address()
-        state = self.get_account_state(exchange_module_address)
+        exchange_owner_address = self.get_exchange_owner_address()
+        state = self.get_account_state(exchange_owner_address)
         if state:
             registered_currencies = state.swap_get_registered_currencies(exchange_module_address)
             if registered_currencies:

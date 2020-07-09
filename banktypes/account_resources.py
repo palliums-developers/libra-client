@@ -1,8 +1,8 @@
 from canoser import Struct, Uint64
 from lbrtypes.account_config import LibraResource
 from lbrtypes.event import EventHandle
-from lbrtypes.move_core.account_address import AccountAddress
-from lbrtypes.move_core.move_resource import MoveResource
+from move_core_types.account_address import AccountAddress
+from move_core_types.move_resource import MoveResource
 
 class LibraTokenResource(Struct, MoveResource):
     MODULE_NAME = "ViolasBank"

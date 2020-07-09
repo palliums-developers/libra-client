@@ -19,8 +19,8 @@ class AccountState(LibraAccountState):
         return BalanceResource.deserialize(resource).value
 
     @get_exception
-    def swap_get_reserves_resource(self) -> Optional[ReservesResource]:
-        resource = self.get(ReservesResource.resource_path(module_address=self.get_account_address()))
+    def swap_get_reserves_resource(self, exchange_module_address=None) -> Optional[ReservesResource]:
+        resource = self.get(ReservesResource.resource_path(module_address=self.get_exchange_module_address(exchange_module_address)))
         return ReservesResource.deserialize(resource).reserves
 
     @get_exception
