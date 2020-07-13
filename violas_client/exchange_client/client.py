@@ -98,8 +98,6 @@ class Client(LibraClient, Base):
         args.append(TransactionArgument.to_U64(amount_out_min))
         args.append(TransactionArgument.to_U8Vector(bytes(path)))
         args.append(TransactionArgument.to_U8Vector(data, hex=False))
-
-
         ty_args = self.get_type_args(currency_in)
         ty_args.extend(self.get_type_args(currency_out))
 
@@ -341,7 +339,7 @@ class Client(LibraClient, Base):
             path = []
         if len(path) == 0:
             path.append(index_in)
-        if len(path) >= 3:
+        if len(path) > 3:
             return
 
         start_path = path[:]
@@ -380,7 +378,7 @@ class Client(LibraClient, Base):
             path = []
         if len(path) == 0:
             path.append(index_out)
-        if len(path) >= 3:
+        if len(path) > 3:
             return
         start_path = path[:]
         for i in range(0, len(pairs)):

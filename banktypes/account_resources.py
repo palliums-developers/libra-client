@@ -1,5 +1,4 @@
 from canoser import Struct, Uint64
-from lbrtypes.account_config import LibraResource
 from lbrtypes.event import EventHandle
 from move_core_types.account_address import AccountAddress
 from move_core_types.move_resource import MoveResource
@@ -9,7 +8,7 @@ class LibraTokenResource(Struct, MoveResource):
     STRUCT_NAME = "LibraToken"
 
     _fields = [
-        ("coin", LibraResource),
+        ("coin", Uint64),
         ("index", Uint64)
     ]
 

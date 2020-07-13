@@ -8,7 +8,7 @@ from typing import Optional
 
 class Client(LibraClient):
 
-    def bank_release_contract(self, sender_account, is_blocking=True, **kwargs):
+    def bank_publish_contract(self, sender_account, is_blocking=True, **kwargs):
         module = Module.gen_module(sender_account.address)
         return self.submit_module(sender_account, module, is_blocking, **kwargs)
 
