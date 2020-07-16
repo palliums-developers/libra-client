@@ -48,6 +48,7 @@ class TokensResource(Struct, MoveResource):
     STRUCT_NAME = "Tokens"
 
     _fields = [
+        # index 代表进入银行的钱. index+1代表存入银行的钱
         ("ts", [BankResource]),
         ("borrows", [BorrowInfoResource])
     ]

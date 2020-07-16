@@ -1,13 +1,12 @@
-from bank_client import Client
-from bank_client.wallet_library import Wallet
+from violas_client import Client
+from violas_client.wallet_library import Wallet
+from move_core_types.language_storage import core_code_address
+from lbrtypes.account_config import association_address
 
 client = Client()
 wallet = Wallet.new()
-module_account = wallet.new_account()
-l_account = wallet.new_account()
-client.mint_coin(module_account.address, 100_000_000, auth_key_prefix=module_account.auth_key_prefix)
-client.bank_publish_contract(module_account)
-client.bank_publish(module_account, bank_module_address=module_account.address)
+ac = client.get_account_state(association_address())
+print(ac)
 
 
 

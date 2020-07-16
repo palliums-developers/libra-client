@@ -1,5 +1,8 @@
 import requests
+import urllib3
+import request
 import json
+from urllib3.response import HTTPResponse
 
 from json_rpc.client import JsonRpcBatch, process_batch_response
 from lbrtypes.rustlib import ensure
@@ -16,12 +19,13 @@ from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EV
 from lbrtypes.account_state import AccountState
 
 JSON_RPC_TIMEOUT = 10
-MAX_JSON_RPC_RETRY_COUNT = 2
+MAX_JSON_RPC_RETRY_COUNT = 3
 
 class JsonRpcClient():
     def __init__(self, url):
         self.url = url
-
+        self.http = urllib3.PoolManager(num_pools=10, headers={'content-type': 'application/json'},
+                                   maxsize=10, block=True)
     @classmethod
     def new(cls, url):
         return cls(url)
@@ -31,17 +35,19 @@ class JsonRpcClient():
             return list()
         request = batch.json_request()
         response = self.send_with_retry(request)
-        if response.status_code != 200:
-            raise LibraError(ServerCode.DefaultServerError, message = f"Server returned error: {response.status_code}")
-        response = process_batch_response(batch, response.json())
-
-        ensure(len(batch.requests) == len(response), "received unexpected number of responses in batch")
-        return response
+        if response.status != 200:
+            raise LibraError(ServerCode.DefaultServerError, message = f"Server returned error: {response.status}")
+        r = process_batch_response(batch, json.loads(response.data.decode()))
+        # response.close()
+        ensure(len(batch.requests) == len(r), "received unexpected number of responses in batch")
+        return r
 
     def send_with_retry(self, request):
         response = self.send(request)
         try_cnt = 0
-        while try_cnt < MAX_JSON_RPC_RETRY_COUNT and (response is None or response.status_code != 200):
+        while try_cnt < MAX_JSON_RPC_RETRY_COUNT and (response is None or response.status != 200):
+            import time
+            time.sleep(3)
             response = self.send(request)
             try_cnt += 1
         if response is None:
@@ -50,9 +56,22 @@ class JsonRpcClient():
 
     def send(self,request):
         try:
-            headers = {'content-type': 'application/json'}
-            return requests.post(self.url, data=json.dumps(request),headers=headers, timeout=JSON_RPC_TIMEOUT)
-        except:
+            data = json.dumps(request)
+            # http = urllib3.PoolManager(headers={'content-type': 'application/json'})
+            result = self.http.request("POST", self.url, body=data, timeout=JSON_RPC_TIMEOUT, preload_content=False)
+            result.release_conn()
+            # print(result.isclosed())
+            # result.close()
+            # print("111", result.isclosed())
+
+            return result
+            # headers = {'content-type': 'application/json'}
+            # requests.adapters.DEFAULT_RETRIES = 5
+            # r = requests.session()
+            # r.keep_alive = False
+            # return requests.post(self.url, data=json.dumps(request), headers=headers, timeout=JSON_RPC_TIMEOUT)
+        except Exception as e:
+            print(e)
             return None
 
 class LibraClient():
