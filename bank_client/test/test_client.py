@@ -86,7 +86,6 @@ def test_repay_borrow():
     assert approximately_equal_to(client.bank_get_amount(a1.address, currency_code="LBR"), 1_000_000_000)
 
 def test_bank_get_supply_rate():
-    
     wallet = Wallet.new()
     a1 = wallet.new_account()
     a2 = wallet.new_account()
@@ -94,18 +93,14 @@ def test_bank_get_supply_rate():
     client.set_bank_module_address(module_address)
     client.mint_coin(a1.address, 3_000_000_000, auth_key_prefix=a1.auth_key_prefix)
     client.mint_coin(a2.address, 3_000_000_000, auth_key_prefix=a2.auth_key_prefix)
-
     client.bank_publish(a1)
     client.bank_publish(a2)
-
     client.bank_enter(a1, 2_000_000_000, currency_code="LBR")
     client.bank_enter(a2, 2_000_000_000, currency_code="LBR")
 
     client.bank_lock(a1, 1_000_000_000, currency_code="LBR")
     client.bank_borrow(a1, 100_000_000, currency_code="LBR")
-
     client.bank_lock(a2, 1_000_000_000, currency_code="LBR")
-
     lock_rate = client.bank_get_lock_rate("LBR")
     time.sleep(60)
     lock_amount = client.bank_get_lock_amount(a2.address, currency_code="LBR")
@@ -114,7 +109,6 @@ def test_bank_get_supply_rate():
     assert approximately_equal_to(2_000_000_000+lock_amount-1_000_000_000, client.bank_get_amount(a2.address, currency_code="LBR"))
 
 def test_bank_get_borrow_rate():
-    
     wallet = Wallet.new()
     a1 = wallet.new_account()
     module_address = publish_bank_module()

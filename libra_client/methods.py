@@ -1,8 +1,5 @@
-import requests
 import urllib3
-import request
 import json
-from urllib3.response import HTTPResponse
 
 from json_rpc.client import JsonRpcBatch, process_batch_response
 from lbrtypes.rustlib import ensure
@@ -13,9 +10,7 @@ from lbrtypes.ledger_info import LedgerInfoWithSignatures
 from lbrtypes.transaction import SignedTransaction
 from json_rpc.client import get_response_from_batch, JsonRpcResponse
 from json_rpc.views import EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView, AccountView
-from lbrtypes.access_path import AccessPath
 from error.error import ServerCode, LibraError
-from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH
 from lbrtypes.account_state import AccountState
 
 JSON_RPC_TIMEOUT = 10
@@ -38,7 +33,6 @@ class JsonRpcClient():
         if response.status != 200:
             raise LibraError(ServerCode.DefaultServerError, message = f"Server returned error: {response.status}")
         r = process_batch_response(batch, json.loads(response.data.decode()))
-        # response.close()
         ensure(len(batch.requests) == len(r), "received unexpected number of responses in batch")
         return r
 
@@ -57,19 +51,9 @@ class JsonRpcClient():
     def send(self,request):
         try:
             data = json.dumps(request)
-            # http = urllib3.PoolManager(headers={'content-type': 'application/json'})
             result = self.http.request("POST", self.url, body=data, timeout=JSON_RPC_TIMEOUT, preload_content=False)
             result.release_conn()
-            # print(result.isclosed())
-            # result.close()
-            # print("111", result.isclosed())
-
             return result
-            # headers = {'content-type': 'application/json'}
-            # requests.adapters.DEFAULT_RETRIES = 5
-            # r = requests.session()
-            # r.keep_alive = False
-            # return requests.post(self.url, data=json.dumps(request), headers=headers, timeout=JSON_RPC_TIMEOUT)
         except Exception as e:
             print(e)
             return None
