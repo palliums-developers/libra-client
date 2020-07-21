@@ -12,6 +12,9 @@ cp move_core_types/ violas_client/ -rf
 
 git mv exchange_client/ violas_client/
 git mv extypes/ violas_client/
+git mv bank_client/ violas_client/
+git mv banktypes/ violas_client/
+git mv vlstypes/ violas_client/
 
 git mv canoser/ libra_client/
 git mv crypto/ libra_client/
