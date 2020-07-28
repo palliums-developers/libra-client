@@ -3,11 +3,12 @@ from error.status_code import ServerCode
 from lbrtypes.vm_error import StatusCode as LibraStatusCode
 
 class LibraError(Exception):
-    def __init__(self, server_code=None, data=None, message=None):
+    def __init__(self, server_code=None, data=None, message=None, on_chain=False):
         server_code = LibraError.parse_server_code(server_code)
         data = LibraError.parse_data(data)
         message = LibraError.parse_message(message)
         super().__init__(server_code, data, message)
+        self.on_chain = on_chain
 
     @staticmethod
     def parse_server_code(server_code):
@@ -30,6 +31,19 @@ class LibraError(Exception):
                 return {'major_status': data, 'message': data.name, 'sub_status': None}
             except:
                 return {'major_status': data, 'message': None, 'sub_status': None}
+        if isinstance(data, str):
+            return {'major_status': None, 'message': data, 'sub_status': None}
+        if isinstance(data, list):
+            status_code = data.get("StatusCode")
+            try:
+                data = LibraStatusCode(status_code)
+                return {'major_status': status_code, 'message': status_code.name, 'sub_status': None}
+            except:
+                return {'major_status': data, 'message': None, 'sub_status': None}
+        from json_rpc.views import VMStatusView
+        if isinstance(data, VMStatusView):
+            return {'major_status': None, 'message': data.enum_name, 'sub_status': str(data.value)}
+
         return data
 
     @classmethod
