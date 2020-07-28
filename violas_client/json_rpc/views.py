@@ -588,7 +588,6 @@ class VMStatusView(RustEnum):
             if value.get("execution_failure"):
                 return cls("ExecutionFailure", ExecutionFailureView.from_value(value.get("execution_failure")))
 
-
 class TransactionView(Struct):
     _fields = [
         ("version", Uint64),

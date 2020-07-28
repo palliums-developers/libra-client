@@ -395,6 +395,8 @@ class Client(LibraClient, Base):
             if reserve_in == 0 or reserve_out == 0:
                 continue
             amount_in = self.get_input_amount(amount_out, reserve_in, reserve_out)
+            if amount_in < 0:
+                continue
             if index_in in pair:
                 path.insert(0, index_in)
                 best_trades.append((path[:], amount_in))
