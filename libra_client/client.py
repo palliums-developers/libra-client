@@ -287,7 +287,16 @@ class Client():
             "auth_key": (auth_key_prefix+receiver).hex(),
             "currency_code": currency_code
         }
-        response = requests.post(self.faucet_server, params=params)
+        try_time = 2
+        while try_time:
+            try:
+                response = requests.post(self.faucet_server, params=params)
+                break
+            except LibraError as e:
+                try_time -= 1
+                import time
+                time.sleep(1)
+                continue
         body = response.text
         status = response.status_code
         ensure(status == requests.codes.ok, f"Failed to query remote faucet server[status={status}]: {body}")
