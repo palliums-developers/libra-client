@@ -90,7 +90,7 @@ class LibraClient():
             state_proof = get_response_from_batch(1, responses)
             self.process_state_proof_response(state_proof)
         response = get_response_from_batch(0, responses)
-        ensure(isinstance(response, JsonRpcResponse), f"Failed to get account state for account address {account} with error: {response}")
+        ensure(isinstance(response, JsonRpcResponse), f"Failed to get account state for account address {account.hex()} with error: {response}")
         account_view = AccountView.from_response(response)
         return account_view
 

@@ -16,7 +16,6 @@ class AccountResource(Struct, MoveResource):
         ("received_events", EventHandle),
         ("sent_events", EventHandle),
         ("sequence_number", Uint64),
-        ("is_frozen", bool),
     ]
 
 

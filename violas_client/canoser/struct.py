@@ -25,8 +25,6 @@ class TypedProperty:
         else:
             raise TypeError('{} has no check_value method'.format(datatype))
 
-
-
 class Struct(Base):
     _fields = []
     _initialized = False
