@@ -43,7 +43,6 @@ def test_lock():
     assert 0 == client.bank_get_lock_rate("LBR")
 
 def test_redeem():
-    
     wallet = Wallet.new()
     a1 = wallet.new_account()
     module_address = publish_bank_module()
@@ -57,7 +56,6 @@ def test_redeem():
     assert approximately_equal_to(client.bank_get_amount(a1.address, currency_code="LBR"), 2_000_000_000)
 
 def test_borrow():
-    
     wallet = Wallet.new()
     a1 = wallet.new_account()
     module_address = publish_bank_module()
@@ -71,7 +69,6 @@ def test_borrow():
     assert approximately_equal_to(client.bank_get_amount(a1.address, currency_code="LBR"), 1_000_000_000+100_000_000)
 
 def test_repay_borrow():
-    
     wallet = Wallet.new()
     a1 = wallet.new_account()
     module_address = publish_bank_module()
