@@ -1,17 +1,26 @@
-from violas_client import Client
-from violas_client.wallet_library import Wallet
-from move_core_types.language_storage import core_code_address
-from lbrtypes.account_config import association_address, transaction_fee_address
-from banktypes.bytecode import bytecodes, CodeType
+from libra_client.error.error import LibraError
+from libra_client import Client, Wallet
 
+
+client = Client("libra_testnet")
 wallet = Wallet.new()
-client = Client("violas_testnet")
-client.set_exchange_owner_address(association_address())
-client.set_exchange_module_address(core_code_address())
-print(client.swap_get_swap_input_amount("1", "1", 39661213))
-
+a1 = wallet.new_account()
+client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix)
+# from violas_client import Client
+# from violas_client.wallet_library import Wallet
+#
+# wallet = Wallet.new()
+# client = Client("bj_testnet")
+#
 # module_account = wallet.new_account()
+# a1 = wallet.new_account()
 # client.mint_coin(module_account.address, 10_000_000, auth_key_prefix=module_account.auth_key_prefix, is_blocking=True)
+# try:
+#     client.transfer_coin(module_account, a1.address, 100)
+# except LibraError:
+#     print(1111)
+# except Exception as e:
+#     print(type(e), e.__class__())
 # client.swap_publish_contract(module_account)
 # client.set_exchange_module_address(module_account.address)
 # client.swap_initialize(module_account)
