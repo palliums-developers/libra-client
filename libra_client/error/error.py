@@ -42,7 +42,7 @@ class LibraError(Exception):
                 return {'major_status': data, 'message': None, 'sub_status': None}
         from json_rpc.views import VMStatusView
         if isinstance(data, VMStatusView):
-            return {'major_status': None, 'message': data.enum_name, 'sub_status': str(data.value)}
+            return {'major_status': None, 'message': data.enum_name, 'sub_status': data.value}
 
         return data
 
