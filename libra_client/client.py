@@ -310,7 +310,7 @@ class Client():
                 continue
             if transaction.is_successful():
                 return
-            raise LibraError(ServerCode.VmStatusError, transaction.get_vm_status())
+            raise LibraError(ServerCode.VmStatusError, transaction.get_vm_status(), on_chain=True)
 
         raise LibraError(ServerCode.VmStatusError, StatusCode.WAIT_TRANSACTION_TIME_OUT)
 
