@@ -2,7 +2,7 @@ from canoser import Struct, Uint64
 from move_core_types.account_address import AccountAddress as Address
 from crypto.ed25519 import Ed25519PublicKey, Ed25519Signature
 from lbrtypes.rustlib import ensure
-from violas_client.error import LibraError, StatusCode
+from canoser import LibraError, StatusCode
 
 class ValidatorConsensusInfo(Struct):
     _fields = [

@@ -2,7 +2,7 @@ from canoser import Struct, Uint8
 from crypto.ed25519 import Ed25519PrivateKey, Ed25519PublicKey, Ed25519Signature, ED25519_PRIVATE_KEY_LENGTH, ED25519_PUBLIC_KEY_LENGTH, ED25519_SIGNATURE_LENGTH
 from bitarray import bitarray
 from crypto.hash import HashValue
-from libra_client.error import LibraError, StatusCode
+from canoser import LibraError, StatusCode
 
 MAX_NUM_OF_KEYS = 32
 BITMAP_NUM_OF_BYTES = 4
