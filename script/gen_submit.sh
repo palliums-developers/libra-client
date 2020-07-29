@@ -26,8 +26,24 @@ git mv test/ libra_client/
 
 git add violas_client/
 
-sed -i "s/from libra_client/from violas_client.libra_client/g" `grep libra_client -rl ./violas_client`
+sed -i "s/from libra_client/from violas_client.libra_client/g" `grep "from libra_client" -rl ./violas_client`
+
+sed -i "s/from error/from violas_client.canoser/g" `grep "from canoser" -rl ./violas_client`
+sed -i "s/from error/from libra_client.canoser/g" `grep "from canoser" -rl ./libra_client`
+
+sed -i "s/from error/from violas_client.crypto/g" `grep "from crypto" -rl ./violas_client`
+sed -i "s/from error/from libra_client.crypto/g" `grep "from crypto" -rl ./libra_client`
+
 sed -i "s/from error/from violas_client.error/g" `grep "from error" -rl ./violas_client`
 sed -i "s/from error/from libra_client.error/g" `grep "from error" -rl ./libra_client`
+
+sed -i "s/from error/from violas_client.json_rpc/g" `grep "from json_rpc" -rl ./violas_client`
+sed -i "s/from error/from libra_client.json_rpc/g" `grep "from json_rpc" -rl ./libra_client`
+
+sed -i "s/from error/from violas_client.lbrtypes/g" `grep "from lbrtypes" -rl ./violas_client`
+sed -i "s/from error/from libra_client.lbrtypes/g" `grep "from lbrtypes" -rl ./libra_client`
+
+sed -i "s/from error/from violas_client.move_core_types/g" `grep "from move_core_types" -rl ./violas_client`
+sed -i "s/from error/from libra_client.move_core_types/g" `grep "from move_core_types" -rl ./libra_client`
 
 cd ./script
