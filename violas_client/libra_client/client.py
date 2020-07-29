@@ -25,7 +25,10 @@ from violas_client.lbrtypes.event import EventKey
 
 
 import os
+from pathlib import Path
 pre_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../key'))
+if not Path(pre_path).exists():
+    pre_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../key'))
 
 CLIENT_WALLET_MNEMONIC_FILE = "client.mnemonic"
 GAS_UNIT_PRICE = 0
