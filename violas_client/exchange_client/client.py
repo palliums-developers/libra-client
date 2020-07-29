@@ -1,5 +1,9 @@
+import os
+import sys
 from typing import Optional, Union
-from libra_client import Client as LibraClient
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from violas_client.libra_client import Client as LibraClient
+sys.path.pop(0)
 from extypes.transaction.module import Module
 from extypes.transaction.script import Script
 from lbrtypes.transaction.transaction_argument import TransactionArgument
@@ -10,7 +14,7 @@ from extypes.bytecode import update_hash_to_type_map
 from lbrtypes.rustlib import ensure
 from extypes.exchange_resource import ReservesResource
 from extypes.exchange_error import ExchangeError
-from error import LibraError
+from violas_client.error import LibraError
 from extypes.base import Base
 
 class Client(LibraClient, Base):

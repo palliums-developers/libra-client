@@ -2,6 +2,9 @@
 
 cd ..
 
+sed -i "s/from violas_client.libra_client/from libra_client/g" `grep 'violas_client.libra_client' -rl ./violas_client`
+sed -i "s/from violas_client.error/from error/g" `grep 'violas_client.error' -rl ./violas_client`
+
 git mv libra_client/test .
 sudo rm libra_client -rf
 

@@ -4,7 +4,7 @@ from lbrtypes.account_state import AccountState as LibraAccountState
 from extypes.exchange_resource import ReservesResource, RegisteredCurrenciesResource, TokensResource
 from extypes.exdep_resource import BalanceResource
 from move_core_types.language_storage import StructTag, TypeTag
-from error import get_exception
+from violas_client.error import get_exception
 
 class AccountState(LibraAccountState):
     @classmethod

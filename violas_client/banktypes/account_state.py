@@ -4,7 +4,7 @@ from typing import Optional
 from lbrtypes.account_state import AccountState as LibraAccountState
 from move_core_types.language_storage import TypeTag, StructTag
 from banktypes.account_resources import TokensResource, UserInfoResource, TokenInfoStoreResource, LibraTokenResource
-from error import get_exception
+from violas_client.error import get_exception
 from lbrtypes.rustlib import ensure
 
 class AccountState(LibraAccountState):

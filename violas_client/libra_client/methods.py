@@ -10,7 +10,7 @@ from lbrtypes.ledger_info import LedgerInfoWithSignatures
 from lbrtypes.transaction import SignedTransaction
 from json_rpc.client import get_response_from_batch, JsonRpcResponse
 from json_rpc.views import EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView, AccountView
-from error.error import ServerCode, LibraError
+from violas_client.error.error import ServerCode, LibraError
 from lbrtypes.account_state import AccountState
 
 JSON_RPC_TIMEOUT = 10
