@@ -21,6 +21,7 @@ git mv violas_client/libra_client .
 git mv violas_client/move_core_types .
 git mv violas_client/vlstypes .
 
+sed -i "s/from violas_client.libra_client/from libra_client/g" `grep 'violas_client.libra_client' -rl ./*`
 
 cd ./script
 

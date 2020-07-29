@@ -30,6 +30,4 @@ sed -i "s/from libra_client/from violas_client.libra_client/g" `grep libra_clien
 sed -i "s/from error/from violas_client.error/g" `grep "from error" -rl ./violas_client`
 sed -i "s/from error/from libra_client.error/g" `grep "from error" -rl ./libra_client`
 
-
-
 cd ./script
