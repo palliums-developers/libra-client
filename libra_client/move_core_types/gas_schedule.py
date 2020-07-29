@@ -1,4 +1,4 @@
-from canoser import Uint64, Struct
+from libra_client.canoser import Uint64, Struct
 
 GasCarrier = Uint64
 

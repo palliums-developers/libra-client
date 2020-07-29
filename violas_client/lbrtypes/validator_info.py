@@ -1,6 +1,6 @@
-from canoser import Struct, Uint64
-from move_core_types.account_address import AccountAddress
-from lbrtypes.validator_config import ValidatorConfig
+from violas_client.canoser import Struct, Uint64
+from violas_client.move_core_types.account_address import AccountAddress
+from violas_client.lbrtypes.validator_config import ValidatorConfig
 
 class ValidatorInfo(Struct):
     _fields = [

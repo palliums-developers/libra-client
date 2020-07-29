@@ -1,11 +1,11 @@
-from lbrtypes.waypoint import Waypoint
-from lbrtypes.ledger_info import LedgerInfoWithSignatures
-from lbrtypes.epoch_change import VerifierType, EpochChangeProof
-from canoser import Struct, RustEnum
-from lbrtypes.epoch_state import EpochState
-from lbrtypes.rustlib import ensure
-from lbrtypes.ledger_info import LedgerInfo
-from lbrtypes.validator_verifier import ValidatorVerifier
+from libra_client.lbrtypes.waypoint import Waypoint
+from libra_client.lbrtypes.ledger_info import LedgerInfoWithSignatures
+from libra_client.lbrtypes.epoch_change import VerifierType, EpochChangeProof
+from libra_client.canoser import Struct, RustEnum
+from libra_client.lbrtypes.epoch_state import EpochState
+from libra_client.lbrtypes.rustlib import ensure
+from libra_client.lbrtypes.ledger_info import LedgerInfo
+from libra_client.lbrtypes.validator_verifier import ValidatorVerifier
 
 class TrustedState(Struct):
     _fields = [

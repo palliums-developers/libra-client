@@ -1,8 +1,8 @@
-from canoser import Struct, Uint64, Optional, RustOptional
-from lbrtypes.event import EventHandle
-from move_core_types.move_resource import MoveResource
-from lbrtypes.account_config.constants.account import ACCOUNT_MODULE_NAME
-from lbrtypes.account_config.resources import KeyRotationCapabilityResourceOption, WithdrawCapabilityResourceOption
+from libra_client.canoser import Struct, Uint64, Optional, RustOptional
+from libra_client.lbrtypes.event import EventHandle
+from libra_client.move_core_types.move_resource import MoveResource
+from libra_client.lbrtypes.account_config.constants.account import ACCOUNT_MODULE_NAME
+from libra_client.lbrtypes.account_config.resources import KeyRotationCapabilityResourceOption, WithdrawCapabilityResourceOption
 
 class AccountResource(Struct, MoveResource):
 

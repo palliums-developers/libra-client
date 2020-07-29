@@ -4,14 +4,14 @@ from banktypes.transaction.script import Script
 from banktypes.view import TransactionView
 from banktypes.bytecode import CodeType
 from banktypes.account_state import AccountState
-from lbrtypes.transaction.transaction_argument import TransactionArgument
-from lbrtypes.rustlib import ensure
+from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
+from violas_client.lbrtypes.rustlib import ensure
 from banktypes.bytecode import update_hash_to_type_map
 from typing import Optional
 from violas_client.error import LibraError
 from banktypes.bank_error import BankError
-from move_core_types.language_storage import core_code_address
-from lbrtypes.account_config import association_address
+from violas_client.move_core_types.language_storage import core_code_address
+from violas_client.lbrtypes.account_config import association_address
 
 class Client(LibraClient):
 

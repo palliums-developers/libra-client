@@ -1,4 +1,4 @@
-from canoser import DelegateT, BytesT
+from violas_client.canoser import DelegateT, BytesT
 from nacl.signing import VerifyKey, SigningKey
 
 

@@ -1,8 +1,8 @@
-from canoser import Struct, Uint64
-from move_core_types.account_address import AccountAddress as Address
-from crypto.ed25519 import Ed25519PublicKey, Ed25519Signature
-from lbrtypes.rustlib import ensure
-from libra_client.canoser import LibraError, StatusCode
+from libra_client.canoser import Struct, Uint64
+from libra_client.move_core_types.account_address import AccountAddress as Address
+from libra_client.crypto.ed25519 import Ed25519PublicKey, Ed25519Signature
+from libra_client.lbrtypes.rustlib import ensure
+from libra_client.error import LibraError, StatusCode
 
 class ValidatorConsensusInfo(Struct):
     _fields = [

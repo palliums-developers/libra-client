@@ -1,8 +1,8 @@
-from canoser import Struct, RustEnum
-from lbrtypes.waypoint import Waypoint
-from lbrtypes.epoch_state import EpochState
-from lbrtypes.ledger_info import LedgerInfoWithSignatures
-from lbrtypes.rustlib import ensure
+from violas_client.canoser import Struct, RustEnum
+from violas_client.lbrtypes.waypoint import Waypoint
+from violas_client.lbrtypes.epoch_state import EpochState
+from violas_client.lbrtypes.ledger_info import LedgerInfoWithSignatures
+from violas_client.lbrtypes.rustlib import ensure
 
 class EpochChangeProof(Struct):
     _fields = [

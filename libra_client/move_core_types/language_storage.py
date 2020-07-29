@@ -1,7 +1,7 @@
-from canoser import Struct, RustEnum, BoolT, Uint8, Uint64, Uint128
+from libra_client.canoser import Struct, RustEnum, BoolT, Uint8, Uint64, Uint128
 from .account_address import AccountAddress
 from .identifier import Identifier
-from crypto.hash import gen_hasher
+from libra_client.crypto.hash import gen_hasher
 
 
 CODE_TAG = 0

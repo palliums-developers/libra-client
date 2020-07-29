@@ -1,11 +1,11 @@
-from canoser import Struct, RustEnum
-from lbrtypes.ledger_info import LedgerInfoWithSignatures
-from lbrtypes.transaction import TransactionWithProof, TransactionListWithProof
-from lbrtypes.account_state_blob import AccountStateWithProof
-from lbrtypes.contract_event import EventWithProof
-from lbrtypes.epoch_change import EpochChangeProof
-from lbrtypes.proof.definition import AccumulatorConsistencyProof
-from lbrtypes.trusted_state import TrustedState
+from violas_client.canoser import Struct, RustEnum
+from violas_client.lbrtypes.ledger_info import LedgerInfoWithSignatures
+from violas_client.lbrtypes.transaction import TransactionWithProof, TransactionListWithProof
+from violas_client.lbrtypes.account_state_blob import AccountStateWithProof
+from violas_client.lbrtypes.contract_event import EventWithProof
+from violas_client.lbrtypes.epoch_change import EpochChangeProof
+from violas_client.lbrtypes.proof.definition import AccumulatorConsistencyProof
+from violas_client.lbrtypes.trusted_state import TrustedState
 
 class GetAccountTransactionBySequenceNumber(Struct):
     _fields = [
@@ -72,7 +72,7 @@ class UpdateToLatestLedgerResponse(Struct):
         ret.ledger_consistency_proof = AccumulatorConsistencyProof.from_proto(proto.ledger_consistency_proof)
         return ret
 
-    from lbrtypes.ledger_info import LedgerInfo
+    from violas_client.lbrtypes.ledger_info import LedgerInfo
     def get_ledger_info(self) -> LedgerInfo:
         return self.ledger_info_with_sigs.get_ledger_info()
     

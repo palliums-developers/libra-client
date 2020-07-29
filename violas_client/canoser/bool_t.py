@@ -1,4 +1,4 @@
-from canoser.base import Base
+from violas_client.canoser.base import Base
 
 class BoolT(Base):
     @classmethod

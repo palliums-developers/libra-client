@@ -1,8 +1,8 @@
-from canoser import Struct, RustEnum
-from lbrtypes.block_info import BlockInfo
-from move_core_types.account_address import AccountAddress
-from crypto.hash import HashValue
-from crypto.ed25519 import Ed25519Signature
+from libra_client.canoser import Struct, RustEnum
+from libra_client.lbrtypes.block_info import BlockInfo
+from libra_client.move_core_types.account_address import AccountAddress
+from libra_client.crypto.hash import HashValue
+from libra_client.crypto.ed25519 import Ed25519Signature
 
 class LedgerInfo(Struct):
     _fields = [

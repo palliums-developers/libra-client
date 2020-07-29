@@ -1,6 +1,6 @@
-from canoser import RustEnum, Uint64, Uint8, Uint128
-from move_core_types.account_address import AccountAddress
-from crypto.ed25519 import ED25519_PUBLIC_KEY_LENGTH
+from violas_client.canoser import RustEnum, Uint64, Uint8, Uint128
+from violas_client.move_core_types.account_address import AccountAddress
+from violas_client.crypto.ed25519 import ED25519_PUBLIC_KEY_LENGTH
 
 def normalize_public_key(public_key):
     if isinstance(public_key, list):

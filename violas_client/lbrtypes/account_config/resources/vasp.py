@@ -1,6 +1,6 @@
-from canoser import Struct, Uint64
-from move_core_types.move_resource import MoveResource
-from lbrtypes.account_config.constants import AccountAddress
+from violas_client.canoser import Struct, Uint64
+from violas_client.move_core_types.move_resource import MoveResource
+from violas_client.lbrtypes.account_config.constants import AccountAddress
 
 
 class ParentVASP(Struct, MoveResource):
