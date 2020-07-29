@@ -21,8 +21,8 @@ class TypeTag(RustEnum):
         ("U128", Uint128),
         ("Address", AccountAddress),
         ("Signer", bytes),
-        ("Vector", "move_core_types.language_storage.TypeTag"),
-        ("Struct", "move_core_types.language_storage.StructTag")
+        ("Vector", "violas_client.move_core_types.language_storage.TypeTag"),
+        ("Struct", "violas_client.move_core_types.language_storage.StructTag")
     ]
 
 class StructTag(Struct):

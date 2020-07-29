@@ -1,7 +1,7 @@
 from mnemonic import Mnemonic
-from key_factory import KeyFactory
+from violas_client.libra_client.key_factory import KeyFactory
 from violas_client.lbrtypes.rustlib import ensure
-from account import Account
+from violas_client.libra_client.account import Account
 from violas_client.lbrtypes.transaction import RawTransaction
 from violas_client.lbrtypes.transaction import SignedTransaction
 import os

@@ -1,6 +1,6 @@
 import copy
-from extypes.account_state import AccountState as ExchangeAccountState
-from banktypes.account_state import AccountState as BankAccountState
+from violas_client.extypes.account_state import AccountState as ExchangeAccountState
+from violas_client.banktypes.account_state import AccountState as BankAccountState
 
 class AccountState(ExchangeAccountState, BankAccountState):
     @classmethod

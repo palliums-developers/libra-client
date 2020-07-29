@@ -6,9 +6,9 @@ from typing import Optional, Union
 from violas_client.lbrtypes.account_config.constants.lbr import LBR_NAME, CORE_CODE_ADDRESS
 from violas_client.move_core_types.language_storage import TypeTag, StructTag
 from violas_client.move_core_types.account_address import AccountAddress as Address
-from methods import LibraClient
+from violas_client.libra_client.methods import LibraClient
 from violas_client.lbrtypes.waypoint import Waypoint
-from account import Account
+from violas_client.libra_client.account import Account
 from violas_client.lbrtypes.transaction import TransactionPayload, SignedTransaction
 from violas_client.lbrtypes.transaction.script import Script
 from violas_client.lbrtypes.rustlib import ensure

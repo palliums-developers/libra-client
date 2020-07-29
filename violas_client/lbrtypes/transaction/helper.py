@@ -1,6 +1,6 @@
 import datetime
 from violas_client.lbrtypes.transaction import TransactionPayload, RawTransaction, SignedTransaction
-from account import Account
+from violas_client.libra_client.account import Account
 from violas_client.crypto.ed25519 import ED25519_SIGNATURE_LENGTH
 from violas_client.lbrtypes.transaction.authenticator import TransactionAuthenticator
 

@@ -1,9 +1,9 @@
 from typing import Optional, Union
-from exchange_client import Client as ExchangeClient
-from bank_client import Client as BankClient
+from violas_client.exchange_client import Client as ExchangeClient
+from violas_client.bank_client import Client as BankClient
 from violas_client.libra_client import Client as LibraClient
-from vlstypes.account_state import AccountState
-from vlstypes.view import TransactionView
+from violas_client.vlstypes.account_state import AccountState
+from violas_client.vlstypes.view import TransactionView
 
 class Client(ExchangeClient, BankClient, LibraClient):
     def get_account_state(self, account_address) -> Optional[AccountState]:

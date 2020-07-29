@@ -1,6 +1,6 @@
 from violas_client.lbrtypes.transaction.module import Module as LibraModule
 from violas_client.move_core_types.account_address import AccountAddress as Address
-from extypes.bytecode import get_code, CodeType
+from violas_client.extypes.bytecode import get_code, CodeType
 
 class Module(LibraModule):
     @staticmethod

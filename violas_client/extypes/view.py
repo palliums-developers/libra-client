@@ -1,8 +1,8 @@
 from violas_client.json_rpc.views import TransactionView as LibraTransactionView
 from violas_client.json_rpc.views import UserTransaction as LibraUserTransaction
-from extypes.bytecode import get_code_type, CodeType
+from violas_client.extypes.bytecode import get_code_type, CodeType
 from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
-from extypes.exdep_resource import MintEvent, BurnEvent, SwapEvent
+from violas_client.extypes.exdep_resource import MintEvent, BurnEvent, SwapEvent
 
 WITH_EVENT_TYPES = [CodeType.ADD_LIQUIDITY, CodeType.REMOVE_LIQUIDITY, CodeType.SWAP]
 
