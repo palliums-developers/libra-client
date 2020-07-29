@@ -12,7 +12,7 @@ from account import Account
 from lbrtypes.transaction import TransactionPayload, SignedTransaction
 from lbrtypes.transaction.script import Script
 from lbrtypes.rustlib import ensure
-from libra_client.error import LibraError, StatusCode, ServerCode
+from violas_client.error import LibraError, StatusCode, ServerCode
 from lbrtypes.bytecode import CodeType
 from lbrtypes.transaction.transaction_argument import TransactionArgument
 from lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
