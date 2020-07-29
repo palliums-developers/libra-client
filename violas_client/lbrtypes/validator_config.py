@@ -1,9 +1,9 @@
-from canoser import Struct
-from move_core_types.move_resource import MoveResource
-from crypto.ed25519 import Ed25519PublicKey
-from crypto.x25519 import PublicKey
-from crypto.multi_ed25519 import Multiaddr
-from canoser import Optional
+from violas_client.canoser import Struct
+from violas_client.move_core_types.move_resource import MoveResource
+from violas_client.crypto.ed25519 import Ed25519PublicKey
+from violas_client.crypto.x25519 import PublicKey
+from violas_client.crypto.multi_ed25519 import Multiaddr
+from violas_client.canoser import Optional
 
 
 class ValidatorConfig(Struct):

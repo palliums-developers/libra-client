@@ -1,5 +1,5 @@
-from canoser import Struct, Uint64
-from lbrtypes.account_config import MoveResource
+from violas_client.canoser import Struct, Uint64
+from violas_client.lbrtypes.account_config import MoveResource
 
 EXCHANGE_MODULE_NAME = "Exchange"
 

@@ -1,4 +1,4 @@
-from move_core_types.language_storage import ModuleId, StructTag, CORE_CODE_ADDRESS
+from libra_client.move_core_types.language_storage import ModuleId, StructTag, CORE_CODE_ADDRESS
 
 ACCOUNT_MODULE_NAME = "LibraAccount"
 

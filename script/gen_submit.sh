@@ -27,6 +27,11 @@ git mv test/ libra_client/
 git add violas_client/
 
 sed -i "s/from libra_client/from violas_client.libra_client/g" `grep "from libra_client" -rl ./violas_client`
+sed -i "s/from bank_client/from violas_client.bank_client/g" `grep "from bank_client" -rl ./violas_client`
+sed -i "s/from banktypes/from violas_client.banktypes/g" `grep "from banktypes" -rl ./violas_client`
+sed -i "s/from exchange_client/from violas_client.exchange_client/g" `grep "from exchange_client" -rl ./violas_client`
+sed -i "s/from extypes/from violas_client.extypes/g" `grep "from extypes" -rl ./violas_client`
+sed -i "s/from vlstypes/from violas_client.vlstypes/g" `grep "from vlstypes" -rl ./violas_client`
 
 sed -i "s/from canoser/from violas_client.canoser/g" `grep "from canoser" -rl ./violas_client`
 sed -i "s/from canoser/from libra_client.canoser/g" `grep "from canoser" -rl ./libra_client`
@@ -45,5 +50,12 @@ sed -i "s/from lbrtypes/from libra_client.lbrtypes/g" `grep "from lbrtypes" -rl 
 
 sed -i "s/from move_core_types/from violas_client.move_core_types/g" `grep "from move_core_types" -rl ./violas_client`
 sed -i "s/from move_core_types/from libra_client.move_core_types/g" `grep "from move_core_types" -rl ./libra_client`
+
+
+sed -i "s/move_core_types.language_storage.TypeTag/violas_client.move_core_types.language_storage.TypeTag/g" `grep "move_core_types.language_storage.TypeTag" -rl ./violas_client`
+sed -i "s/move_core_types.language_storage.TypeTag/libra_client.move_core_types.language_storage.TypeTag/g" `grep "move_core_types.language_storage.TypeTag" -rl ./libra_client`
+
+sed -i "s/move_core_types.language_storage.StructTag/violas_client.move_core_types.language_storage.StructTag/g" `grep "move_core_types.language_storage.StructTag" -rl ./violas_client`
+sed -i "s/move_core_types.language_storage.StructTag/libra_client.move_core_types.language_storage.StructTag/g" `grep "move_core_types.language_storage.StructTag" -rl ./libra_client`
 
 cd ./script

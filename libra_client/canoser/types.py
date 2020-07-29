@@ -1,10 +1,10 @@
-from canoser.int_type import Uint8
-from canoser.tuple_t import TupleT
-from canoser.map_t import MapT
-from canoser.str_t import StrT
-from canoser.bytes_t import BytesT, ByteArrayT
-from canoser.bool_t import BoolT
-from canoser.array_t import ArrayT
+from libra_client.canoser.int_type import Uint8
+from libra_client.canoser.tuple_t import TupleT
+from libra_client.canoser.map_t import MapT
+from libra_client.canoser.str_t import StrT
+from libra_client.canoser.bytes_t import BytesT, ByteArrayT
+from libra_client.canoser.bool_t import BoolT
+from libra_client.canoser.array_t import ArrayT
 
 
 def my_import(name):

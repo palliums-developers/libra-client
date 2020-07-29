@@ -1,5 +1,5 @@
-from canoser import Struct
-from lbrtypes.on_chain_config import OnChainConfig
+from violas_client.canoser import Struct
+from violas_client.lbrtypes.on_chain_config import OnChainConfig
 
 class RegisteredCurrencies(Struct, OnChainConfig):
     IDENTIFIER = "RegisteredCurrencies"

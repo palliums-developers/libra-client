@@ -1,6 +1,6 @@
-from canoser import Struct, Uint8
-from move_core_types.account_address import AccountAddress as Address
-from lbrtypes.bytecode import get_code, CodeType
+from violas_client.canoser import Struct, Uint8
+from violas_client.move_core_types.account_address import AccountAddress as Address
+from violas_client.lbrtypes.bytecode import get_code, CodeType
 
 class Module(Struct):
     _fields = [

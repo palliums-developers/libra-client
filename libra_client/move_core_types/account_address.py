@@ -1,5 +1,5 @@
-from canoser import DelegateT, BytesT
-from canoser.util import int_list_to_hex
+from libra_client.canoser import DelegateT, BytesT
+from libra_client.canoser.util import int_list_to_hex
 
 class AccountAddress(DelegateT):
     LENGTH = 16

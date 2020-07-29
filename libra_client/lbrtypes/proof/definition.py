@@ -1,6 +1,6 @@
-from canoser import Struct, Uint64, RustOptional
-from crypto.hash import HashValue, TransactionAccumulatorHasher, EventAccumulatorHasher
-from lbrtypes.proof import SparseMerkleLeafNode
+from libra_client.canoser import Struct, Uint64, RustOptional
+from libra_client.crypto.hash import HashValue, TransactionAccumulatorHasher, EventAccumulatorHasher
+from libra_client.lbrtypes.proof import SparseMerkleLeafNode
 
 class AccumulatorProof(Struct):
     _fields = [

@@ -1,7 +1,7 @@
 from libra_client.json_rpc.views import TransactionView, EventView
 from libra_client.lbrtypes.account_state import AccountState
 from libra_client.error import LibraError
-from libra_client.lbrtypes.account_config import treasury_compliance_account_address
+from libra_client.lbrtypes.account_config import testnet_dd_account_address
 from libra_client import Client, Wallet
 from typing import List
 from libra_client.account import Account
@@ -131,7 +131,7 @@ def test_get_account_transaction():
     client = create_client()
     tx = client.get_account_transaction(a1.address, 0, True)
     assert tx is None
-    tx = client.get_account_transaction(treasury_compliance_account_address(), 1, True)
+    tx = client.get_account_transaction(testnet_dd_account_address(), 1, True)
     assert isinstance(tx, TransactionView)
 
 def test_get_transactions():

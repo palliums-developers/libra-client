@@ -1,6 +1,6 @@
-from extypes.view import TransactionView as ExchangeTransactionView
-from banktypes.view import TransactionView as BankTransactionView
-from lbrtypes.bytecode import CodeType as LibraCodeType
+from violas_client.extypes.view import TransactionView as ExchangeTransactionView
+from violas_client.banktypes.view import TransactionView as BankTransactionView
+from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
 
 class TransactionView(ExchangeTransactionView, BankTransactionView):
 

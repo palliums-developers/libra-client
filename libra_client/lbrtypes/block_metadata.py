@@ -1,8 +1,8 @@
-from canoser import Struct, Uint64
-from move_core_types.account_address import AccountAddress
-from lbrtypes.event import EventHandle
-from crypto.hash import HashValue
-from move_core_types.move_resource import MoveResource
+from libra_client.canoser import Struct, Uint64
+from libra_client.move_core_types.account_address import AccountAddress
+from libra_client.lbrtypes.event import EventHandle
+from libra_client.crypto.hash import HashValue
+from libra_client.move_core_types.move_resource import MoveResource
 
 class BlockMetadata(Struct):
     _fields = [

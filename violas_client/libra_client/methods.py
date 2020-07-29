@@ -1,17 +1,17 @@
 import urllib3
 import json
 
-from json_rpc.client import JsonRpcBatch, process_batch_response
-from lbrtypes.rustlib import ensure
-from lbrtypes.waypoint import Waypoint
+from violas_client.json_rpc.client import JsonRpcBatch, process_batch_response
+from violas_client.lbrtypes.rustlib import ensure
+from violas_client.lbrtypes.waypoint import Waypoint
 from typing import Optional
-from lbrtypes.trusted_state import TrustedState
-from lbrtypes.ledger_info import LedgerInfoWithSignatures
-from lbrtypes.transaction import SignedTransaction
-from json_rpc.client import get_response_from_batch, JsonRpcResponse
-from json_rpc.views import EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView, AccountView
-from error.error import ServerCode, LibraError
-from lbrtypes.account_state import AccountState
+from violas_client.lbrtypes.trusted_state import TrustedState
+from violas_client.lbrtypes.ledger_info import LedgerInfoWithSignatures
+from violas_client.lbrtypes.transaction import SignedTransaction
+from violas_client.json_rpc.client import get_response_from_batch, JsonRpcResponse
+from violas_client.json_rpc.views import EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView, AccountView
+from violas_client.error.error import ServerCode, LibraError
+from violas_client.lbrtypes.account_state import AccountState
 
 JSON_RPC_TIMEOUT = 10
 MAX_JSON_RPC_RETRY_COUNT = 3

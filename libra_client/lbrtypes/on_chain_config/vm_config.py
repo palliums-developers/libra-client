@@ -1,6 +1,6 @@
-from canoser import Struct, Uint8, RustEnum
-from move_core_types.gas_schedule import CostTable, GasConstants
-from lbrtypes.on_chain_config import OnChainConfig
+from libra_client.canoser import Struct, Uint8, RustEnum
+from libra_client.move_core_types.gas_schedule import CostTable, GasConstants
+from libra_client.lbrtypes.on_chain_config import OnChainConfig
 
 class VMPublishingOption(RustEnum):
     _enums = [
