@@ -1,11 +1,11 @@
-from violas_client.error import LibraError
-from violas_client import Client, Wallet
+from libra_client.error import LibraError
+from libra_client import Client, Wallet
 
 LibraError.parse_server_code(1)
 
 
 wallet = Wallet.new()
-client = Client("bj_testnet")
+client = Client("violas_testnet")
 
 module_account = wallet.new_account()
 a1 = wallet.new_account()

@@ -1,9 +1,6 @@
-import os
-import sys
+
 from typing import Optional, Union
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from violas_client.libra_client import Client as LibraClient
-sys.path.pop(0)
 from extypes.transaction.module import Module
 from extypes.transaction.script import Script
 from lbrtypes.transaction.transaction_argument import TransactionArgument
