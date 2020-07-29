@@ -86,7 +86,7 @@ class Client():
     @classmethod
     def new(cls, url, chain_id=NamedChain.TESTING, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
         ret = cls.__new__(cls)
-        ret.client = LibraClient.new(chain_id, url, waypoint)
+        ret.client = LibraClient.new(url, waypoint)
         faucet_account_file = faucet_file
         if faucet_account_file is None:
             ret.treasury_compliance_account = None
