@@ -12,11 +12,10 @@ from account import Account
 from lbrtypes.transaction import TransactionPayload, SignedTransaction
 from lbrtypes.transaction.script import Script
 from lbrtypes.rustlib import ensure
-from lbrtypes.access_path import AccessPath
 from error import LibraError, StatusCode, ServerCode
 from lbrtypes.bytecode import CodeType
 from lbrtypes.transaction.transaction_argument import TransactionArgument
-from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH, association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
+from lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
 from lbrtypes.transaction.helper import create_user_txn
 from lbrtypes.account_state import AccountState
 from lbrtypes.account_config import config_address
@@ -24,9 +23,11 @@ from lbrtypes.account_config import LBR_NAME
 from lbrtypes.event import EventKey
 from lbrtypes.chain_id import NamedChain
 
-
 import os
+from pathlib import Path
 pre_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../key'))
+if not Path(pre_path).exists():
+    pre_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../key'))
 
 CLIENT_WALLET_MNEMONIC_FILE = "client.mnemonic"
 GAS_UNIT_PRICE = 0
@@ -287,16 +288,13 @@ class Client():
             "auth_key": (auth_key_prefix+receiver).hex(),
             "currency_code": currency_code
         }
-        try_time = 2
-        while try_time:
+        while True:
             try:
                 response = requests.post(self.faucet_server, params=params)
                 break
-            except LibraError as e:
-                try_time -= 1
+            except:
                 import time
                 time.sleep(1)
-                continue
         body = response.text
         status = response.status_code
         ensure(status == requests.codes.ok, f"Failed to query remote faucet server[status={status}]: {body}")
@@ -339,7 +337,7 @@ class Client():
                 continue
             if transaction.is_successful():
                 return
-            raise LibraError(ServerCode.VmStatusError, transaction.get_vm_status())
+            raise LibraError(ServerCode.VmStatusError, transaction.get_vm_status(), on_chain=True)
 
         raise LibraError(ServerCode.VmStatusError, StatusCode.WAIT_TRANSACTION_TIME_OUT)
 
