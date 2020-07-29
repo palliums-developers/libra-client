@@ -1,4 +1,4 @@
-from violas_client.canoser.base import Base
+from canoser.base import Base
 
 class TupleT(Base):
 

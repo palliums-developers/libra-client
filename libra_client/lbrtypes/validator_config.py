@@ -1,9 +1,9 @@
-from libra_client.canoser import Struct
-from libra_client.move_core_types.move_resource import MoveResource
-from libra_client.crypto.ed25519 import Ed25519PublicKey
-from libra_client.crypto.x25519 import PublicKey
-from libra_client.crypto.multi_ed25519 import Multiaddr
-from libra_client.canoser import Optional
+from canoser import Struct
+from move_core_types.move_resource import MoveResource
+from crypto.ed25519 import Ed25519PublicKey
+from crypto.x25519 import PublicKey
+from crypto.multi_ed25519 import Multiaddr
+from canoser import Optional
 
 
 class ValidatorConfig(Struct):

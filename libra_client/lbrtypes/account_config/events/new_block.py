@@ -1,6 +1,6 @@
-from libra_client.canoser import Struct, Uint64
-from libra_client.move_core_types.account_address import AccountAddress
-from libra_client.move_core_types.move_resource import MoveResource
+from canoser import Struct, Uint64
+from move_core_types.account_address import AccountAddress
+from move_core_types.move_resource import MoveResource
 
 class NewBlockEvent(Struct, MoveResource):
     MODULE_NAME = "LibraBlock"

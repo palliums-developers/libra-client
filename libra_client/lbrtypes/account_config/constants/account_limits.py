@@ -1,4 +1,4 @@
-from libra_client.move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS
+from move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS
 
 ACCOUNT_LIMITS_MODULE_NAME = "AccountLimits"
 ACCOUNT_LIMITS_MODULE = ModuleId(CORE_CODE_ADDRESS, ACCOUNT_LIMITS_MODULE_NAME)

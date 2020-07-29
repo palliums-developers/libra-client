@@ -1,5 +1,5 @@
-from libra_client.canoser import RustEnum, Struct
-from libra_client.lbrtypes.access_path import AccessPath
+from canoser import RustEnum, Struct
+from lbrtypes.access_path import AccessPath
 
 class WriteOp(RustEnum):
     _enums = [

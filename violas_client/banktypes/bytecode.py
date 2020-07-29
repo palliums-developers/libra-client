@@ -1,7 +1,7 @@
 from enum import IntEnum
-from violas_client.move_core_types.account_address import AccountAddress
-from violas_client.lbrtypes.bytecode import gen_hex_hash
-from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
+from move_core_types.account_address import AccountAddress
+from lbrtypes.bytecode import gen_hex_hash
+from lbrtypes.bytecode import CodeType as LibraCodeType
 
 
 class CodeType(IntEnum):

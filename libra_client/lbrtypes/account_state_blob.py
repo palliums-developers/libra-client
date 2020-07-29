@@ -1,7 +1,7 @@
-from libra_client.canoser import Struct, RustOptional
-from libra_client.lbrtypes.transaction import Version
-from libra_client.lbrtypes.proof.definition import AccountStateProof
-from libra_client.lbrtypes.account_state import AccountState
+from canoser import Struct, RustOptional
+from lbrtypes.transaction import Version
+from lbrtypes.proof.definition import AccountStateProof
+from lbrtypes.account_state import AccountState
 
 class AccountStateBlob(Struct):
     _fields = [

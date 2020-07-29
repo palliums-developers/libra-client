@@ -1,4 +1,4 @@
-from libra_client.move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS, StructTag
+from move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS, StructTag
 
 EVENT_MODULE_NAME = "Event"
 EVENT_MODULE = ModuleId(CORE_CODE_ADDRESS, EVENT_MODULE_NAME)

@@ -1,5 +1,5 @@
-from violas_client.move_core_types.account_address import AccountAddress
-from violas_client.lbrtypes.on_chain_config import config_address
+from move_core_types.account_address import AccountAddress
+from lbrtypes.on_chain_config import config_address
 
 def association_address() -> AccountAddress :
     return AccountAddress.from_hex("0xA550C18")

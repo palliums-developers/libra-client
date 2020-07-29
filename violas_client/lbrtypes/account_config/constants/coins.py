@@ -1,5 +1,5 @@
-from violas_client.lbrtypes.account_config.constants import from_currency_code_string, CORE_CODE_ADDRESS
-from violas_client.move_core_types.language_storage import StructTag, TypeTag
+from lbrtypes.account_config.constants import from_currency_code_string, CORE_CODE_ADDRESS
+from move_core_types.language_storage import StructTag, TypeTag
 
 COIN1_NAME = "Coin1"
 COIN2_NAME = "Coin2"

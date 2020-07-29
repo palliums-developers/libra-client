@@ -1,7 +1,7 @@
-from violas_client.canoser import Struct, RustEnum, BoolT, Uint8, Uint64, Uint128
+from canoser import Struct, RustEnum, BoolT, Uint8, Uint64, Uint128
 from .account_address import AccountAddress
 from .identifier import Identifier
-from violas_client.crypto.hash import gen_hasher
+from crypto.hash import gen_hasher
 
 
 CODE_TAG = 0

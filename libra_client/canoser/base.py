@@ -1,4 +1,4 @@
-from libra_client.canoser.cursor import Cursor
+from canoser.cursor import Cursor
 from io import StringIO
 import json
 

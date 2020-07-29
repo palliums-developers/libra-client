@@ -1,17 +1,17 @@
-from violas_client.libra_client import Client as LibraClient
+from libra_client import Client as LibraClient
 from banktypes.transaction.module import Module
 from banktypes.transaction.script import Script
 from banktypes.view import TransactionView
 from banktypes.bytecode import CodeType
 from banktypes.account_state import AccountState
-from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
-from violas_client.lbrtypes.rustlib import ensure
+from lbrtypes.transaction.transaction_argument import TransactionArgument
+from lbrtypes.rustlib import ensure
 from banktypes.bytecode import update_hash_to_type_map
 from typing import Optional
-from violas_client.error import LibraError
+from error import LibraError
 from banktypes.bank_error import BankError
-from violas_client.move_core_types.language_storage import core_code_address
-from violas_client.lbrtypes.account_config import association_address
+from move_core_types.language_storage import core_code_address
+from lbrtypes.account_config import association_address
 
 class Client(LibraClient):
 
@@ -124,17 +124,19 @@ class Client(LibraClient):
 
     def get_account_blob(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
-        state = AccountState.new(blob)
-        if hasattr(self, "bank_module_address"):
-            state.set_bank_module_address(self.bank_module_address)
-        return state
+        if blob:
+            state = AccountState.new(blob)
+            if hasattr(self, "bank_module_address"):
+                state.set_bank_module_address(self.bank_module_address)
+            return state
 
     def get_account_state(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
-        state = AccountState.new(blob)
-        if hasattr(self, "bank_module_address"):
-            state.set_bank_module_address(self.bank_module_address)
-        return state
+        if blob:
+            state = AccountState.new(blob)
+            if hasattr(self, "bank_module_address"):
+                state.set_bank_module_address(self.bank_module_address)
+            return state
 
     def get_transaction(self, version, fetch_events:bool=True) -> Optional[TransactionView]:
         txs = self.get_transactions(version, 1, fetch_events)

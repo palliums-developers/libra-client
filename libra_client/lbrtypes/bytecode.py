@@ -1,5 +1,5 @@
 from enum import IntEnum
-from libra_client.move_core_types.account_address import AccountAddress
+from move_core_types.account_address import AccountAddress
 
 class TransactionType(IntEnum):
     SIGNED_TRANSACTION = 0

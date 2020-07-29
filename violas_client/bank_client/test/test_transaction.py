@@ -1,6 +1,6 @@
 from violas_client import Client, Wallet
 from banktypes.bytecode import CodeType
-from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
+from lbrtypes.bytecode import CodeType as LibraCodeType
 
 def test_get_code_type():
     wallet = Wallet.new()

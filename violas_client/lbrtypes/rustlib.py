@@ -1,5 +1,5 @@
-from violas_client.lbrtypes.error import LibraError
-from violas_client.lbrtypes.vm_error import StatusCode
+from lbrtypes.error import LibraError
+from lbrtypes.vm_error import StatusCode
 
 def ensure(code, msg):
     if not code:

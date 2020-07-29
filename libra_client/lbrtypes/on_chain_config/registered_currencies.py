@@ -1,5 +1,5 @@
-from libra_client.canoser import Struct
-from libra_client.lbrtypes.on_chain_config import OnChainConfig
+from canoser import Struct
+from lbrtypes.on_chain_config import OnChainConfig
 
 class RegisteredCurrencies(Struct, OnChainConfig):
     IDENTIFIER = "RegisteredCurrencies"

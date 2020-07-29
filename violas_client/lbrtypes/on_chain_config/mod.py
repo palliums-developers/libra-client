@@ -1,9 +1,9 @@
-from violas_client.canoser import Struct, Uint64
-from violas_client.lbrtypes.event import EventHandle, EventKey
-from violas_client.move_core_types.account_address import AccountAddress
-from violas_client.move_core_types.move_resource import MoveResource
-from violas_client.lbrtypes.access_path import AccessPath
-from violas_client.move_core_types.language_storage import StructTag, CORE_CODE_ADDRESS, TypeTag
+from canoser import Struct, Uint64
+from lbrtypes.event import EventHandle, EventKey
+from move_core_types.account_address import AccountAddress
+from move_core_types.move_resource import MoveResource
+from lbrtypes.access_path import AccessPath
+from move_core_types.language_storage import StructTag, CORE_CODE_ADDRESS, TypeTag
 
 class ConfigID(Struct):
     _fields = [

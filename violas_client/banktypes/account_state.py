@@ -1,11 +1,11 @@
 import copy
 import time
 from typing import Optional
-from violas_client.lbrtypes.account_state import AccountState as LibraAccountState
-from violas_client.move_core_types.language_storage import TypeTag, StructTag
+from lbrtypes.account_state import AccountState as LibraAccountState
+from move_core_types.language_storage import TypeTag, StructTag
 from banktypes.account_resources import TokensResource, UserInfoResource, TokenInfoStoreResource, LibraTokenResource
-from violas_client.error import get_exception
-from violas_client.lbrtypes.rustlib import ensure
+from error import get_exception
+from lbrtypes.rustlib import ensure
 
 class AccountState(LibraAccountState):
 

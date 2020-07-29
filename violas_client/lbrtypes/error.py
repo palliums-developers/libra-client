@@ -1,4 +1,4 @@
-from violas_client.lbrtypes.vm_error import StatusCode
+from lbrtypes.vm_error import StatusCode
 from enum import IntEnum
 
 class LibraError(Exception):

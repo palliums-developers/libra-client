@@ -1,16 +1,16 @@
 from typing import Optional, Union
-from violas_client.libra_client import Client as LibraClient
+from libra_client import Client as LibraClient
 from extypes.transaction.module import Module
 from extypes.transaction.script import Script
-from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
+from lbrtypes.transaction.transaction_argument import TransactionArgument
 from extypes.bytecode import CodeType
 from extypes.account_state import AccountState
 from extypes.view import TransactionView
 from extypes.bytecode import update_hash_to_type_map
-from violas_client.lbrtypes.rustlib import ensure
+from lbrtypes.rustlib import ensure
 from extypes.exchange_resource import ReservesResource
 from extypes.exchange_error import ExchangeError
-from violas_client.error import LibraError
+from error import LibraError
 from extypes.base import Base
 
 class Client(LibraClient, Base):

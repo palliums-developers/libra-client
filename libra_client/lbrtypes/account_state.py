@@ -1,11 +1,11 @@
 from typing import Optional
-from libra_client.lbrtypes.account_config import *
-from libra_client.lbrtypes.on_chain_config import ConfigurationResource
-from libra_client.lbrtypes.validator_config import ValidatorConfigResource
-from libra_client.lbrtypes.libra_timestamp import LibraTimestampResource
-from libra_client.lbrtypes.on_chain_config.validator_set import ValidatorSet
-from libra_client.lbrtypes.block_metadata import LibraBlockResource
-from libra_client.lbrtypes.access_path import AccessPath
+from lbrtypes.account_config import *
+from lbrtypes.on_chain_config import ConfigurationResource
+from lbrtypes.validator_config import ValidatorConfigResource
+from lbrtypes.libra_timestamp import LibraTimestampResource
+from lbrtypes.on_chain_config.validator_set import ValidatorSet
+from lbrtypes.block_metadata import LibraBlockResource
+from lbrtypes.access_path import AccessPath
 
 
 class AccountState(Struct):
@@ -46,7 +46,7 @@ class AccountState(Struct):
         return self.ordered_map.get(path)
 
     def get_registered_currencies(self):
-        from libra_client.lbrtypes.on_chain_config.registered_currencies import RegisteredCurrencies
+        from lbrtypes.on_chain_config.registered_currencies import RegisteredCurrencies
         registered_currencies_resource = self.get(RegisteredCurrencies.resource_path().path)
         if registered_currencies_resource:
             return RegisteredCurrencies.deserialize(registered_currencies_resource).currency_codes
@@ -98,7 +98,7 @@ class AccountState(Struct):
             return LibraBlockResource.deserialize(resource)
 
     def get_event_handle_by_query_path(self, query_path):
-        from libra_client.lbrtypes.block_metadata import NEW_BLOCK_EVENT_PATH
+        from lbrtypes.block_metadata import NEW_BLOCK_EVENT_PATH
         if self.exists():
             if ACCOUNT_RECEIVED_EVENT_PATH == query_path:
                return  self.get_account_resource().get_received_events()

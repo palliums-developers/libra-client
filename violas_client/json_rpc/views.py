@@ -1,7 +1,7 @@
 from typing import List
-from violas_client.canoser import Struct, Uint64, BoolT, StrT, RustEnum, Uint8, Uint16
-from violas_client.lbrtypes.account_state import AccountState
-from violas_client.lbrtypes.bytecode import get_code_type, CodeType
+from canoser import Struct, Uint64, BoolT, StrT, RustEnum, Uint8, Uint16
+from lbrtypes.account_state import AccountState
+from lbrtypes.bytecode import get_code_type, CodeType
 
 class AmountView(Struct):
     _fields = [
@@ -308,7 +308,7 @@ class EventView(Struct):
         return response.value
 
     def get_address(self):
-        from violas_client.move_core_types.account_address import AccountAddress
+        from move_core_types.account_address import AccountAddress
         key = self.get_key()
         return key[len(key) - AccountAddress.HEX_LENGTH:]
 

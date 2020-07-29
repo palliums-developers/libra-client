@@ -1,4 +1,4 @@
-from libra_client.canoser import Struct
+from canoser import Struct
 from enum import IntEnum
 
 class MempoolStatusCode(IntEnum):

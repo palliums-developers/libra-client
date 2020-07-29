@@ -1,6 +1,6 @@
-from violas_client.json_rpc.views import TransactionView as LibraTransactionView
+from json_rpc.views import TransactionView as LibraTransactionView
 from banktypes.bytecode import get_code_type, CodeType
-from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
+from lbrtypes.bytecode import CodeType as LibraCodeType
 from banktypes.account_resources import ViolasEvent
 
 WITH_AMOUNT_TYPE = [CodeType.BORROW, CodeType.ENTER_BANK, CodeType.EXIT_BANK, CodeType.LIQUIDATE_BORROW, CodeType.LOCK,

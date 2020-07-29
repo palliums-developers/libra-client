@@ -1,5 +1,5 @@
-from libra_client.canoser import Struct
-from libra_client.crypto.hash import HashValue, SparseMerkleInternalHasher, TransactionAccumulatorHasher, EventAccumulatorHasher
+from canoser import Struct
+from crypto.hash import HashValue, SparseMerkleInternalHasher, TransactionAccumulatorHasher, EventAccumulatorHasher
 
 class MerkleTreeInternalNode(Struct):
     _fields = [

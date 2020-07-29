@@ -1,4 +1,4 @@
-from violas_client.lbrtypes.transaction.script import Script as LibraScript
+from lbrtypes.transaction.script import Script as LibraScript
 from banktypes.bytecode import get_code
 
 class Script(LibraScript):
