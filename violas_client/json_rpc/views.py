@@ -436,7 +436,7 @@ class UserTransaction(Struct):
         return self.gas_unit_price
 
     def get_expiration_time(self):
-        return self.expiration_time
+        return self.expiration_timestamp_secs
 
     def get_script_hash(self):
         return self.script_hash

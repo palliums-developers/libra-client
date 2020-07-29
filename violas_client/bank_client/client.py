@@ -124,6 +124,8 @@ class Client(LibraClient):
 
     def get_account_blob(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
+        if blob is None:
+            return None
         state = AccountState.new(blob)
         if hasattr(self, "bank_module_address"):
             state.set_bank_module_address(self.bank_module_address)
@@ -131,6 +133,8 @@ class Client(LibraClient):
 
     def get_account_state(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
+        if blob is None:
+            return None
         state = AccountState.new(blob)
         if hasattr(self, "bank_module_address"):
             state.set_bank_module_address(self.bank_module_address)
