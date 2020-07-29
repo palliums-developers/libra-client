@@ -2,12 +2,12 @@ import json
 import requests
 
 from typing import List, Tuple, Union
-from canoser import RustEnum, RustOptional
-from json_rpc.views import AccountView, StateProofView, TransactionView, EventView, \
+from violas_client.canoser import RustEnum, RustOptional
+from violas_client.json_rpc.views import AccountView, StateProofView, TransactionView, EventView, \
     BlockMetadataView, AccountStateWithProofView
-from move_core_types.account_address import AccountAddress as Address
-from lbrtypes.rustlib import ensure
-from lbrtypes.transaction import SignedTransaction
+from violas_client.move_core_types.account_address import AccountAddress as Address
+from violas_client.lbrtypes.rustlib import ensure
+from violas_client.lbrtypes.transaction import SignedTransaction
 
 class JsonRpcBatch():
     def __init__(self, requests: List[Tuple[str, List]]):

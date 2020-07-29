@@ -1,5 +1,5 @@
-from move_core_types.language_storage import StructTag
-from lbrtypes.access_path import AccessPath, Accesses
+from violas_client.move_core_types.language_storage import StructTag
+from violas_client.lbrtypes.access_path import AccessPath, Accesses
 
 class MoveResource():
     MODULE_NAME: str
@@ -19,8 +19,8 @@ class MoveResource():
 
     @classmethod
     def struct_tag(cls, *type_params, module_address=None):
-        from lbrtypes.account_config import CORE_CODE_ADDRESS
-        from move_core_types.account_address import AccountAddress
+        from violas_client.lbrtypes.account_config import CORE_CODE_ADDRESS
+        from violas_client.move_core_types.account_address import AccountAddress
         if module_address is None:
             module_address = CORE_CODE_ADDRESS
         module_address = AccountAddress.normalize_to_bytes(module_address)

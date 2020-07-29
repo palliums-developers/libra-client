@@ -1,5 +1,5 @@
 from enum import IntEnum
-from move_core_types.account_address import AccountAddress
+from violas_client.move_core_types.account_address import AccountAddress
 
 class TransactionType(IntEnum):
     SIGNED_TRANSACTION = 0

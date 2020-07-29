@@ -1,8 +1,8 @@
-from canoser import Struct, Uint64, Optional, RustOptional
-from lbrtypes.event import EventHandle
-from move_core_types.move_resource import MoveResource
-from lbrtypes.account_config.constants.account import ACCOUNT_MODULE_NAME
-from lbrtypes.account_config.resources import KeyRotationCapabilityResourceOption, WithdrawCapabilityResourceOption
+from violas_client.canoser import Struct, Uint64, Optional, RustOptional
+from violas_client.lbrtypes.event import EventHandle
+from violas_client.move_core_types.move_resource import MoveResource
+from violas_client.lbrtypes.account_config.constants.account import ACCOUNT_MODULE_NAME
+from violas_client.lbrtypes.account_config.resources import KeyRotationCapabilityResourceOption, WithdrawCapabilityResourceOption
 
 class AccountResource(Struct, MoveResource):
 

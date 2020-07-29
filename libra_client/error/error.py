@@ -1,6 +1,6 @@
 from enum import IntEnum
 from libra_client.error.status_code import ServerCode
-from lbrtypes.vm_error import StatusCode as LibraStatusCode
+from libra_client.lbrtypes.vm_error import StatusCode as LibraStatusCode
 
 class LibraError(Exception):
     def __init__(self, server_code=None, data=None, message=None, on_chain=False):

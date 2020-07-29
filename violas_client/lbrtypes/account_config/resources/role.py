@@ -1,5 +1,5 @@
-from canoser import RustEnum, Uint64
-from lbrtypes.account_config.resources import ParentVASP, ChildVASP
+from violas_client.canoser import RustEnum, Uint64
+from violas_client.lbrtypes.account_config.resources import ParentVASP, ChildVASP
 
 class AccountRole(RustEnum):
     _enums = [

@@ -1,6 +1,6 @@
-from canoser import RustEnum, Struct
-from lbrtypes.validator_info import ValidatorInfo
-from lbrtypes.on_chain_config import OnChainConfig
+from libra_client.canoser import RustEnum, Struct
+from libra_client.lbrtypes.validator_info import ValidatorInfo
+from libra_client.lbrtypes.on_chain_config import OnChainConfig
 
 from enum import IntEnum
 

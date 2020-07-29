@@ -1,7 +1,7 @@
-from json_rpc.views import TransactionView, EventView
-from lbrtypes.account_state import AccountState
+from libra_client.json_rpc.views import TransactionView, EventView
+from libra_client.lbrtypes.account_state import AccountState
 from libra_client.error import LibraError
-from lbrtypes.account_config import treasury_compliance_account_address
+from libra_client.lbrtypes.account_config import treasury_compliance_account_address
 from libra_client import Client, Wallet
 from typing import List
 from libra_client.account import Account

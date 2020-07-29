@@ -1,4 +1,4 @@
-from move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS
+from libra_client.move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS
 
 GENESIS_MODULE_NAME = "Genesis"
 GENESIS_MODULE = ModuleId(CORE_CODE_ADDRESS, GENESIS_MODULE_NAME)

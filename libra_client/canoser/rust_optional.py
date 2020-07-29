@@ -1,8 +1,8 @@
-from canoser.base import Base
-from canoser.types import type_mapping
-from canoser.bool_t import BoolT
-from canoser.struct import TypedProperty
-from canoser import Struct
+from libra_client.canoser.base import Base
+from libra_client.canoser.types import type_mapping
+from libra_client.canoser.bool_t import BoolT
+from libra_client.canoser.struct import TypedProperty
+from libra_client.canoser import Struct
 
 
 class RustOptional(Base):

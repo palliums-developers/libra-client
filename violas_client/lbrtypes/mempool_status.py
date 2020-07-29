@@ -1,4 +1,4 @@
-from canoser import Struct
+from violas_client.canoser import Struct
 from enum import IntEnum
 
 class MempoolStatusCode(IntEnum):

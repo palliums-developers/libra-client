@@ -1,27 +1,27 @@
 import time
 import requests
-from json_rpc.views import TransactionView
+from violas_client.json_rpc.views import TransactionView
 from typing import Optional, Union
 
-from lbrtypes.account_config.constants.lbr import LBR_NAME, CORE_CODE_ADDRESS
-from move_core_types.language_storage import TypeTag, StructTag
-from move_core_types.account_address import AccountAddress as Address
+from violas_client.lbrtypes.account_config.constants.lbr import LBR_NAME, CORE_CODE_ADDRESS
+from violas_client.move_core_types.language_storage import TypeTag, StructTag
+from violas_client.move_core_types.account_address import AccountAddress as Address
 from methods import LibraClient
-from lbrtypes.waypoint import Waypoint
+from violas_client.lbrtypes.waypoint import Waypoint
 from account import Account
-from lbrtypes.transaction import TransactionPayload, SignedTransaction
-from lbrtypes.transaction.script import Script
-from lbrtypes.rustlib import ensure
-from lbrtypes.access_path import AccessPath
+from violas_client.lbrtypes.transaction import TransactionPayload, SignedTransaction
+from violas_client.lbrtypes.transaction.script import Script
+from violas_client.lbrtypes.rustlib import ensure
+from violas_client.lbrtypes.access_path import AccessPath
 from violas_client.error import LibraError, StatusCode, ServerCode
-from lbrtypes.bytecode import CodeType
-from lbrtypes.transaction.transaction_argument import TransactionArgument
-from lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH, association_address, treasury_compliance_account_address
-from lbrtypes.transaction.helper import create_user_txn
-from lbrtypes.account_state import AccountState
-from lbrtypes.account_config import config_address
-from lbrtypes.account_config import LBR_NAME
-from lbrtypes.event import EventKey
+from violas_client.lbrtypes.bytecode import CodeType
+from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
+from violas_client.lbrtypes.account_config import ACCOUNT_SENT_EVENT_PATH, ACCOUNT_RECEIVED_EVENT_PATH, association_address, treasury_compliance_account_address
+from violas_client.lbrtypes.transaction.helper import create_user_txn
+from violas_client.lbrtypes.account_state import AccountState
+from violas_client.lbrtypes.account_config import config_address
+from violas_client.lbrtypes.account_config import LBR_NAME
+from violas_client.lbrtypes.event import EventKey
 
 
 import os
@@ -173,7 +173,7 @@ class Client():
     def mint_coin(self, receiver_address, micro_coins, auth_key_prefix=None, is_blocking=True, currency_module_address=None,
                   currency_code=None,
                   max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION, gas_currency_code=None):
-        from lbrtypes.account_config import LBR_NAME
+        from violas_client.lbrtypes.account_config import LBR_NAME
         if currency_code is None:
             currency_code = LBR_NAME
         if self.faucet_account:

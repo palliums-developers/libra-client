@@ -1,4 +1,4 @@
-from canoser.base import Base
+from libra_client.canoser.base import Base
 
 class BoolT(Base):
     @classmethod

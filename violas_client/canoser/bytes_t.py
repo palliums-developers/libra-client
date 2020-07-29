@@ -1,6 +1,6 @@
 import struct
-from canoser.int_type import Uint32
-from canoser.base import Base
+from violas_client.canoser.int_type import Uint32
+from violas_client.canoser.base import Base
 
 class BytesT(Base):
 

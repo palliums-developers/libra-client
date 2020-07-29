@@ -1,9 +1,9 @@
 from mnemonic import Mnemonic
 from key_factory import KeyFactory
-from lbrtypes.rustlib import ensure
+from violas_client.lbrtypes.rustlib import ensure
 from account import Account
-from lbrtypes.transaction import RawTransaction
-from lbrtypes.transaction import SignedTransaction
+from violas_client.lbrtypes.transaction import RawTransaction
+from violas_client.lbrtypes.transaction import SignedTransaction
 import os
 
 class Wallet():

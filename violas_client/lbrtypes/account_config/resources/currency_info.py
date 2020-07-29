@@ -1,11 +1,11 @@
-from canoser import Struct, Uint64, Uint128
-from move_core_types.move_resource import MoveResource
-from move_core_types.language_storage import StructTag, CORE_CODE_ADDRESS, ResourceKey
-from lbrtypes.access_path import AccessPath
-from move_core_types.identifier import Identifier
-from lbrtypes.event import EventHandle
-from lbrtypes.account_config import type_tag_for_currency_code, association_address
-from lbrtypes.access_path import Accesses
+from violas_client.canoser import Struct, Uint64, Uint128
+from violas_client.move_core_types.move_resource import MoveResource
+from violas_client.move_core_types.language_storage import StructTag, CORE_CODE_ADDRESS, ResourceKey
+from violas_client.lbrtypes.access_path import AccessPath
+from violas_client.move_core_types.identifier import Identifier
+from violas_client.lbrtypes.event import EventHandle
+from violas_client.lbrtypes.account_config import type_tag_for_currency_code, association_address
+from violas_client.lbrtypes.access_path import Accesses
 
 class CurrencyInfoResource(Struct, MoveResource):
     MODULE_NAME = "Libra"

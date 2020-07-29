@@ -1,14 +1,14 @@
-from canoser import Uint64, Struct, RustEnum
-from move_core_types.account_address import AccountAddress
-from lbrtypes.transaction.change_set import ChangeSet
-from lbrtypes.transaction.script import Script
-from lbrtypes.transaction.module import Module
-from lbrtypes.transaction.authenticator import TransactionAuthenticator
-from lbrtypes.contract_event import ContractEvent
-from lbrtypes.block_metadata import BlockMetadata
-from lbrtypes.proof.definition import TransactionListProof, TransactionProof
-from crypto.hash import gen_hasher, HashValue
-from lbrtypes.bytecode import TransactionType
+from libra_client.canoser import Uint64, Struct, RustEnum
+from libra_client.move_core_types.account_address import AccountAddress
+from libra_client.lbrtypes.transaction.change_set import ChangeSet
+from libra_client.lbrtypes.transaction.script import Script
+from libra_client.lbrtypes.transaction.module import Module
+from libra_client.lbrtypes.transaction.authenticator import TransactionAuthenticator
+from libra_client.lbrtypes.contract_event import ContractEvent
+from libra_client.lbrtypes.block_metadata import BlockMetadata
+from libra_client.lbrtypes.proof.definition import TransactionListProof, TransactionProof
+from libra_client.crypto.hash import gen_hasher, HashValue
+from libra_client.lbrtypes.bytecode import TransactionType
 
 class Version(Uint64):
     pass
@@ -96,7 +96,7 @@ class Transaction(RustEnum):
             return self.value.raw_txn.payload.value
 
     def get_code_type(self):
-        from lbrtypes.bytecode import CodeType
+        from libra_client.lbrtypes.bytecode import CodeType
         if self.enum_name == "BlockMetadata":
             return CodeType.BLOCK_METADATA
         script = self.get_script()

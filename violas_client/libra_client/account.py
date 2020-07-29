@@ -1,9 +1,9 @@
 from nacl.signing import SigningKey
 from enum import Enum
 
-from move_core_types.account_address import AccountAddress
-from lbrtypes.account_config import treasury_compliance_account_address, association_address, transaction_fee_address
-from lbrtypes.transaction.authenticator import AuthenticationKey
+from violas_client.move_core_types.account_address import AccountAddress
+from violas_client.lbrtypes.account_config import treasury_compliance_account_address, association_address, transaction_fee_address
+from violas_client.lbrtypes.transaction.authenticator import AuthenticationKey
 
 
 AccountStatus = Enum('AccountStatus', ('Local','Persisted','Unknown'))
