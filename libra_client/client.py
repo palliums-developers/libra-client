@@ -267,7 +267,13 @@ class Client():
             "auth_key": (auth_key_prefix+receiver).hex(),
             "currency_code": currency_code
         }
-        response = requests.post(self.faucet_server, params=params)
+        while True:
+            try:
+                response = requests.post(self.faucet_server, params=params)
+                break
+            except LibraError:
+                import time
+                time.sleep(1)
         body = response.text
         status = response.status_code
         ensure(status == requests.codes.ok, f"Failed to query remote faucet server[status={status}]: {body}")
@@ -310,7 +316,7 @@ class Client():
                 continue
             if transaction.is_successful():
                 return
-            raise LibraError(ServerCode.VmStatusError, transaction.get_vm_status())
+            raise LibraError(ServerCode.VmStatusError, transaction.get_vm_status(), on_chain=True)
 
         raise LibraError(ServerCode.VmStatusError, StatusCode.WAIT_TRANSACTION_TIME_OUT)
 

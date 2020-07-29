@@ -1,7 +1,7 @@
 from typing import Optional, Union
 from exchange_client import Client as ExchangeClient
 from bank_client import Client as BankClient
-from libra_client import Client as LibraClient
+from violas_client.libra_client import Client as LibraClient
 from vlstypes.account_state import AccountState
 from vlstypes.view import TransactionView
 

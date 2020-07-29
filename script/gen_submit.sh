@@ -26,4 +26,6 @@ git mv test/ libra_client/
 
 git add violas_client/
 
+sed -i "s/from libra_client/from violas_client.libra_client/g" `grep libra_client -rl ./violas_client`
+
 cd ./script

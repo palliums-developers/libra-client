@@ -1,4 +1,4 @@
-from libra_client import Client as LibraClient
+from violas_client.libra_client import Client as LibraClient
 from banktypes.transaction.module import Module
 from banktypes.transaction.script import Script
 from banktypes.view import TransactionView
