@@ -19,9 +19,7 @@ sed -i "s/violas_client.move_core_types.language_storage.TypeTag/move_core_types
 sed -i "s/violas_client.move_core_types.language_storage.StructTag/move_core_types.language_storage.StructTag/g" `grep 'violas_client.move_core_types.language_storage.StructTag' -rl ./violas_client`
 
 
-
-
-git mv libra_client/test .
+#git mv libra_client/test .
 sudo rm libra_client -rf
 
 git mv violas_client/bank_client .

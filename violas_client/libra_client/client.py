@@ -38,7 +38,7 @@ NETWORKS = {
     'libra_testnet':{
         'url': "https://client.testnet.libra.org",
         'faucet_server': "http://faucet.testnet.libra.org",
-        'chain_id': NamedChain.TESTING
+        'chain_id': NamedChain.TESTNET
     },
     'violas_testnet':{
         "url": "http://51.140.241.96:50001",
@@ -63,7 +63,7 @@ class Client():
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
 
-    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="libra_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -179,7 +179,7 @@ class Client():
                                    currency_module_address=currency_module_address)
         return self.submit_script(sender_account, script, is_blocking, max_gas_amount=max_gas_amount, gas_unit_price=gas_unit_price, txn_expiration=txn_expiration, gas_currency_code=gas_currency_code)
 
-    def mint_coin(self, receiver_address, micro_coins, auth_key_prefix=None, add_all_currencies=True, is_blocking=True, currency_module_address=None,
+    def mint_coin(self, receiver_address, micro_coins, auth_key_prefix=None, add_all_currencies=False, is_blocking=True, currency_module_address=None,
                   currency_code=None,
                   max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION, gas_currency_code=None):
         from violas_client.lbrtypes.account_config import LBR_NAME
@@ -276,6 +276,7 @@ class Client():
 
     def mint_coin_with_faucet_service(self, receiver, auth_key_prefix, micro_coins: int, currency_code, is_blocking=True):
         receiver = Address.normalize_to_bytes(receiver)
+        ensure(auth_key_prefix is not None, "Require auth_key_prefix")
         auth_key_prefix = Address.normalize_to_bytes(auth_key_prefix)
         ensure(self.faucet_server is not None, "Require faucet server")
         params = {
@@ -286,7 +287,8 @@ class Client():
         while True:
             try:
                 response = requests.post(self.faucet_server, params=params)
-                break
+                if response.status_code == requests.codes.ok:
+                    break
             except:
                 import time
                 time.sleep(1)
@@ -296,7 +298,7 @@ class Client():
         sequence_number = int(body)
         if is_blocking:
             self.wait_for_transaction(testnet_dd_account_address(), sequence_number - 1)
-        return sequence_number
+        return sequence_number-1
 
     def get_metadata(self):
         return self.client.get_metadata()

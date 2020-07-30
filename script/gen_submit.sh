@@ -22,7 +22,6 @@ git mv error/ libra_client/
 git mv json_rpc/ libra_client/
 git mv lbrtypes/ libra_client/
 git mv move_core_types/ libra_client/
-git mv test/ libra_client/
 
 git add violas_client/
 
