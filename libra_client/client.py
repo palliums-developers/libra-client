@@ -21,7 +21,7 @@ from libra_client.lbrtypes.account_state import AccountState
 from libra_client.lbrtypes.account_config import config_address
 from libra_client.lbrtypes.account_config import LBR_NAME
 from libra_client.lbrtypes.event import EventKey
-from libra_client.lbrtypes.chain_id import NamedChain
+from libra_client.lbrtypes import NamedChain
 
 import os
 from pathlib import Path

@@ -21,7 +21,7 @@ from violas_client.lbrtypes.account_state import AccountState
 from violas_client.lbrtypes.account_config import config_address
 from violas_client.lbrtypes.account_config import LBR_NAME
 from violas_client.lbrtypes.event import EventKey
-from violas_client.lbrtypes.chain_id import NamedChain
+from violas_client.lbrtypes import NamedChain
 
 import os
 from pathlib import Path

@@ -9,6 +9,17 @@ class AmountView(Struct):
         ("currency", StrT)
     ]
 
+class DesignatedDealerView(Struct):
+    _fields = [
+        ("human_name", str),
+        ("base_url", str),
+        ("expiration_time", Uint64),
+        ("compliance_key", str),
+        ("preburn_balances", [AmountView]),
+        ("received_mint_events_key", str),
+
+    ]
+
 class ParentVASPView(Struct):
     _fields = [
         ("human_name", str),
@@ -21,24 +32,24 @@ class ParentVASPView(Struct):
 class AccountRoleView(RustEnum):
     _enums = [
         ("unknown", None),
-        ("unhosted", None),
         ("empty", None),
         ("child_vasp", str),
         ("parent_vasp", ParentVASPView),
+        ("designated_dealer", DesignatedDealerView)
     ]
 
     @classmethod
     def from_value(cls, value):
         if value == "unknown":
             return cls("unknown", None)
-        if value == "unhosted":
-            return cls("unhosted", None)
         if value == "empty":
             return cls("empty", None)
         if value.get("child_vasp") is not None:
             return cls("child_vasp", value.get("child_vasp"))
         if value.get("parent_vasp") is not None:
             return cls("parent_vasp", ParentVASPView.from_value(value.get("parent_vasp")))
+        if value.get("designated_dealer") is not None:
+            return cls("designated_dealer", DesignatedDealerView.from_value(value.get("designated_dealer")))
 
 class AccountView(Struct):
     _fields = [
