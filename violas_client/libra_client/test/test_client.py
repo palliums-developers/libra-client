@@ -1,6 +1,6 @@
 from violas_client.json_rpc.views import TransactionView, EventView
 from violas_client.lbrtypes.account_state import AccountState
-from violas_client.lbrtypes.error import LibraError
+from violas_client.error.error import LibraError
 from violas_client.lbrtypes.account_config import testnet_dd_account_address
 from violas_client.libra_client import Client, Wallet
 from typing import List
