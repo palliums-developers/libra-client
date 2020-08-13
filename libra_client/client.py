@@ -294,6 +294,8 @@ class Client():
                 response = requests.post(self.faucet_server, params=params)
                 if response.status_code == requests.codes.ok:
                     break
+                if response.status_code == 429:
+                    raise Exception(response.text)
             except:
                 import time
                 time.sleep(1)

@@ -419,6 +419,7 @@ class UserTransaction(Struct):
         ("gas_currency", str),
         ("expiration_timestamp_secs", Uint64),
         ("script_hash", StrT),
+        ("script_bytes", str),
         ("script", ScriptView)
     ]
 
@@ -605,6 +606,7 @@ class TransactionView(Struct):
         ("version", Uint64),
         ("transaction", TransactionDataView),
         ("hash", str),
+        ("bytes", str),
         ("events", [EventView]),
         ("vm_status", VMStatusView),
         ("gas_used", Uint64)
