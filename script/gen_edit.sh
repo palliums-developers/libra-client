@@ -14,6 +14,8 @@ sed -i "s/from violas_client.lbrtypes/from lbrtypes/g" `grep 'violas_client.lbrt
 sed -i "s/from violas_client.libra_client/from libra_client/g" `grep 'violas_client.libra_client' -rl ./violas_client`
 sed -i "s/from violas_client.vlstypes/from vlstypes/g" `grep 'violas_client.vlstypes' -rl ./violas_client`
 sed -i "s/from violas_client.move_core_types/from move_core_types/g" `grep 'violas_client.move_core_types' -rl ./violas_client`
+sed -i "s/from violas_client.oracle_client/from oracle_client/g" `grep 'violas_client.oracle_client' -rl ./violas_client`
+
 
 sed -i "s/violas_client.move_core_types.language_storage.TypeTag/move_core_types.language_storage.TypeTag/g" `grep 'violas_client.move_core_types.language_storage.TypeTag' -rl ./violas_client`
 sed -i "s/violas_client.move_core_types.language_storage.StructTag/move_core_types.language_storage.StructTag/g" `grep 'violas_client.move_core_types.language_storage.StructTag' -rl ./violas_client`
@@ -34,6 +36,8 @@ git mv violas_client/lbrtypes .
 git mv violas_client/libra_client .
 git mv violas_client/move_core_types .
 git mv violas_client/vlstypes .
+git mv violas_client/oracle_client .
+
 
 
 cd ./script

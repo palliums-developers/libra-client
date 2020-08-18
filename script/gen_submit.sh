@@ -15,6 +15,7 @@ git mv extypes/ violas_client/
 git mv bank_client/ violas_client/
 git mv banktypes/ violas_client/
 git mv vlstypes/ violas_client/
+git mv oracle_client/ violas_client/
 
 git mv canoser/ libra_client/
 git mv crypto/ libra_client/
@@ -31,6 +32,8 @@ sed -i "s/from banktypes/from violas_client.banktypes/g" `grep "from banktypes" 
 sed -i "s/from exchange_client/from violas_client.exchange_client/g" `grep "from exchange_client" -rl ./violas_client`
 sed -i "s/from extypes/from violas_client.extypes/g" `grep "from extypes" -rl ./violas_client`
 sed -i "s/from vlstypes/from violas_client.vlstypes/g" `grep "from vlstypes" -rl ./violas_client`
+sed -i "s/from oracle_client/from violas_client.oracle_client/g" `grep "from oracle_client" -rl ./violas_client`
+
 
 sed -i "s/from canoser/from violas_client.canoser/g" `grep "from canoser" -rl ./violas_client`
 sed -i "s/from canoser/from libra_client.canoser/g" `grep "from canoser" -rl ./libra_client`

@@ -652,7 +652,7 @@ class TransactionView(Struct):
     def get_events(self) -> List[EventView]:
         return self.events
 
-    def get_vm_status(self) -> int:
+    def get_vm_status(self):
         return self.vm_status
 
     def get_gas_used(self) -> int:
@@ -715,7 +715,7 @@ class TransactionView(Struct):
         tx["amount"] = self.get_amount()
         tx["currency_code"] = self.get_currency_code()
         tx["sequence_number"] = self.get_sequence_number()
-        tx["major_status"] = self.get_vm_status()
+        tx["major_status"] = str(self.get_vm_status())
         tx["version"] = self.get_version()
         tx["success"] = self.is_successful()
         tx["expiration_time"] = self.get_expiration_time()

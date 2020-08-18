@@ -90,7 +90,7 @@ def get_code(type, module_address=None):
         if module_address:
             module_address = AccountAddress.normalize_to_bytes(module_address)
             code = code.replace(default_module_address, module_address)
-        return code
+    return code
 
 # def gen_code_type():
 #     for index, key in enumerate(bytecodes.keys()):
