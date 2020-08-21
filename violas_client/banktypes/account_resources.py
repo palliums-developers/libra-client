@@ -2,6 +2,7 @@ from violas_client.canoser import Struct, Uint64
 from violas_client.lbrtypes.event import EventHandle
 from violas_client.move_core_types.account_address import AccountAddress
 from violas_client.move_core_types.move_resource import MoveResource
+from violas_client.lbrtypes.account_config.resources import WithdrawCapabilityResource
 
 class LibraTokenResource(Struct, MoveResource):
     MODULE_NAME = "ViolasBank"
@@ -101,7 +102,8 @@ class TokenInfoStoreResource(Struct, MoveResource):
 
     _fields = [
         ("supervisor", AccountAddress),
-        ("tokens", [TokenInfoResource])
+        ("tokens", [TokenInfoResource]),
+        ("withdraw_capability", WithdrawCapabilityResource)
     ]
 
 class EventPublish(Struct):
