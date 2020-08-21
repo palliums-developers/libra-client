@@ -1,7 +1,7 @@
 from violas_client import Client, Wallet
-from banktypes.bytecode import CodeType
-from lbrtypes.bytecode import CodeType as LibraCodeType
-from move_core_types.language_storage import core_code_address
+from violas_client.banktypes.bytecode import CodeType
+from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
+from violas_client.move_core_types.language_storage import core_code_address
 
 
 module_address = "da13aace1aa1c49e497416a9dd062ecb"
