@@ -1,5 +1,5 @@
-from bank_client import Client, Wallet
-from move_core_types.language_storage import core_code_address
+from violas_client.bank_client import Client, Wallet
+from violas_client.move_core_types.language_storage import core_code_address
 import time
 
 client = Client("bj_testnet")
@@ -21,4 +21,7 @@ seq = client.bank_publish(a1, data=data)
 assert client.get_account_transaction(a1.address, seq).get_data() == data_hex
 
 seq = client.bank_lock(a1, 100_000_000, currency_code="USD", data=data)
+seq = client.bank_borrow(a1, 10_000_000, currency_code="USD", data=data)
+
 assert client.get_account_transaction(a1.address, seq).get_data() == data_hex
+print(client.bank_get_amount_can_be_borrowed(a1.address))

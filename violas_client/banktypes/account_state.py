@@ -1,16 +1,16 @@
 import copy
 import time
 from typing import Optional
-from violas_client.lbrtypes.account_state import AccountState as LibraAccountState
+from violas_client.oracle_client.account_state import AccountState as OracleAccountState
 from violas_client.move_core_types.language_storage import TypeTag, StructTag
 from violas_client.banktypes.account_resources import TokensResource, UserInfoResource, TokenInfoStoreResource, LibraTokenResource
 from violas_client.error import get_exception
 from violas_client.lbrtypes.rustlib import ensure
 
-class AccountState(LibraAccountState):
+class AccountState(OracleAccountState):
 
     @classmethod
-    def new(cls, account_state: LibraAccountState):
+    def new(cls, account_state: OracleAccountState):
         ret = copy.deepcopy(account_state)
         ret.__class__ = cls
         return ret

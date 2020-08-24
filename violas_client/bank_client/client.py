@@ -1,5 +1,4 @@
-from violas_client.libra_client import Client as LibraClient
-from violas_client.banktypes.transaction.module import Module
+from typing import Optional
 from violas_client.banktypes.transaction.script import Script
 from violas_client.banktypes.view import TransactionView
 from violas_client.banktypes.bytecode import CodeType
@@ -7,13 +6,13 @@ from violas_client.banktypes.account_state import AccountState
 from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
 from violas_client.lbrtypes.rustlib import ensure
 from violas_client.banktypes.bytecode import update_hash_to_type_map
-from typing import Optional
 from violas_client.error import LibraError
 from violas_client.banktypes.bank_error import BankError
 from violas_client.move_core_types.language_storage import core_code_address
 from violas_client.lbrtypes.account_config import association_address
+from violas_client.oracle_client import Client as OracleClient
 
-class Client(LibraClient):
+class Client(OracleClient):
 
     def bank_borrow(self, sender_account, amount,  currency_code, data=None, is_blocking=True, **kwargs):
         args = []
@@ -124,7 +123,7 @@ class Client(LibraClient):
                 if token.index % 2:
                     index = token.index -1
                     exchange_rate = owner_state.get_exchange_rate(index)
-                    amount = owner_state.get_lock_amount(index, exchange_rate)
+                    amount = state.get_lock_amount(index, exchange_rate)
                     currency_code = self.bank_get_currency_code(index)
                     result[currency_code] = amount
         return result
@@ -171,6 +170,35 @@ class Client(LibraClient):
     def get_utilization(self, currency_code):
         state = self.get_account_state(self.get_bank_module_address())
         return state.get_utilization_rate(currency_code)
+
+    def bank_get_amount_can_be_borrowed(self, account_address):
+        prices, collateral_factors = dict(), dict()
+        def get_price(currency_code):
+            price = prices.get(currency_code)
+            if price is None:
+                price = self.oracle_get_exchange_rate(currency_code)
+                prices[currency_code] = price
+            return price
+
+        def get_collateral_factor(currency_code):
+            collateral_factor = collateral_factors.get(currency_code)
+            if collateral_factor is None:
+                index = self.bank_get_currency_index(currency_code)
+                collateral_factor = self.get_account_state(self.get_bank_owner_address()).get_token_info(index).collateral_factor
+                collateral_factors[currency_code] = collateral_factor
+            return collateral_factor
+
+        lock_amounts = self.bank_get_lock_amounts(account_address)
+        borrow_amounts = self.bank_get_borrow_amounts(account_address)
+        locked_sum = 0
+        for currency_code, amount in lock_amounts.items():
+            if amount != 0:
+                locked_sum += amount * (get_price(currency_code).value / 2**32) * (get_collateral_factor(currency_code)/2**32)
+        borrowed_sum = 0
+        for currency_code, amount in borrow_amounts.items():
+            if amount[1] != 0:
+                borrowed_sum += amount[1] * (get_price(currency_code).value / 2**32)
+        return max((locked_sum - borrowed_sum) / 10**6, 0)
 
 
     '''....................................called internal.........................................'''

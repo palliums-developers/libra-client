@@ -6,7 +6,7 @@ from violas_client.vlstypes.account_state import AccountState
 from violas_client.vlstypes.view import TransactionView
 from violas_client.oracle_client import Client as OracleClient
 
-class Client(ExchangeClient, BankClient, OracleClient, LibraClient):
+class Client(ExchangeClient, BankClient, LibraClient):
     def get_account_state(self, account_address) -> Optional[AccountState]:
         state = LibraClient.get_account_state(self, account_address)
         if state is not None:
