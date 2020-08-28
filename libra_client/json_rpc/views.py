@@ -679,26 +679,26 @@ class TransactionView(Struct):
 
     def get_receiver(self):
         receiver = self.transaction.get_receiver()
-        if receiver is None and self.get_code_type() in (CodeType.TESTNET_MINT, ):
-            for event in self.events:
-                if event.data.enum_name == "ReceivedPayment":
-                    return event.get_address()
+        # if receiver is None and self.get_code_type() in (CodeType.TESTNET_MINT, ):
+        #     for event in self.events:
+        #         if event.data.enum_name == "ReceivedPayment":
+        #             return event.get_address()
         return receiver
 
     def get_amount(self):
         amount = self.transaction.get_amount()
-        if amount is None and self.get_code_type() in (CodeType.TESTNET_MINT, ):
-            for event in self.events:
-                if event.data.enum_name == "ReceivedPayment":
-                    return event.get_amount().amount
+        # if amount is None and self.get_code_type() in (CodeType.TESTNET_MINT, ):
+        #     for event in self.events:
+        #         if event.data.enum_name == "ReceivedPayment":
+        #             return event.get_amount().amount
         return amount
 
     def get_currency_code(self):
         currency = self.transaction.get_currency_code()
-        if currency is None and self.get_code_type() in (CodeType.TESTNET_MINT, ):
-            for event in self.events:
-                if event.data.enum_name == "ReceivedPayment":
-                    return event.get_amount().currency
+        # if currency is None and self.get_code_type() in (CodeType.TESTNET_MINT, ):
+        #     for event in self.events:
+        #         if event.data.enum_name == "ReceivedPayment":
+        #             return event.get_amount().currency
         return currency
 
     def get_data(self):
