@@ -4,9 +4,9 @@ from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
 from violas_client.move_core_types.language_storage import core_code_address
 
 
-module_address = "da13aace1aa1c49e497416a9dd062ecb"
 
 client = Client()
+module_address = "da13aace1aa1c49e497416a9dd062ecb"
 client.set_bank_module_address(core_code_address())
 client.set_bank_owner_address(module_address)
 
