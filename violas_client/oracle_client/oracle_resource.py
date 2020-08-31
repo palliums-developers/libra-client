@@ -8,8 +8,8 @@ from violas_client.lbrtypes.event import EventHandle
 class UpdateEvent(Struct):
     _fields = [
         ("value", Uint64),
-        ("timestamp ", Uint64),
-        ("currency_code ", str),
+        ("timestamp", Uint64),
+        ("currency_code", str),
     ]
 
     def get_value(self):
