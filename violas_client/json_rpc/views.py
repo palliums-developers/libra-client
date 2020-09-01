@@ -242,7 +242,7 @@ class UnknownEvent(Struct):
         return None
 
     def get_data(self):
-        return None
+        return self.raw
 
 class EventDataView(RustEnum):
     _enums = [
@@ -287,8 +287,8 @@ class EventDataView(RustEnum):
             return self.value.get_amount()
 
     def get_data(self):
-        if self.enum_name != "Unknown":
-            return self.value.get_data()
+        # if self.enum_name != "Unknown":
+        return self.value.get_data()
 
 
 class EventView(Struct):

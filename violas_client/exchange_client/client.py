@@ -291,16 +291,16 @@ class Client(LibraClient, Base):
 
     def get_output_amount(self, amount_in, reserve_in, reserve_out):
         assert reserve_in > 0 and reserve_out > 0
-        amount_inWithFee = amount_in * 997
+        amount_inWithFee = amount_in * 9997
         numerator = amount_inWithFee * reserve_out
-        denominator = reserve_in * 1000 + amount_inWithFee
+        denominator = reserve_in * 10000 + amount_inWithFee
         amount_out = numerator // denominator
         return amount_out
 
     def get_input_amount(self, amount_out, reserve_in, reserve_out):
         assert reserve_in > 0 and reserve_out > 0
-        numerator = reserve_in * amount_out * 1000
-        denominator = (reserve_out - amount_out) * 997
+        numerator = reserve_in * amount_out * 10000
+        denominator = (reserve_out - amount_out) * 9997
         amount_in = numerator // denominator + 1
         return amount_in
 
