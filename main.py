@@ -1,6 +1,6 @@
-from violas_client import Wallet, Client
+from violas_client import Client
 from violas_client.move_core_types.language_storage import core_code_address
-
+from violas_client.lbrtypes.account_config import association_address
 
 bank_module_address = "da13aace1aa1c49e497416a9dd062ecb"
 exchange_module_address = "00000000000000000000000045584348"

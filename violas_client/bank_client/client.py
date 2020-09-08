@@ -58,6 +58,17 @@ class Client(LibraClient):
         script = Script.gen_script(CodeType.REPAY_BORROW2, *args, ty_args=ty_args, module_address=self.get_bank_module_address())
         return self.submit_script(sender_account, script, is_blocking, **kwargs)
 
+    def bank_liquidate_borrow(self, sender_account, borrower, expired_currency, collateral_code, amount=0, data=None, is_blocking=True, **kwargs):
+        args = []
+        args.append(TransactionArgument.to_address(borrower))
+        args.append(TransactionArgument.to_U64(amount))
+        args.append(TransactionArgument.to_U8Vector(data, hex=False))
+
+        ty_args = self.get_type_args(expired_currency)
+        ty_args.extend(self.get_type_args(collateral_code))
+        script = Script.gen_script(CodeType.LIQUIDATE_BORROW, *args, ty_args=ty_args, module_address=self.get_bank_module_address())
+        return self.submit_script(sender_account, script, is_blocking, **kwargs)
+
     def get_account_blob(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
         if blob:
