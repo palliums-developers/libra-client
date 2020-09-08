@@ -106,6 +106,24 @@ class TokenInfoStoreResource(Struct, MoveResource):
         ("withdraw_capability", WithdrawCapabilityResource)
     ]
 
+    def to_format(self):
+        if hasattr(self, "format"):
+            return
+        self.format = { token.currency_code: token for token in self.tokens}
+
+    def get_price(self, currency_code):
+        self.to_format()
+        token = self.format.get(currency_code)
+        if token is not None:
+            return token.price
+
+    def get_collateral_factor(self, currency_code):
+        self.to_format()
+        token = self.format.get(currency_code)
+        if token is not None:
+            return token.collateral_factor
+
+
 class EventPublish(Struct):
     _fields = [
         ("data", bytes)

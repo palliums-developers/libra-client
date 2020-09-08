@@ -13,6 +13,36 @@ def approximately_equal_to(a, b):
     b = int(b)
     return a in range(b-50, b+50)
 
+
+def test_get_total_collateral_value():
+    wallet = Wallet.new()
+    a1 = wallet.new_account()
+    client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix)
+    client.bank_publish(a1)
+    client.add_currency_to_account(a1, "USD")
+    client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="USD")
+    client.bank_lock(a1, 100_000_000, currency_code="USD")
+    assert approximately_equal_to(client.bank_get_total_collateral_value(a1.address), 100_000_000 / 2)
+
+def test_get_total_borrow_value():
+    wallet = Wallet.new()
+    a1 = wallet.new_account()
+    client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="USD")
+    client.bank_publish(a1, gas_currency_code="USD")
+    client.bank_lock(a1, 100_000_000, currency_code="USD")
+    client.bank_borrow(a1, 10_000_000, currency_code="USD")
+    assert approximately_equal_to(client.bank_get_total_borrow_value(a1.address), 10_000_000)
+
+def test_get_max_borrow_amount():
+    wallet = Wallet.new()
+    a1 = wallet.new_account()
+    client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="USD")
+    client.bank_publish(a1, gas_currency_code="USD")
+    client.bank_lock(a1, 100_000_000, currency_code="USD")
+    client.bank_borrow(a1, 10_000_000, currency_code="USD")
+    assert approximately_equal_to(client.bank_get_max_borrow_amount(a1.address, "USD"), 40_000_000)
+
+
 def test_lock():
     wallet = Wallet.new()
     a1 = wallet.new_account()

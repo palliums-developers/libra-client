@@ -124,7 +124,6 @@ class AccountState(LibraAccountState):
         assert(resource is not None)
 
 
-
     def _exchange_rate(self, index):
         self.require_bank_account()
         t = self.get_tokens_resource().ts[index]
