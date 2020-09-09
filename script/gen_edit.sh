@@ -23,6 +23,7 @@ sed -i "s/violas_client.move_core_types.language_storage.StructTag/move_core_typ
 
 #git mv libra_client/test .
 sudo rm libra_client -rf
+sudo rm violas_client/key -rf
 
 git mv violas_client/bank_client .
 git mv violas_client/banktypes .

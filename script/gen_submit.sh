@@ -9,6 +9,8 @@ cp json_rpc/ violas_client/ -rf
 cp lbrtypes/ violas_client/ -rf
 cp libra_client/ violas_client/ -rf
 cp move_core_types/ violas_client/ -rf
+cp key/ violas_client/ -rf
+
 
 git mv exchange_client/ violas_client/
 git mv extypes/ violas_client/
