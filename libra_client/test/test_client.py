@@ -1,10 +1,10 @@
-from violas_client.json_rpc.views import TransactionView, EventView
-from violas_client.lbrtypes.account_state import AccountState
-from violas_client.error.error import LibraError
-from violas_client.lbrtypes.account_config import testnet_dd_account_address
-from violas_client.libra_client import Client, Wallet
+from json_rpc.views import TransactionView, EventView
+from lbrtypes.account_state import AccountState
+from error.error import LibraError
+from lbrtypes.account_config import testnet_dd_account_address
+from libra_client import Client, Wallet
 from typing import List
-from violas_client.libra_client.account import Account
+from libra_client.account import Account
 
 def create_accounts(account_number)-> List[Account]:
     wallet = Wallet.new()

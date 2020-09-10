@@ -1,6 +1,6 @@
-from violas_client.canoser import RustEnum, Struct
-from violas_client.lbrtypes.validator_info import ValidatorInfo
-from violas_client.lbrtypes.on_chain_config import OnChainConfig
+from canoser import RustEnum, Struct
+from lbrtypes.validator_info import ValidatorInfo
+from lbrtypes.on_chain_config import OnChainConfig
 
 from enum import IntEnum
 

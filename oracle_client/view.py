@@ -1,7 +1,7 @@
-from violas_client.json_rpc.views import TransactionView as LibraTransactionView
-from violas_client.oracle_client.bytecodes import get_code_type, CodeType
-from violas_client.oracle_client.oracle_resource import UpdateEvent
-from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
+from json_rpc.views import TransactionView as LibraTransactionView
+from oracle_client.bytecodes import get_code_type, CodeType
+from oracle_client.oracle_resource import UpdateEvent
+from lbrtypes.bytecode import CodeType as LibraCodeType
 
 class TransactionView(LibraTransactionView):
     @classmethod

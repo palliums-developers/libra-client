@@ -1,8 +1,8 @@
-from violas_client.canoser.base import Base
-from violas_client.canoser.types import type_mapping
-from violas_client.canoser.bool_t import BoolT
-from violas_client.canoser.struct import TypedProperty
-from violas_client.canoser import Struct
+from canoser.base import Base
+from canoser.types import type_mapping
+from canoser.bool_t import BoolT
+from canoser.struct import TypedProperty
+from canoser import Struct
 
 
 class RustOptional(Base):

@@ -1,8 +1,8 @@
 from violas_client import Client, Wallet
-from violas_client.move_core_types.language_storage import core_code_address
+from move_core_types.language_storage import core_code_address
 
 import time
-module_address = "da13aace1aa1c49e497416a9dd062ecb"
+module_address = "00000000000000000000000042414E4B"
 
 client = Client()
 client.set_bank_module_address(core_code_address())
@@ -99,7 +99,7 @@ def test_bank_get_supply_rate():
     lock_amount = client.bank_get_lock_amount(a2.address, currency_code="USD")
     assert approximately_equal_to(lock_amount, 100_000_000+100_000_000*lock_rate)
     client.bank_redeem(a2, currency_code="USD", amount=lock_amount)
-    assert client.bank_get_lock_amount(a2.address, "USD") == 0
+    assert approximately_equal_to(client.bank_get_lock_amount(a2.address, "USD"), 0)
 
 def test_bank_get_borrow_rate():
     wallet = Wallet.new()

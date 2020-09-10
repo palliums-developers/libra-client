@@ -1,9 +1,9 @@
 from typing import Union, Optional
-from violas_client.libra_client import Client as LibraClient
-from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
-from violas_client.oracle_client.bytecodes import gen_script, CodeType
-from violas_client.oracle_client.account_state import AccountState
-from violas_client.lbrtypes.account_config.constants.addresses import association_address
+from libra_client import Client as LibraClient
+from lbrtypes.transaction.transaction_argument import TransactionArgument
+from oracle_client.bytecodes import gen_script, CodeType
+from oracle_client.account_state import AccountState
+from lbrtypes.account_config.constants.addresses import association_address
 
 class Client(LibraClient):
     def update_exchange_rate(self, currency_code, numerator, denominator, is_blocking=True, **kwargs):

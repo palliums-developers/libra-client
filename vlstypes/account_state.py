@@ -1,7 +1,7 @@
 import copy
-from violas_client.extypes.account_state import AccountState as ExchangeAccountState
-from violas_client.banktypes.account_state import AccountState as BankAccountState
-from violas_client.oracle_client.account_state import AccountState as OracleAccountState
+from extypes.account_state import AccountState as ExchangeAccountState
+from banktypes.account_state import AccountState as BankAccountState
+from oracle_client.account_state import AccountState as OracleAccountState
 
 class AccountState(ExchangeAccountState, BankAccountState, OracleAccountState):
     @classmethod

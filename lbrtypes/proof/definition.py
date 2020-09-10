@@ -1,6 +1,6 @@
-from violas_client.canoser import Struct, Uint64, RustOptional
-from violas_client.crypto.hash import HashValue, TransactionAccumulatorHasher, EventAccumulatorHasher
-from violas_client.lbrtypes.proof import SparseMerkleLeafNode
+from canoser import Struct, Uint64, RustOptional
+from crypto.hash import HashValue, TransactionAccumulatorHasher, EventAccumulatorHasher
+from lbrtypes.proof import SparseMerkleLeafNode
 
 class AccumulatorProof(Struct):
     _fields = [

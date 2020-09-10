@@ -1,6 +1,6 @@
 import struct
 from random import randint
-from violas_client.canoser.base import Base
+from canoser.base import Base
 from struct import pack, unpack
 from_bytes = int.from_bytes
 

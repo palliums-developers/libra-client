@@ -1,11 +1,11 @@
 import copy
 import time
 from typing import Optional
-from violas_client.lbrtypes.account_state import AccountState as LibraAccountState
-from violas_client.move_core_types.language_storage import TypeTag, StructTag
-from violas_client.banktypes.account_resources import TokensResource, UserInfoResource, TokenInfoStoreResource, LibraTokenResource
-from violas_client.error import get_exception
-from violas_client.lbrtypes.rustlib import ensure
+from lbrtypes.account_state import AccountState as LibraAccountState
+from move_core_types.language_storage import TypeTag, StructTag
+from banktypes.account_resources import TokensResource, UserInfoResource, TokenInfoStoreResource, LibraTokenResource
+from error import get_exception
+from lbrtypes.rustlib import ensure
 from .utils import new_mantissa, mantissa_div, mantissa_mul, safe_sub
 
 class AccountState(LibraAccountState):
@@ -122,7 +122,6 @@ class AccountState(LibraAccountState):
         resource = self.ordered_map.get(
             TokenInfoStoreResource.resource_path_for(module_address=self.get_bank_module_address()))
         assert(resource is not None)
-
 
     def _exchange_rate(self, index):
         self.require_bank_account()

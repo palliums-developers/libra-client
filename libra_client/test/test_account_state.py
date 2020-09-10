@@ -1,4 +1,4 @@
-from violas_client.libra_client import Client, Wallet
+from libra_client import Client, Wallet
 
 def test_exist():
     client = Client()

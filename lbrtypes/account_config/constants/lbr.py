@@ -1,5 +1,5 @@
-from violas_client.move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS, TypeTag, StructTag
-from violas_client.lbrtypes.account_config.constants.libra import from_currency_code_string
+from move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS, TypeTag, StructTag
+from lbrtypes.account_config.constants.libra import from_currency_code_string
 
 LBR_NAME = "LBR"
 
