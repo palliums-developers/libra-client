@@ -1,4 +1,4 @@
-from libra_client.wallet_library import Wallet
+from violas_client.libra_client.wallet_library import Wallet
 
 def test_recover():
     file_name = "./recover"
