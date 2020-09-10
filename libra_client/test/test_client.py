@@ -1,7 +1,7 @@
-from libra_client.json_rpc.views import TransactionView, EventView
-from libra_client.lbrtypes.account_state import AccountState
-from libra_client.error.error import LibraError
-from libra_client.lbrtypes.account_config import testnet_dd_account_address
+from json_rpc.views import TransactionView, EventView
+from lbrtypes.account_state import AccountState
+from error.error import LibraError
+from lbrtypes.account_config import testnet_dd_account_address
 from libra_client import Client, Wallet
 from typing import List
 from libra_client.account import Account
@@ -77,7 +77,6 @@ def test_get_currency_info():
     client = create_client()
     info = client.get_currency_info("LBR")
     assert info != None
-
 
 
 def test_mint_coin():
@@ -179,4 +178,3 @@ def test_get_event():
     assert len(events) == 0
     events = client.get_received_events(a3.address, 10, 10)
     assert len(events) == 0
-
