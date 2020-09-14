@@ -120,6 +120,10 @@ class Client():
             return { balance.currency: balance.amount for balance in state.balances}
         return {}
 
+    def has_register_currency(self, account_address, currency_code):
+        balances = self.get_balances(account_address)
+        return balances.get(currency_code) is not None
+
     def get_sequence_number(self, account_address: Union[bytes, str]) -> Optional[int]:
         account_state = self.get_account_blob(account_address)
         if account_state:
