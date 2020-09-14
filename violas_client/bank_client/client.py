@@ -100,23 +100,26 @@ class Client(LibraClient):
         if tx:
             return TransactionView.new(tx)
 
-    # def bank_get_amount(self, account_address, currency_code):
-    #     index = self.bank_get_currency_index(currency_code)
-    #     state = self.get_account_state(account_address)
-    #     return state.get_bank_amount(index)
-    #
-    # def bank_get_amounts(self, account_address):
-    #     state = self.get_account_state(account_address)
-    #     tokens = state.get_tokens_resource()
-    #     result = {}
-    #     if tokens:
-    #         for token in tokens.ts:
-    #             if token.index % 2 == 0:
-    #                 currency_code = self.bank_get_currency_code(token.index)
-    #                 value = token.value
-    #                 result[currency_code] = value
-    #     return result
+    @LibraClient.return_when_error(0)
+    def bank_get_amount(self, account_address, currency_code):
+        index = self.bank_get_currency_index(currency_code)
+        state = self.get_account_state(account_address)
+        return state.get_bank_amount(index)
 
+    @LibraClient.return_when_error({})
+    def bank_get_amounts(self, account_address):
+        state = self.get_account_state(account_address)
+        tokens = state.get_tokens_resource()
+        result = {}
+        if tokens:
+            for token in tokens.ts:
+                if token.index % 2 == 0:
+                    currency_code = self.bank_get_currency_code(token.index)
+                    value = token.value
+                    result[currency_code] = value
+        return result
+
+    @LibraClient.return_when_error(0)
     def bank_get_lock_amount(self, account_address, currency_code):
         bank_owner_address = self.get_bank_owner_address()
         state = self.get_account_state(bank_owner_address)
@@ -125,6 +128,7 @@ class Client(LibraClient):
         state = self.get_account_state(account_address)
         return state.get_lock_amount(index, exchange_rate)
 
+    @LibraClient.return_when_error({})
     def bank_get_lock_amounts(self, account_address):
         bank_owner_address = self.get_bank_owner_address()
         owner_state = self.get_account_state(bank_owner_address)
@@ -141,6 +145,7 @@ class Client(LibraClient):
                     result[currency_code] = amount
         return result
 
+    @LibraClient.return_when_error(0)
     def bank_get_borrow_amount(self, account_address, currency_code):
         bank_owner_address = self.get_bank_owner_address()
         state = self.get_account_state(bank_owner_address)
@@ -149,6 +154,7 @@ class Client(LibraClient):
         state = self.get_account_state(account_address)
         return state.get_borrow_amount(index, interest_index)
 
+    @LibraClient.return_when_error({})
     def bank_get_borrow_amounts(self, account_address):
         bank_owner_address = self.get_bank_owner_address()
         owner_state = self.get_account_state(bank_owner_address)
@@ -164,6 +170,7 @@ class Client(LibraClient):
                     result[currency_code] = amount
         return result
 
+    @LibraClient.return_when_error(0)
     def bank_get_total_collateral_value(self, account_address):
         bank_owner_address = self.get_bank_owner_address()
         owner_state = self.get_account_state(bank_owner_address)
@@ -184,6 +191,7 @@ class Client(LibraClient):
             sum += mantissa_mul(mantissa_mul(amount, token_info_stores.get_price(currency)), token_info_stores.get_collateral_factor(currency))
         return sum
 
+    @LibraClient.return_when_error(0)
     def bank_get_total_borrow_value(self, account_address):
         bank_owner_address = self.get_bank_owner_address()
         owner_state = self.get_account_state(bank_owner_address)
@@ -203,7 +211,7 @@ class Client(LibraClient):
             sum += mantissa_mul(amount[1], token_info_stores.get_price(currency))
         return sum
 
-
+    @LibraClient.return_when_error(0)
     def bank_get_max_borrow_amount(self, account_address, currency_code):
         bank_owner_address = self.get_bank_owner_address()
         owner_state = self.get_account_state(bank_owner_address)

@@ -385,3 +385,13 @@ class Client():
         if currency_code:
             return currency_code
         return LBR_NAME
+
+    def return_when_error(value):
+        def get_exception(func):
+            def catch_execption_func(*args, **kwargs):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    return value
+            return catch_execption_func
+        return get_exception
