@@ -95,6 +95,13 @@ class TransactionView(LibraTransactionView):
             if len(events):
                 return events[0].get_collateral_currency()
 
+    def get_collateral_amount(self):
+        type = self.get_code_type()
+        if type is not None:
+            events = self.get_bank_type_events(type)
+            if len(events):
+                return events[0].get_collateral_currency()
+
     def get_data(self):
         data = super().get_data()
         if data is None:

@@ -211,6 +211,7 @@ class EventLiquidateBorrow (Struct):
         ("borrower", AccountAddress),
         ("amount", Uint64),
         ("collateral_tokenidx", Uint64),
+        ("collateral_amount", Uint64),
         ("data", bytes),
     ]
 
@@ -303,6 +304,10 @@ class ViolasEvent(Struct):
     def get_collateral_currency(self):
         if hasattr(self.get_bank_event(), "currency_code2"):
             return self.get_bank_event().currency_code2
+
+    def get_collateral_amount(self):
+        if hasattr(self.get_bank_event(), "collateral_amount"):
+            return self.get_bank_event().collateral_amount
 
     def get_borrower(self):
         if hasattr(self.get_bank_event(), "borrower"):
