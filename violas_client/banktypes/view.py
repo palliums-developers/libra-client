@@ -33,6 +33,8 @@ class TransactionView(LibraTransactionView):
         CodeType.REPAY_BORROW: EventRepayBorrow,
         CodeType.UPDATE_COLLATERAL_FACTOR: EventUpdateCollateralFactor,
         CodeType.UPDATE_PRICE_FROM_ORACLE: EventUpdatePrice,
+        CodeType.UPDATE_PRICE_INDEX: EventUpdatePrice,
+        CodeType.UPDATE_PRICE: EventUpdatePrice,
         CodeType.UPDATE_RATE_MODEL: EventUpdateRateModel
     }
 

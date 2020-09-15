@@ -201,15 +201,18 @@ class AccountState(LibraAccountState):
         str_amap = super().__str__()
         amap = json.loads(str_amap)
         if hasattr(self, "bank_module_address"):
-            tokens_resource = self.get_tokens_resource()
-            user_info_resource = self.get_user_info_resource()
-            token_info_store_resource = self.get_token_info_store_resource()
-            if tokens_resource:
-                amap["tokens_resource"] = tokens_resource.to_json_serializable()
-            if user_info_resource:
-                amap["user_info_resource"] = user_info_resource.to_json_serializable()
-            if token_info_store_resource:
-                amap["token_info_store_resource"] = token_info_store_resource.to_json_serializable()
+            try:
+                tokens_resource = self.get_tokens_resource()
+                user_info_resource = self.get_user_info_resource()
+                token_info_store_resource = self.get_token_info_store_resource()
+                if tokens_resource:
+                    amap["tokens_resource"] = tokens_resource.to_json_serializable()
+                if user_info_resource:
+                    amap["user_info_resource"] = user_info_resource.to_json_serializable()
+                if token_info_store_resource:
+                    amap["token_info_store_resource"] = token_info_store_resource.to_json_serializable()
+            except:
+                pass
         return json.dumps(amap, sort_keys=False, indent=2)
 
 
