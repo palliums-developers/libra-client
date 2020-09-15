@@ -16,7 +16,7 @@ from violas_client.banktypes.utils import mantissa_div, mantissa_mul, new_mantis
 
 class Client(LibraClient):
 
-    BANK_OWNER_ADDRESS = "00000000000000000000000042414E4B"
+    BANK_OWNER_ADDRESS = "00000000000000000000000042414e4b"
     BANK_MODULE_ADDRESS = core_code_address()
 
     def bank_borrow(self, sender_account, amount,  currency_code, data=None, is_blocking=True, **kwargs):
