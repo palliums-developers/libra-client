@@ -116,10 +116,9 @@ class TransactionView(LibraTransactionView):
 
     def get_price(self):
         type = self.get_code_type()
-        if type == CodeType.UPDATE_PRICE_FROM_ORACLE:
-            events = self.get_bank_type_events(type)
-            if len(events):
-                return events[0].get_price()
+        events = self.get_bank_type_events(type)
+        if len(events):
+            return events[0].get_price()
 
     def get_borrower(self):
         type = self.get_code_type()
