@@ -17,7 +17,8 @@ class DesignatedDealerView(Struct):
         ("compliance_key", str),
         ("preburn_balances", [AmountView]),
         ("received_mint_events_key", str),
-
+        ("compliance_key_rotation_events_key", str),
+        ("base_url_rotation_events_key", str),
     ]
 
 class ParentVASPView(Struct):

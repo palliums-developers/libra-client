@@ -17,7 +17,8 @@ class DesignatedDealerView(Struct):
         ("compliance_key", str),
         ("preburn_balances", [AmountView]),
         ("received_mint_events_key", str),
-
+        ("compliance_key_rotation_events_key", str),
+        ("base_url_rotation_events_key", str),
     ]
 
 class ParentVASPView(Struct):
@@ -304,11 +305,11 @@ class EventDataView(RustEnum):
         if value["type"] == "newblock":
             return cls("NewBlock", NewBlockEvent.from_value(value))
         if value["type"] == "receivedmint":
-            return cls("NewBlock", ReceivedMint.from_value(value))
+            return cls("ReceivedMint", ReceivedMint.from_value(value))
         if value["type"] == "compliancekeyrotation":
-            return cls("NewBlock", ComplianceKeyRotation.from_value(value))
+            return cls("ComplianceKeyRotation", ComplianceKeyRotation.from_value(value))
         if value["type"] == "baseurlrotation":
-            return cls("NewBlock", BaseUrlRotation.from_value(value))
+            return cls("BaseUrlRotation", BaseUrlRotation.from_value(value))
         if value["type"] == "unknown":
             return cls("Unknown", UnknownEvent.from_value(value))
 
