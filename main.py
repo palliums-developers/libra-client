@@ -1,13 +1,11 @@
 from violas_client import Client, Wallet
+from violas_client.move_core_types.language_storage import core_code_address
 
-import time
-# client = Client()
-# wallet = Wallet.new()
-# a1 = wallet.new_account()
-# a2 = wallet.new_account()
-# client.mint_coin(a1.address, 50, auth_key_prefix=a1.auth_key_prefix)
-# client.mint_coin(a2.address, 100, auth_key_prefix=a2.auth_key_prefix)
-#
-# client.transfer_coin(a1, a2.address, 5, is_blocking=True)
-# client.transfer_coin(a1, a2.address, 10, is_blocking=True)
-# events = client.get_received_events(a1.address, 0, 10)
+client = Client()
+
+wallet = Wallet.new()
+module_account = wallet.new_account()
+client.mint_coin(module_account.address, 200_000_000, auth_key_prefix=module_account.auth_key_prefix,
+                 currency_code="USD")
+seq = client.bank_publish(module_account)
+client.get_account_transaction(module_account.address, seq).get_amount()

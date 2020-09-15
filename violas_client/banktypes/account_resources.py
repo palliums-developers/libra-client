@@ -164,6 +164,13 @@ class EventUpdatePrice (Struct):
         ("price", Uint64),
     ]
 
+class EventUpdatePriceFromOracle(Struct):
+    _fields = [
+        ("currency_code", str),
+        ("tokenidx", Uint64),
+        ("price", Uint64),
+    ]
+
 class EventLock(Struct):
     _fields = [
         ("currency_code", str),
@@ -228,6 +235,15 @@ class EventExitBank (Struct):
         ("amount", Uint64),
     ]
 
+class EventUpdateRateModel(Struct):
+    _fields = [
+        ("currency_code", str),
+        ("tokenidx", Uint64),
+        ("base_rate", Uint64),
+        ("rate_multiplier", Uint64),
+        ("rate_jump_multiplier", Uint64),
+        ("rate_kink", Uint64),
+    ]
 
 event_type_map = {
     "0": EventPublish,
@@ -241,8 +257,9 @@ event_type_map = {
     "12": EventUpdateCollateralFactor,
     "13": EventEnterBank,
     "14": EventExitBank,
+    "15": EventUpdateRateModel,
+    "16": EventUpdatePriceFromOracle
 }
-
 
 class ViolasEvent(Struct):
     _fields = [
@@ -260,6 +277,8 @@ class ViolasEvent(Struct):
     def get_currency_code(self):
         if hasattr(self.get_bank_event(), "currency_code"):
             return self.get_bank_event().currency_code
+        elif hasattr(self.get_bank_event(), "currency_code1"):
+            return self.get_bank_event().currency_code1
 
     def get_amount(self):
         if hasattr(self.get_bank_event(), "amount"):
@@ -268,3 +287,23 @@ class ViolasEvent(Struct):
     def get_data(self):
         if hasattr(self.get_bank_event(), "data"):
             return self.get_bank_event().data.hex()
+
+    def payee(self):
+        if hasattr(self.get_bank_event(), "payee"):
+            return self.get_bank_event().payee
+
+    def get_tokenidx(self):
+        if hasattr(self.get_bank_event(), "tokenidx"):
+            return self.get_bank_event().tokenidx
+
+    def get_price(self):
+        if hasattr(self.get_bank_event(), "price"):
+            return self.get_bank_event().price
+
+    def get_collateral_currency(self):
+        if hasattr(self.get_bank_event(), "currency_code2"):
+            return self.get_bank_event().currency_code2
+
+    def get_borrower(self):
+        if hasattr(self.get_bank_event(), "borrower"):
+            return self.get_bank_event().borrower

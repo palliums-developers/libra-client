@@ -68,7 +68,7 @@ class Client():
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
 
-    def __init__(self, network="libra_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -190,7 +190,7 @@ class Client():
         from violas_client.lbrtypes.account_config import LBR_NAME
         if currency_code is None:
             currency_code = LBR_NAME
-        if self.get_account_state(receiver_address) is None and hasattr(self, "associate_account"):
+        if self.get_account_state(receiver_address) is None and hasattr(self, "treasury_compliance_account"):
             args = []
             args.append(TransactionArgument.to_U64(0))
             args.append(TransactionArgument.to_address(receiver_address))
@@ -199,7 +199,7 @@ class Client():
             args.append(TransactionArgument.to_bool(add_all_currencies))
             ty_args = self.get_type_args(currency_code, currency_module_address)
             script = Script.gen_script(CodeType.CREATE_PARENT_VASP_ACCOUNT, *args, ty_args=ty_args, currency_module_address=currency_module_address)
-            self.submit_script(self.associate_account, script, is_blocking, gas_currency_code, max_gas_amount, gas_unit_price, txn_expiration)
+            self.submit_script(self.treasury_compliance_account, script, is_blocking, gas_currency_code, max_gas_amount, gas_unit_price, txn_expiration)
         if hasattr(self, "testnet_dd_account"):
             args = []
             args.append(TransactionArgument.to_address(receiver_address))

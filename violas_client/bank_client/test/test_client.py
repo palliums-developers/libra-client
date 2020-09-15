@@ -2,16 +2,14 @@ from violas_client import Client, Wallet
 from violas_client.move_core_types.language_storage import core_code_address
 
 import time
-module_address = "da13aace1aa1c49e497416a9dd062ecb"
 
 client = Client()
-client.set_bank_module_address(core_code_address())
-client.set_bank_owner_address(module_address)
+
 
 def approximately_equal_to(a, b):
     a = int(a)
     b = int(b)
-    return a in range(b-50, b+50)
+    return a in range(b-1, b+1)
 
 
 def test_get_total_collateral_value():
@@ -114,4 +112,3 @@ def test_bank_get_borrow_rate():
     assert approximately_equal_to(borrow_amount, 10_000_000+10_000_000*borrow_rate*2)
     client.bank_repay_borrow(a1, currency_code="USD", amount=borrow_amount)
     assert client.bank_get_borrow_amount(a1.address, "USD")[0] == 0
-

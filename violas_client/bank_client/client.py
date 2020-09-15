@@ -16,6 +16,9 @@ from violas_client.banktypes.utils import mantissa_div, mantissa_mul, new_mantis
 
 class Client(LibraClient):
 
+    BANK_OWNER_ADDRESS = "00000000000000000000000042414E4B"
+    BANK_MODULE_ADDRESS = core_code_address()
+
     def bank_borrow(self, sender_account, amount,  currency_code, data=None, is_blocking=True, **kwargs):
         args = []
         args.append(TransactionArgument.to_U64(amount))
@@ -74,16 +77,14 @@ class Client(LibraClient):
         blob = super().get_account_blob(account_address)
         if blob:
             state = AccountState.new(blob)
-            if hasattr(self, "bank_module_address"):
-                state.set_bank_module_address(self.bank_module_address)
+            state.set_bank_module_address(self.get_bank_module_address())
             return state
 
     def get_account_state(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)
         if blob:
             state = AccountState.new(blob)
-            if hasattr(self, "bank_module_address"):
-                state.set_bank_module_address(self.bank_module_address)
+            state.set_bank_module_address(self.get_bank_module_address())
             return state
 
     def get_transaction(self, version, fetch_events:bool=True) -> Optional[TransactionView]:
@@ -313,9 +314,7 @@ class Client(LibraClient):
             return address
         if hasattr(self, "bank_module_address"):
             return self.bank_module_address
-        if hasattr(self, "bank_owner_address"):
-            return self.bank_owner_address
-        return core_code_address()
+        return self.BANK_MODULE_ADDRESS
 
     def set_bank_owner_address(self, address):
         self.bank_owner_address = address
@@ -325,9 +324,7 @@ class Client(LibraClient):
             return address
         if hasattr(self, "bank_owner_address"):
             return self.bank_owner_address
-        if hasattr(self, "bank_module_address"):
-            return self.bank_module_address
-        return association_address()
+        return self.BANK_OWNER_ADDRESS
 
     def parse_currency_code(self, currency_code):
         if currency_code is None:
