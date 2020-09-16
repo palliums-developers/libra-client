@@ -254,19 +254,16 @@ class Client(LibraClient):
     def bank_get_lock_amounts_to_currency(self, account_address, currency_code):
         bank_owner_address = self.get_bank_owner_address()
         owner_state = self.get_account_state(bank_owner_address)
-        state = self.get_account_state(account_address)
-        tokens = state.get_tokens_resource()
         token_info_resource = owner_state.get_token_info_store_resource()
-        total_amount = 0
-        if tokens:
-            for token in tokens.ts:
-                if token.index % 2:
-                    index = token.index -1
-                    exchange_rate = owner_state.get_exchange_rate(index)
-                    amount = state.get_lock_amount(index, exchange_rate)
-                    c = self.bank_get_currency_code(index)
-                    total_amount += amount*token_info_resource.get_price(c)
-        return int(total_amount / token_info_resource.get_price(currency_code))
+        lock_amounts = self.bank_get_lock_amounts(account_address)
+        borrow_amounts = self.bank_get_borrow_amounts(account_address)
+        sum = 0
+        for currency, amount in lock_amounts.items():
+            sum += token_info_resource.get_price(currency)*amount
+        for currency, amount in borrow_amounts.items():
+            sum -= token_info_resource.get_price(currency)*amount
+
+        return int(sum / token_info_resource.get_price(currency_code))
 
 
     def bank_get_lock_rate(self, currency_code):
