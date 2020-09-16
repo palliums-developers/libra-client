@@ -261,7 +261,7 @@ class Client(LibraClient):
         for currency, amount in lock_amounts.items():
             sum += token_info_resource.get_price(currency)*amount
         for currency, amount in borrow_amounts.items():
-            sum -= token_info_resource.get_price(currency)*amount
+            sum -= token_info_resource.get_price(currency)*amount[1]
 
         return int(sum / token_info_resource.get_price(currency_code))
 
