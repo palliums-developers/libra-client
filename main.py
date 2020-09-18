@@ -10,11 +10,3 @@ print(tx.get_code_type(), tx.get_price())
 # for tx in txs:
 #     if tx.get_code_type() != CodeType.BLOCK_METADATA:
 #         print(tx.get_amount())
-
-
-# wallet = Wallet.new()
-# module_account = wallet.new_account()
-# client.mint_coin(module_account.address, 200_000_000, auth_key_prefix=module_account.auth_key_prefix,
-#                  currency_code="USD")
-# seq = client.bank_publish(module_account)
-# client.get_account_transaction(module_account.address, seq).get_amount()

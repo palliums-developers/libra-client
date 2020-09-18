@@ -248,6 +248,21 @@ class Client(LibraClient):
         if sum <= 0:
             return 0
         return mantissa_div(sum, token_info_stores.get_price(currency_code))
+
+    @LibraClient.return_when_error(0)
+    def bank_get_lock_amounts_to_currency(self, account_address, currency_code):
+        bank_owner_address = self.get_bank_owner_address()
+        owner_state = self.get_account_state(bank_owner_address)
+        token_info_resource = owner_state.get_token_info_store_resource()
+        lock_amounts = self.bank_get_lock_amounts(account_address)
+        borrow_amounts = self.bank_get_borrow_amounts(account_address)
+        sum = 0
+        for currency, amount in lock_amounts.items():
+            sum += token_info_resource.get_price(currency)*amount
+        for currency, amount in borrow_amounts.items():
+            sum -= token_info_resource.get_price(currency)*amount[1]
+
+        return int(sum / token_info_resource.get_price(currency_code))
     
     def bank_get_lock_rate(self, currency_code):
         bank_owner_address = self.get_bank_owner_address()
