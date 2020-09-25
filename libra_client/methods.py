@@ -1,17 +1,17 @@
 import urllib3
 import json
 
-from libra_client.json_rpc.client import JsonRpcBatch, process_batch_response
-from libra_client.lbrtypes.rustlib import ensure
-from libra_client.lbrtypes.waypoint import Waypoint
+from json_rpc.client import JsonRpcBatch, process_batch_response
+from lbrtypes.rustlib import ensure
+from lbrtypes.waypoint import Waypoint
 from typing import Optional
-from libra_client.lbrtypes.trusted_state import TrustedState
-from libra_client.lbrtypes.ledger_info import LedgerInfoWithSignatures
-from libra_client.lbrtypes.transaction import SignedTransaction
-from libra_client.json_rpc.client import get_response_from_batch, JsonRpcResponse
-from libra_client.json_rpc.views import EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView, AccountView
-from libra_client.error.error import ServerCode, LibraError
-from libra_client.lbrtypes.account_state import AccountState
+from lbrtypes.trusted_state import TrustedState
+from lbrtypes.ledger_info import LedgerInfoWithSignatures
+from lbrtypes.transaction import SignedTransaction
+from json_rpc.client import get_response_from_batch, JsonRpcResponse
+from json_rpc.views import EventView, BlockMetadataView, TransactionView, StateProofView, AccountStateWithProofView, AccountView
+from error.error import ServerCode, LibraError
+from lbrtypes.account_state import AccountState
 
 JSON_RPC_TIMEOUT = 10
 MAX_JSON_RPC_RETRY_COUNT = 3
