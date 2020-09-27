@@ -2,6 +2,8 @@ from typing import List
 from violas_client.canoser import Struct, Uint64, BoolT, StrT, RustEnum, Uint8, Uint16
 from violas_client.lbrtypes.account_state import AccountState
 from violas_client.lbrtypes.bytecode import get_code_type, CodeType
+from violas_client.canoser import RustOptional
+
 
 class AmountView(Struct):
     _fields = [
@@ -591,10 +593,22 @@ class TransactionDataView(RustEnum):
         if self.enum_name == "UnknownTransaction":
             return CodeType.UNKNOWN
 
+class MoveAbortExplanationView(Struct):
+    _fields = [
+        ("category", StrT),
+        ("category_description", StrT),
+        ("reason", StrT),
+        ("reason_description", StrT),
+    ]
+
+class OptionalMoveAbortExplanationView(RustOptional):
+    _type = MoveAbortExplanationView
+
 class MoveAbortView(Struct):
     _fields = [
         ("location", StrT),
         ("abort_code", Uint64),
+        ("explanation", OptionalMoveAbortExplanationView)
     ]
 
 class ExecutionFailureView(Struct):
@@ -610,9 +624,7 @@ class VMStatusView(RustEnum):
         ("OutOfGas", None),
         ("MoveAbort", MoveAbortView),
         ("ExecutionFailure", ExecutionFailureView),
-        ("VerificationError", None),
-        ("DeserializationError", None),
-        ("PublishingFailure", None),
+        ("MiscellaneousError", None),
     ]
 
     @classmethod
@@ -626,12 +638,8 @@ class VMStatusView(RustEnum):
             return cls("MoveAbort", MoveAbortView.from_value(value))
         if tp == "execution_failure":
             return cls("ExecutionFailure", ExecutionFailureView.from_value(value))
-        if tp == "verification_error":
-            return cls("VerificationError", None)
-        if tp == "deserialization_error":
-            return cls("DeserializationError", None)
-        if tp == "publishing_failure":
-            return cls("PublishingFailure", None)
+        if tp == "miscellaneous_error":
+            return cls("MiscellaneousError", None)
 
 class TransactionView(Struct):
     _fields = [
