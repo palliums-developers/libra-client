@@ -604,6 +604,13 @@ class MoveAbortExplanationView(Struct):
 class OptionalMoveAbortExplanationView(RustOptional):
     _type = MoveAbortExplanationView
 
+    @classmethod
+    def from_value(cls, value):
+        if value is None:
+            return OptionalMoveAbortExplanationView()
+        else:
+            return OptionalMoveAbortExplanationView(MoveAbortExplanationView.from_value(value))
+
 class MoveAbortView(Struct):
     _fields = [
         ("location", StrT),
