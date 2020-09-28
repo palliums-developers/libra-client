@@ -1,9 +1,10 @@
-from violas_client.client import Client
-from lbrtypes.bytecode import CodeType
+from libra_client import Client, Wallet
 
-client = Client("bj_testnet")
-txs = client.get_transactions(257000, 1000)
+client = Client("libra_testnet")
+# wallet = Wallet.new()
+# a1 = wallet.new_account()
+# client.mint_coin(a1.address, 10000, auth_key_prefix=a1.auth_key_prefix)
 
-# for tx in txs:
-#     if tx.get_code_type() != CodeType.BLOCK_METADATA:
-#         print()
+balance = client.get_balance("5e5f9844b8486e0c8a719a4cebd36701")
+print(balance)
+# print(balance)

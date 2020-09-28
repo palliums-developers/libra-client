@@ -190,7 +190,7 @@ class Client():
         from violas_client.lbrtypes.account_config import LBR_NAME
         if currency_code is None:
             currency_code = LBR_NAME
-        if self.get_account_state(receiver_address) is None and hasattr(self, "treasury_compliance_account"):
+        if self.get_account_state(receiver_address) is None and self.treasury_compliance_account is not None:
             args = []
             args.append(TransactionArgument.to_U64(0))
             args.append(TransactionArgument.to_address(receiver_address))
