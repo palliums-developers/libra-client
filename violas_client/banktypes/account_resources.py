@@ -317,5 +317,9 @@ class ViolasEvent(Struct):
         if hasattr(self.get_bank_event(), "borrower"):
             return self.get_bank_event().borrower.hex()
 
+    def get_factor(self):
+        if hasattr(self.get_bank_event(), "factor"):
+            return self.get_bank_event().factor
+
     def get_timestamp(self):
         return self.timestamp // 1_000_000

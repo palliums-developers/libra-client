@@ -107,7 +107,7 @@ class Client(LibraClient):
                                    module_address=self.get_bank_module_address())
         return self.submit_script(sender_account, script, is_blocking, **kwargs)
 
-    def bank_update_collateral_factor(self, sender_account, currency_code, factor, is_blocking, **kwargs):
+    def bank_update_collateral_factor(self, sender_account, currency_code, factor, is_blocking=True, **kwargs):
         args = []
         args.append(TransactionArgument.to_U64(int(factor*(2**32))))
 
@@ -116,7 +116,7 @@ class Client(LibraClient):
                                    module_address=self.get_bank_module_address())
         return self.submit_script(sender_account, script, is_blocking, **kwargs)
 
-    def bank_update_rate_model(self, sender_account, currency_code, base_rate, rate_multiplier, rate_jump_multiplier, rate_kink, is_blocking, **kwargs):
+    def bank_update_rate_model(self, sender_account, currency_code, base_rate, rate_multiplier, rate_jump_multiplier, rate_kink, is_blocking=True, **kwargs):
         args = []
         args.append(TransactionArgument.to_U64(int(base_rate*(2**32)*60*24*30)))
         args.append(TransactionArgument.to_U64(int(rate_multiplier*(2**32)*60*24*30)))
