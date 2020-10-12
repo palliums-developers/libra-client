@@ -94,7 +94,7 @@ def test_bank_get_supply_rate():
     lock_amount = client.bank_get_lock_amount(a2.address, currency_code="USD")
     assert approximately_equal_to(lock_amount, 100_000_000 + 100_000_000*lock_rate)
     client.bank_redeem(a2, amount=lock_amount, currency_code="USD")
-    assert client.bank_get_lock_amount(a2.address, "USD") == 0
+    assert approximately_equal_to(client.bank_get_lock_amount(a2.address, "USD"), 0)
 
 def test_bank_get_borrow_rate():
     wallet = Wallet.new()

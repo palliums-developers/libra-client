@@ -28,7 +28,7 @@ class AccountState(LibraAccountState):
         return UserInfoResource.deserialize(resource)
 
     @get_exception
-    def get_token_info_store_resource(self) -> Optional[TokenInfoStoreResource]:
+    def get_token_info_store_resource(self, accrue_interest=True) -> Optional[TokenInfoStoreResource]:
         self.require_bank_account()
         if hasattr(self, "token_info_store"):
             return self.token_info_store
@@ -36,9 +36,11 @@ class AccountState(LibraAccountState):
             TokenInfoStoreResource.resource_path_for(module_address=self.get_bank_module_address()))
         resource = TokenInfoStoreResource.deserialize(resource)
         self.token_info_store = resource
-        for index in range(0, len(resource.tokens)):
-            self._accrue_interest(index)
+        if accrue_interest:
+            for index in range(0, len(resource.tokens)):
+                self._accrue_interest(index)
         return self.token_info_store
+
 
     @get_exception
     def get_token_info(self, index):

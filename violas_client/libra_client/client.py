@@ -117,7 +117,7 @@ class Client():
         address = Address.normalize_to_bytes(account_address)
         state = self.client.get_account_state(address, True)
         if state:
-            return { balance.currency: balance.amount for balance in state.balances}
+            return {balance.currency: balance.amount for balance in state.balances}
         return {}
 
     def get_sequence_number(self, account_address: Union[bytes, str]) -> Optional[int]:
