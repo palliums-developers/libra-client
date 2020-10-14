@@ -26,8 +26,8 @@ class Client(LibraClient):
     def bank_update_price_from_oracle(self, sender_account, currency_code, is_blocking=True, **kwargs):
         args = []
         ty_args = self.get_type_args(currency_code)
-        script = Script.gen_script(CodeType.UPDATE_PRICE_FROM_ORACLE, *args, ty_args=ty_args,
-                                   module_address=self.get_bank_module_address())
+        script = Script.gen_script(CodeType.UPDATE_PRICE_FROM_ORACLE, *args, ty_args=ty_args, module_address=self.get_bank_module_address())
+        print(script.to_json_serializable())
         return self.submit_script(sender_account, script, is_blocking, **kwargs)
 
     def bank_register_token(self, sender_account, currency_code, price_oracle, collater_factor, base_rate, rate_multiplier, rate_jump_mutiplier, rate_kink, data=None, is_blocking=True, **kwargs):
@@ -127,6 +127,7 @@ class Client(LibraClient):
 
         script = Script.gen_script(CodeType.UPDATE_RATE_MODEL, *args, ty_args=ty_args, module_address=self.get_bank_module_address())
         return self.submit_script(sender_account, script, is_blocking, **kwargs)
+
 
     def get_account_blob(self, account_address) -> Optional[AccountState]:
         blob = super().get_account_blob(account_address)

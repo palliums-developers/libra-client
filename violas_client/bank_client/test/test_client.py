@@ -8,7 +8,7 @@ client = Client()
 def approximately_equal_to(a, b):
     a = int(a)
     b = int(b)
-    return a in range(b-1, b+1)
+    return a in range(b-1, b+2)
 
 def test_get_total_collateral_value():
     wallet = Wallet.new()
