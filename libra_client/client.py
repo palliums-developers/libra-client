@@ -1,27 +1,27 @@
 import time
 import requests
-from libra_client.json_rpc.views import TransactionView
+from json_rpc.views import TransactionView
 from typing import Optional, Union
 
-from libra_client.lbrtypes.account_config.constants.lbr import LBR_NAME, CORE_CODE_ADDRESS
-from libra_client.move_core_types.language_storage import TypeTag, StructTag
-from libra_client.move_core_types.account_address import AccountAddress as Address
+from lbrtypes.account_config.constants.lbr import DEFAULT_COIN_NAME, CORE_CODE_ADDRESS
+from move_core_types.language_storage import TypeTag, StructTag
+from move_core_types.account_address import AccountAddress as Address
 from libra_client.methods import LibraClient
-from libra_client.lbrtypes.waypoint import Waypoint
+from lbrtypes.waypoint import Waypoint
 from libra_client.account import Account
-from libra_client.lbrtypes.transaction import TransactionPayload, SignedTransaction
-from libra_client.lbrtypes.transaction.script import Script
-from libra_client.lbrtypes.rustlib import ensure
-from libra_client.error import LibraError, StatusCode, ServerCode
-from libra_client.lbrtypes.bytecode import CodeType
-from libra_client.lbrtypes.transaction.transaction_argument import TransactionArgument
-from libra_client.lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
-from libra_client.lbrtypes.transaction.helper import create_user_txn
-from libra_client.lbrtypes.account_state import AccountState
-from libra_client.lbrtypes.account_config import config_address
-from libra_client.lbrtypes.account_config import LBR_NAME
-from libra_client.lbrtypes.event import EventKey
-from libra_client.lbrtypes import NamedChain
+from lbrtypes.transaction import TransactionPayload, SignedTransaction
+from lbrtypes.transaction.script import Script
+from lbrtypes.rustlib import ensure
+from error import LibraError, StatusCode, ServerCode
+from lbrtypes.bytecode import CodeType
+from lbrtypes.transaction.transaction_argument import TransactionArgument
+from lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
+from lbrtypes.transaction.helper import create_user_txn
+from lbrtypes.account_state import AccountState
+from lbrtypes.account_config import config_address
+from lbrtypes.account_config import DEFAULT_COIN_NAME
+from lbrtypes.event import EventKey
+from lbrtypes import NamedChain
 
 import os
 from pathlib import Path
@@ -68,7 +68,7 @@ class Client():
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
 
-    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="libra_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -117,7 +117,7 @@ class Client():
         address = Address.normalize_to_bytes(account_address)
         state = self.client.get_account_state(address, True)
         if state:
-            return { balance.currency: balance.amount for balance in state.balances}
+            return {balance.currency: balance.amount for balance in state.balances}
         return {}
 
     def get_sequence_number(self, account_address: Union[bytes, str]) -> Optional[int]:
@@ -187,9 +187,9 @@ class Client():
     def mint_coin(self, receiver_address, micro_coins, auth_key_prefix=None, human_name="", data="", add_all_currencies=False, is_blocking=True, currency_module_address=None,
                   currency_code=None,
                   max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION, gas_currency_code=None):
-        from libra_client.lbrtypes.account_config import LBR_NAME
+        from lbrtypes.account_config import DEFAULT_COIN_NAME
         if currency_code is None:
-            currency_code = LBR_NAME
+            currency_code = DEFAULT_COIN_NAME
         if self.get_account_state(receiver_address) is None and self.treasury_compliance_account is not None:
             args = []
             args.append(TransactionArgument.to_U64(0))
@@ -325,7 +325,7 @@ class Client():
         if currency_module_address is None:
             currency_module_address = CORE_CODE_ADDRESS
         if currency_code is None:
-            currency_code = LBR_NAME
+            currency_code = DEFAULT_COIN_NAME
         if struct_name is None:
             struct_name = currency_code
         currency_module_address = Address.normalize_to_bytes(currency_module_address)
@@ -384,7 +384,7 @@ class Client():
             return gas_currency_code
         if currency_code:
             return currency_code
-        return LBR_NAME
+        return DEFAULT_COIN_NAME
 
     def return_when_error(value):
         def get_exception(func):
