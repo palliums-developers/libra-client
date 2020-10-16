@@ -2,7 +2,7 @@ from violas_client import Client, Wallet
 from lbrtypes.transaction.script import Script
 
 client = Client("bj_testnet")
-print(client.get_transaction(0).get_sender().lower())
+print(client.get_transaction(4083709).get_receiver())
 # wallet = Wallet.new()
 # a1 = wallet.new_account()
 # a2 = wallet.new_account()
