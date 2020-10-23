@@ -66,6 +66,11 @@ class AccountState(Struct):
             if resource:
                 return BalanceResource.deserialize(resource)
 
+    def get_credential_resource(self) -> Optional[CredentialResource]:
+        credential = self.get(CredentialResource.resource_path())
+        if credential:
+            return CredentialResource.deserialize(credential)
+
     def get_configuration_resource(self) -> Optional[ConfigurationResource]:
         configuration_resource = self.get(ConfigurationResource.resource_path())
         if configuration_resource:
