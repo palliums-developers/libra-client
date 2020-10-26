@@ -64,8 +64,8 @@ def test_borrow():
     client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="USD")
     client.bank_publish(a1, gas_currency_code="USD")
     client.bank_lock(a1, 100_000_000, currency_code="USD")
-    client.bank_borrow(a1, 10_000_000, currency_code="USD")
-    assert approximately_equal_to(client.bank_get_borrow_amount(a1.address, currency_code="USD")[1], 10_000_000)
+    client.bank_borrow(a1, 50_000_000, currency_code="USD")
+    assert approximately_equal_to(client.bank_get_borrow_amount(a1.address, currency_code="USD")[1], 50_000_000)
 
 def test_repay_borrow():
     wallet = Wallet.new()
