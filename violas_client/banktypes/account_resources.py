@@ -51,7 +51,8 @@ class TokensResource(Struct, MoveResource):
     _fields = [
         # index 代表进入银行的钱. index+1代表存入银行的钱
         ("ts", [BankResource]),
-        ("borrows", [BorrowInfoResource])
+        ("borrows", [BorrowInfoResource]),
+        ("last_exchange_rates", [Uint64])
     ]
 
 
@@ -180,6 +181,7 @@ class EventLock(Struct):
         ("tokenidx", Uint64),
         ("amount", Uint64),
         ("data", bytes),
+        ("incentive", Uint64),
     ]
 
 class EventRedeem (Struct):
@@ -188,6 +190,7 @@ class EventRedeem (Struct):
         ("tokenidx", Uint64),
         ("amount", Uint64),
         ("data", bytes),
+        ("incentive", Uint64),
     ]
 
 class EventBorrow (Struct):
@@ -196,6 +199,7 @@ class EventBorrow (Struct):
         ("tokenidx", Uint64),
         ("amount", Uint64),
         ("data", bytes),
+        ("incentive", Uint64),
     ]
 
 class EventRepayBorrow (Struct):
@@ -204,6 +208,7 @@ class EventRepayBorrow (Struct):
         ("tokenidx", Uint64),
         ("amount", Uint64),
         ("data", bytes),
+        ("incentive", Uint64),
     ]
 
 class EventLiquidateBorrow (Struct):
@@ -320,6 +325,10 @@ class ViolasEvent(Struct):
     def get_factor(self):
         if hasattr(self.get_bank_event(), "factor"):
             return self.get_bank_event().factor
+
+    def get_incentive(self):
+        if hasattr(self.get_bank_event(), "incentive"):
+            return self.get_bank_event().incentive
 
     def get_timestamp(self):
         return self.timestamp // 1_000_000

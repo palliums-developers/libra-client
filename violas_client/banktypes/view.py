@@ -131,3 +131,9 @@ class TransactionView(LibraTransactionView):
         events = self.get_bank_events()
         if len(events):
             return events[0].get_timestamp()
+
+    def get_incentive(self):
+        type = self.get_code_type()
+        events = self.get_bank_type_events(type)
+        if len(events):
+            return events[0].get_incentive()
