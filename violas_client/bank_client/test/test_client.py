@@ -113,3 +113,11 @@ def test_bank_get_borrow_rate():
     assert approximately_equal_to(borrow_amount, 10_000_000+10_000_000*borrow_rate*2)
     client.bank_repay_borrow(a1, amount=borrow_amount, currency_code="USD")
     assert client.bank_get_borrow_amount(a1.address, "USD")[0] == 0
+
+def test_liquidate_borrow():
+    wallet = Wallet.new()
+    a1 = wallet.new_account()
+    client.mint_coin(a1.address, 3000_000_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="USD")
+    client.bank_publish(a1, gas_currency_code="USD")
+    client.bank_lock(a1, 1000_000_000_000, currency_code="USD")
+    client.bank_borrow(a1, 500_000_000_000-10, currency_code="USD")
