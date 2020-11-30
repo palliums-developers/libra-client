@@ -221,6 +221,3 @@ class AccountState(LibraAccountState):
                 pass
         return json.dumps(amap, sort_keys=False, indent=2)
 
-
-
-

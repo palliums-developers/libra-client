@@ -117,7 +117,7 @@ def test_bank_get_borrow_rate():
 def test_liquidate_borrow():
     wallet = Wallet.new()
     a1 = wallet.new_account()
-    client.mint_coin(a1.address, 3000_000_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="USD")
+    client.mint_coin(a1.address, 300_000_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="USD")
     client.bank_publish(a1, gas_currency_code="USD")
-    client.bank_lock(a1, 1000_000_000_000, currency_code="USD")
-    client.bank_borrow(a1, 500_000_000_000-10, currency_code="USD")
+    client.bank_lock(a1, 100_000_000_000, currency_code="USD")
+    client.bank_borrow(a1, 50_000_000_000-100, currency_code="USD")
