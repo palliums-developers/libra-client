@@ -4,7 +4,7 @@ from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
 from violas_client.banktypes.account_resources import ViolasEvent
 from violas_client.banktypes.account_resources import EventPublish, EventRegisterLibraToken, EventMint, EventTransfer,\
     EventUpdatePrice, EventLock, EventRedeem, EventBorrow, EventRepayBorrow, EventLiquidateBorrow, EventUpdateCollateralFactor, \
-    EventEnterBank, EventExitBank, EventUpdateRateModel, EventUpdatePriceFromOracle
+    EventEnterBank, EventExitBank, EventUpdateRateModel, EventUpdatePriceFromOracle, EventClaimIncentive, EventSetIncentiveRate
 
 WITH_AMOUNT_TYPE = [CodeType.BORROW, CodeType.ENTER_BANK, CodeType.EXIT_BANK, CodeType.LIQUIDATE_BORROW, CodeType.LOCK,
                     CodeType.REDEEM, CodeType.REPAY_BORROW]
@@ -35,7 +35,9 @@ class TransactionView(LibraTransactionView):
         CodeType.UPDATE_PRICE_FROM_ORACLE: EventUpdatePriceFromOracle,
         CodeType.UPDATE_PRICE_INDEX: EventUpdatePrice,
         CodeType.UPDATE_PRICE: EventUpdatePrice,
-        CodeType.UPDATE_RATE_MODEL: EventUpdateRateModel
+        CodeType.UPDATE_RATE_MODEL: EventUpdateRateModel,
+        CodeType.SET_INCENTIVE_RATE: EventSetIncentiveRate,
+        CodeType.CLAIM_INCENTIVE: EventClaimIncentive
     }
 
     @classmethod
