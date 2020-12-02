@@ -319,7 +319,29 @@ class Client(LibraClient):
             sum -= token_info_resource.get_price(currency)*amount[1]
 
         return int(sum / token_info_resource.get_price(currency_code))
-    
+
+    @LibraClient.return_when_error(None)
+    def bank_get_sum_incentive_amount(self, account_address):
+        bank_owner_address = self.get_bank_owner_address()
+        owner_state = self.get_account_state(bank_owner_address)
+        tokens = owner_state.get_token_info_store_resource(accrue_interest=False, update_incentive_supply_index=True, update_incentive_borrow_index=True).tokens
+        state = self.get_account_state(account_address)
+        sum = 0
+        for i in range(0, len(tokens), 2):
+            sum += state.get_supply_incentive(i, tokens)
+            sum += state.get_borrow_incentive(i, tokens)
+        return sum
+
+    @LibraClient.return_when_error(None)
+    def bank_get_incentive_amount(self, account_address, currency_code):
+        index = self.bank_get_currency_index(currency_code)
+        bank_owner_address = self.get_bank_owner_address()
+        owner_state = self.get_account_state(bank_owner_address)
+        tokens = owner_state.get_token_info_store_resource(accrue_interest=False, update_incentive_supply_index=True, update_incentive_borrow_index=True).tokens
+        state = self.get_account_state(account_address)
+        sum = state.get_supply_incentive(index, tokens) + state.get_borrow_incentive(index, tokens)
+        return sum
+
     def bank_get_lock_rate(self, currency_code):
         bank_owner_address = self.get_bank_owner_address()
         state = self.get_account_state(bank_owner_address)
