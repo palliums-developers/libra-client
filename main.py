@@ -1,22 +1,24 @@
-from violas_client import Client, Wallet
-import time
+import bech32
+from libra_client.canoser import hex_to_int_list
+# code = "lbr1p7ujcndcl7nudzwt8fglhx6wxn08kgs5tm6mz4usw5p72t"
 
-client =Client()
+# def segwit_scriptpubkey(witver, witprog):
+#     """Construct a Segwit scriptPubKey for a given witness program."""
+#     print(bytes(witprog).hex()[:32])
+#     return bytes([witver + 0x50 if witver else 0, len(witprog)] + witprog)
+#
+# # data = "tlb1pgc28wuxspzzmvghzen74dczc8a3y46c9y0xeq7g9g63ya"
+# #
+# # # value = "f72589b71ff4f8d139674a3f7369c69bcf64428bdeb62af2"
+# # #
+# # # value = bech32.encode("tlb", 1, hex_to_int_list(value))
+# # # print(value)
+# #
+# # ver, prog = bech32.decode("tlb", data)
+# # # print(prog)
+# # segwit_scriptpubkey(ver, prog).hex()
+#
+addr = "00000000000000000000000042414e4b"
+print(addr.upper())
 
-wallet = Wallet.new()
-module_account = wallet.new_account()
-client.mint_coin(module_account.address, 200_000_000, auth_key_prefix=module_account.auth_key_prefix,
-                 currency_code="USD")
-seq = client.bank_publish(module_account)
-assert client.get_account_transaction(module_account.address, seq).get_amount() == None
 
-a1 = wallet.new_account()
-client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="USD")
-client.add_currency_to_account(a1, "VLS")
-seq = client.bank_publish(a1)
-seq = client.bank_lock(a1, 100_000_000, currency_code="USD")
-time.sleep(60)
-print(client.bank_get_sum_incentive_amount(a1.address_hex))
-seq = client.bank_redeem(a1, 100_000_000 ,currency_code="USD")
-tx = client.get_account_transaction(a1.address_hex, seq)
-print(tx.get_incentive())

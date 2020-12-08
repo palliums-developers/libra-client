@@ -413,7 +413,6 @@ class UnknownScript(Struct):
     _fields = [
     ]
 
-
 class ScriptView(Struct):
     _fields = [
         ("r", StrT),
@@ -686,6 +685,10 @@ class TransactionView(Struct):
     def get_script_hash(self):
         if self.is_user_transaction():
             return self.transaction.value.get_script_hash()
+
+    def get_script(self):
+        if self.is_user_transaction():
+            return self.transaction.value.get_script()
 
     @classmethod
     def from_response(cls, response):

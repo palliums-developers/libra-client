@@ -109,7 +109,6 @@ def test_bank_get_borrow_rate():
     borrow_rate = client.bank_get_borrow_rate(currency_code="USD")
     time.sleep(120)
     _, borrow_amount = client.bank_get_borrow_amount(a1.address, currency_code="USD")
-    print(borrow_amount, 10_000_000+10_000_000*borrow_rate*2)
     assert approximately_equal_to(borrow_amount, 10_000_000+10_000_000*borrow_rate*2)
     client.bank_repay_borrow(a1, amount=borrow_amount, currency_code="USD")
     assert client.bank_get_borrow_amount(a1.address, "USD")[0] == 0

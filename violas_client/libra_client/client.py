@@ -317,7 +317,6 @@ class Client():
                                   gas_currency_code=self.get_gas_currency_code(currency_code, gas_currency_code),
                                   **kwargs)
 
-
     '''...........................................Called internal.....................................'''
     def require_faucet_account(self):
         ensure(self.treasury_compliance_account is not None, "facucet_account is not set")
