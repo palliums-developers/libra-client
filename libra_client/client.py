@@ -310,13 +310,11 @@ class Client():
         args.append(TransactionArgument.to_bool(add_all_currency))
         args.append(TransactionArgument.to_U64(child_initial_balance))
 
-
         ty_args = self.get_type_args(currency_code)
         script = Script.gen_script(CodeType.CREATE_CHILD_VASP_ACCOUNT, *args, ty_args=ty_args)
         return self.submit_script(parent_vasp_account, script,
                                   gas_currency_code=self.get_gas_currency_code(currency_code, gas_currency_code),
                                   **kwargs)
-
 
     '''...........................................Called internal.....................................'''
     def require_faucet_account(self):

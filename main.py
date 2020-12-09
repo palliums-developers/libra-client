@@ -1,24 +1,22 @@
-import bech32
-from libra_client.canoser import hex_to_int_list
-# code = "lbr1p7ujcndcl7nudzwt8fglhx6wxn08kgs5tm6mz4usw5p72t"
+from violas_client import Client, Wallet
 
-# def segwit_scriptpubkey(witver, witprog):
-#     """Construct a Segwit scriptPubKey for a given witness program."""
-#     print(bytes(witprog).hex()[:32])
-#     return bytes([witver + 0x50 if witver else 0, len(witprog)] + witprog)
-#
-# # data = "tlb1pgc28wuxspzzmvghzen74dczc8a3y46c9y0xeq7g9g63ya"
-# #
-# # # value = "f72589b71ff4f8d139674a3f7369c69bcf64428bdeb62af2"
-# # #
-# # # value = bech32.encode("tlb", 1, hex_to_int_list(value))
-# # # print(value)
-# #
-# # ver, prog = bech32.decode("tlb", data)
-# # # print(prog)
-# # segwit_scriptpubkey(ver, prog).hex()
-#
-addr = "00000000000000000000000042414e4b"
-print(addr.upper())
+# client = Client()
+# # v = client.get_account_state(client.BANK_OWNER_ADDRESS).get_token_info_store_resource(accrue_interest=False)
+# # print(v)
+# wallet = Wallet.new()
+# a1 = wallet.new_account()
+# client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="EUR")
+# client.add_currency_to_account(a1, "VLS")
+# client.bank_publish(a1)
+# client.bank_lock(a1, 100_000_000, currency_code="EUR")
+# client.bank_borrow(a1, 10_000_000, currency_code="EUR")
+# borrow_rate = client.bank_get_borrow_rate(currency_code="EUR")
+# _, borrow_amount = client.bank_get_borrow_amount(a1.address, currency_code="EUR")
+# client.bank_repay_borrow(a1, amount=borrow_amount, currency_code="EUR")
+# assert client.bank_get_borrow_amount(a1.address, "EUR")[0] == 0
 
-
+from libra_client import Wallet
+mn = "chalk cereal gate tape near stamp candy liberty insect pyramid toward uphold punch almost lift blur pledge lobster genuine file chief awkward drama govern"
+mn = "buffalo become better swarm motion margin reward twice develop judge cancel garage document actor ceiling tornado mom busy cloth position equal parrot surface network"
+wallet = Wallet.new_from_mnemonic(mn)
+print(wallet.new_account().address_hex)

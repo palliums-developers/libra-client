@@ -310,7 +310,6 @@ class Client():
         args.append(TransactionArgument.to_bool(add_all_currency))
         args.append(TransactionArgument.to_U64(child_initial_balance))
 
-
         ty_args = self.get_type_args(currency_code)
         script = Script.gen_script(CodeType.CREATE_CHILD_VASP_ACCOUNT, *args, ty_args=ty_args)
         return self.submit_script(parent_vasp_account, script,
