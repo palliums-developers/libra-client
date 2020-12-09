@@ -1,9 +1,9 @@
 from typing import Union, Optional
-from violas_client.libra_client import Client as LibraClient
-from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
-from violas_client.oracle_client.bytecodes import gen_script, CodeType
-from violas_client.oracle_client.account_state import AccountState
-from violas_client.lbrtypes.account_config.constants.lbr import CORE_CODE_ADDRESS
+from libra_client import Client as LibraClient
+from lbrtypes.transaction.transaction_argument import TransactionArgument
+from oracle_client.bytecodes import gen_script, CodeType
+from oracle_client.account_state import AccountState
+from lbrtypes.account_config.constants.lbr import CORE_CODE_ADDRESS
 
 class Client(LibraClient):
     ORACLE_OWNER_ADDRESS = "0000000000000000000000004f524143"

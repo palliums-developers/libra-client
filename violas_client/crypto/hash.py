@@ -1,4 +1,4 @@
-from violas_client.canoser import Uint8, DelegateT, BytesT
+from canoser import Uint8, DelegateT, BytesT
 import hashlib
 import subprocess
 

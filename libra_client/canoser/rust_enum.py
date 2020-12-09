@@ -1,8 +1,8 @@
-from libra_client.canoser.base import Base
-from libra_client.canoser.cursor import Cursor
-from libra_client.canoser.types import type_mapping
-from libra_client.canoser.int_type import Uint32
-from libra_client.canoser.struct import TypedProperty
+from violas_client.canoser.base import Base
+from violas_client.canoser.cursor import Cursor
+from violas_client.canoser.types import type_mapping
+from violas_client.canoser.int_type import Uint32
+from violas_client.canoser.struct import TypedProperty
 import json
 
 #TODO: how to support discontinuous index in enum

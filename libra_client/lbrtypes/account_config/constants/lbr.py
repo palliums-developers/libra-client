@@ -1,5 +1,5 @@
-from libra_client.move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS, TypeTag, StructTag
-from libra_client.lbrtypes.account_config.constants.libra import from_currency_code_string
+from violas_client.move_core_types.language_storage import ModuleId, CORE_CODE_ADDRESS, TypeTag, StructTag
+from violas_client.lbrtypes.account_config.constants.libra import from_currency_code_string
 
 DEFAULT_COIN_NAME = "Coin1"
 

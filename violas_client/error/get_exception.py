@@ -1,4 +1,4 @@
-from violas_client.error import LibraError
+from error import LibraError
 
 def get_exception(func):
     def catch_execption_func(*args, **kwargs):

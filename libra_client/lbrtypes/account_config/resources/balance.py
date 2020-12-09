@@ -1,8 +1,8 @@
-from libra_client.canoser import Struct, Uint64
-from libra_client.move_core_types.move_resource import MoveResource
-from libra_client.move_core_types.language_storage import StructTag, CORE_CODE_ADDRESS
-from libra_client.lbrtypes.access_path import AccessPath
-from libra_client.lbrtypes.account_config.constants.account import ACCOUNT_MODULE_NAME
+from violas_client.canoser import Struct, Uint64
+from violas_client.move_core_types.move_resource import MoveResource
+from violas_client.move_core_types.language_storage import StructTag, CORE_CODE_ADDRESS
+from violas_client.lbrtypes.access_path import AccessPath
+from violas_client.lbrtypes.account_config.constants.account import ACCOUNT_MODULE_NAME
 
 class BalanceResource(Struct, MoveResource):
     MODULE_NAME = ACCOUNT_MODULE_NAME
@@ -26,7 +26,7 @@ class BalanceResource(Struct, MoveResource):
 
     @classmethod
     def access_path_for(cls, currency_typetag):
-        from libra_client.lbrtypes.access_path import Accesses
+        from violas_client.lbrtypes.access_path import Accesses
         return AccessPath.resource_access_vec(cls.struct_tag_for_currency(currency_typetag), Accesses.empty())
 
     # @classmethod

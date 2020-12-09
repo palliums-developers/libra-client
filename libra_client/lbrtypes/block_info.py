@@ -1,6 +1,6 @@
-from libra_client.canoser import Struct, Uint64, Optional
-from libra_client.lbrtypes.transaction import Version
-from libra_client.crypto.hash import HashValue
+from violas_client.canoser import Struct, Uint64, Optional
+from violas_client.lbrtypes.transaction import Version
+from violas_client.crypto.hash import HashValue
 
 Round = Uint64
 
@@ -12,7 +12,7 @@ GENESIS_TIMESTAMP_USECS = 0
 
 
 class BlockInfo(Struct):
-    from libra_client.lbrtypes.epoch_state import EpochState
+    from violas_client.lbrtypes.epoch_state import EpochState
     _fields = [
         ("epoch", Uint64),
         ("round", Round),

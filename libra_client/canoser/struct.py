@@ -1,6 +1,6 @@
-from libra_client.canoser.base import Base
-from libra_client.canoser.cursor import Cursor
-from libra_client.canoser.types import type_mapping
+from violas_client.canoser.base import Base
+from violas_client.canoser.cursor import Cursor
+from violas_client.canoser.types import type_mapping
 import json
 
 class TypedProperty:

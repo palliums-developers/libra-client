@@ -1,4 +1,4 @@
-from libra_client.canoser import Struct, Uint64, Optional
+from violas_client.canoser import Struct, Uint64, Optional
 from enum import IntEnum
 
 # The minimum status code for validation statuses

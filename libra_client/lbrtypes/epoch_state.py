@@ -1,6 +1,6 @@
-from libra_client.canoser import Struct, Uint64
-from libra_client.lbrtypes.validator_verifier import ValidatorVerifier
-from libra_client.lbrtypes.rustlib import ensure
+from violas_client.canoser import Struct, Uint64
+from violas_client.lbrtypes.validator_verifier import ValidatorVerifier
+from violas_client.lbrtypes.rustlib import ensure
 
 class EpochState(Struct):
     _fields = [

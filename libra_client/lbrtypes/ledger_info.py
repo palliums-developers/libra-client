@@ -1,8 +1,8 @@
-from libra_client.canoser import Struct, RustEnum
-from libra_client.lbrtypes.block_info import BlockInfo
-from libra_client.move_core_types.account_address import AccountAddress
-from libra_client.crypto.hash import HashValue
-from libra_client.crypto.ed25519 import Ed25519Signature
+from violas_client.canoser import Struct, RustEnum
+from violas_client.lbrtypes.block_info import BlockInfo
+from violas_client.move_core_types.account_address import AccountAddress
+from violas_client.crypto.hash import HashValue
+from violas_client.crypto.ed25519 import Ed25519Signature
 
 class LedgerInfo(Struct):
     _fields = [

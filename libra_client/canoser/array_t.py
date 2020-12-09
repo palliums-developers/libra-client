@@ -1,5 +1,5 @@
-from libra_client.canoser.base import Base
-from libra_client.canoser.int_type import Uint32, Uint8
+from violas_client.canoser.base import Base
+from violas_client.canoser.int_type import Uint32, Uint8
 import struct
 
 

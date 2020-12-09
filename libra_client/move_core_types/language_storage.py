@@ -1,7 +1,7 @@
-from libra_client.canoser import Struct, RustEnum, BoolT, Uint8, Uint64, Uint128
+from violas_client.canoser import Struct, RustEnum, BoolT, Uint8, Uint64, Uint128
 from .account_address import AccountAddress
 from .identifier import Identifier
-from libra_client.crypto.hash import gen_hasher
+from violas_client.crypto.hash import gen_hasher
 
 CODE_TAG = 0
 RESOURCE_TAG = 1
@@ -20,8 +20,8 @@ class TypeTag(RustEnum):
         ("U128", Uint128),
         ("Address", AccountAddress),
         ("Signer", bytes),
-        ("Vector", "libra_client.move_core_types.language_storage.TypeTag"),
-        ("Struct", "libra_client.move_core_types.language_storage.StructTag")
+        ("Vector", "violas_client.move_core_types.language_storage.TypeTag"),
+        ("Struct", "violas_client.move_core_types.language_storage.StructTag")
     ]
 
 class StructTag(Struct):

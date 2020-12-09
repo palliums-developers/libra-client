@@ -1,5 +1,5 @@
-from libra_client.canoser.base import Base
-from libra_client.canoser.rust_optional import RustOptional
+from violas_client.canoser.base import Base
+from violas_client.canoser.rust_optional import RustOptional
 
 class Optional(RustOptional):
     _type = None

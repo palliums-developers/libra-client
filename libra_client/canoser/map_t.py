@@ -1,5 +1,5 @@
-from libra_client.canoser.base import Base
-from libra_client.canoser.int_type import Uint32
+from violas_client.canoser.base import Base
+from violas_client.canoser.int_type import Uint32
 
 class MapT(Base):
 
@@ -38,7 +38,7 @@ class MapT(Base):
         for k, v in kvs.items():
             if isinstance(self.ktype, list) or \
                 (hasattr(self.ktype, 'delegate_type') and isinstance(self.ktype.delegate_type, list)):
-                from libra_client.canoser.types import BytesT
+                from violas_client.canoser.types import BytesT
                 BytesT().check_value(k)
             else:
                 self.ktype.check_value(k)

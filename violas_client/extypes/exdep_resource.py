@@ -1,6 +1,6 @@
-from violas_client.canoser import Struct, Uint64, Uint8, RustEnum
-from violas_client.lbrtypes.account_config import WithdrawCapabilityResource
-from violas_client.lbrtypes.account_config import MoveResource, AccountAddress
+from canoser import Struct, Uint64, Uint8, RustEnum
+from lbrtypes.account_config import WithdrawCapabilityResource
+from lbrtypes.account_config import MoveResource, AccountAddress
 
 EXDEP_MODULE_NAME = "ExDep"
 

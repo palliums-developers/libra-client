@@ -1,6 +1,6 @@
-from violas_client.canoser import Struct, Uint64, RustEnum, DelegateT
-from violas_client.move_core_types.account_address import AccountAddress
-from violas_client.move_core_types.identifier import Identifier
+from canoser import Struct, Uint64, RustEnum, DelegateT
+from move_core_types.account_address import AccountAddress
+from move_core_types.identifier import Identifier
 
 class Field(Identifier):
     pass

@@ -1,5 +1,5 @@
-from violas_client.lbrtypes.transaction.script import Script as LibraScript
-from violas_client.extypes.bytecode import get_code
+from lbrtypes.transaction.script import Script as LibraScript
+from extypes.bytecode import get_code
 
 class Script(LibraScript):
 

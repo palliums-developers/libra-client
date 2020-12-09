@@ -1,9 +1,9 @@
 from mnemonic import Mnemonic
-from violas_client.libra_client.key_factory import KeyFactory
-from violas_client.lbrtypes.rustlib import ensure
-from violas_client.libra_client.account import Account
-from violas_client.lbrtypes.transaction import RawTransaction
-from violas_client.lbrtypes.transaction import SignedTransaction
+from libra_client.key_factory import KeyFactory
+from lbrtypes.rustlib import ensure
+from libra_client.account import Account
+from lbrtypes.transaction import RawTransaction
+from lbrtypes.transaction import SignedTransaction
 import os
 
 class Wallet():
@@ -75,3 +75,12 @@ class Wallet():
         if isinstance(address_or_refid, int):
             return self.accounts[address_or_refid]
 
+    def replace_address(self, old_addr, new_addr, new_auth_key):
+        account = self.get_account_by_address_or_refid(old_addr)
+        if account is not None:
+            if isinstance(new_addr, str):
+                new_addr = bytes.fromhex(new_addr)
+            if isinstance(new_auth_key, str):
+                new_auth_key = bytes.fromhex(new_auth_key)
+            account.address = new_addr
+            account.auth_key = new_auth_key+new_addr

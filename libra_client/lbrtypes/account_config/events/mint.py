@@ -1,7 +1,7 @@
-from libra_client.canoser import Struct, Uint64
-from libra_client.move_core_types.identifier import Identifier
-from libra_client.move_core_types.move_resource import MoveResource
-from libra_client.lbrtypes.account_config.constants.libra import LIBRA_MODULE_NAME
+from violas_client.canoser import Struct, Uint64
+from violas_client.move_core_types.identifier import Identifier
+from violas_client.move_core_types.move_resource import MoveResource
+from violas_client.lbrtypes.account_config.constants.libra import LIBRA_MODULE_NAME
 
 class CancelBurnEvent(Struct, MoveResource):
     MODULE_NAME = LIBRA_MODULE_NAME

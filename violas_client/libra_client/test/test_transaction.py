@@ -1,7 +1,7 @@
-from violas_client.lbrtypes.account_config import testnet_dd_account_address
-from violas_client.libra_client import Client, Wallet
+from lbrtypes.account_config import testnet_dd_account_address
+from libra_client import Client, Wallet
 from typing import List
-from violas_client.libra_client.account import Account
+from libra_client.account import Account
 
 def create_accounts(account_number)-> List[Account]:
     wallet = Wallet.new()
