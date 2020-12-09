@@ -1,5 +1,5 @@
-from exchange_client import Wallet, Client
-from move_core_types.language_storage import core_code_address
+from violas_client.exchange_client import Wallet, Client
+from violas_client.move_core_types.language_storage import core_code_address
 
 module_address = "00000000000000000000000045584348"
 

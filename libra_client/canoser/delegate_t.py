@@ -1,5 +1,5 @@
-from violas_client.canoser.types import type_mapping
-from violas_client.canoser.base import Base
+from libra_client.canoser.types import type_mapping
+from libra_client.canoser.base import Base
 
 
 class DelegateT(Base):

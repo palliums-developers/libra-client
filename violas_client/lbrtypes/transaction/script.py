@@ -1,7 +1,7 @@
-from canoser import Struct
-from move_core_types.language_storage import TypeTag
-from lbrtypes.transaction.transaction_argument import TransactionArgument
-from lbrtypes.bytecode import get_code_type, get_code
+from violas_client.canoser import Struct
+from violas_client.move_core_types.language_storage import TypeTag
+from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
+from violas_client.lbrtypes.bytecode import get_code_type, get_code
 
 SCRIPT_HASH_LENGTH = 32
 

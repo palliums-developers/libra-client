@@ -1,6 +1,6 @@
-from violas_client.canoser import Struct
-from violas_client.lbrtypes.move_core.account_address import AccountAddress
-from violas_client.crypto.ed25519 import Ed25519PrivateKey, Ed25519Signature
+from libra_client.canoser import Struct
+from libra_client.lbrtypes.move_core.account_address import AccountAddress
+from libra_client.crypto.ed25519 import Ed25519PrivateKey, Ed25519Signature
 
 class ValidatorSigner(Struct):
     _fields = [

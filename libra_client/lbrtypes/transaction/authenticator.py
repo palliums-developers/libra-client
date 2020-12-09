@@ -1,10 +1,10 @@
-from violas_client.canoser import Struct, RustEnum
+from libra_client.canoser import Struct, RustEnum
 from enum import IntEnum
 
-from violas_client.crypto.ed25519 import Ed25519PublicKey, Ed25519Signature
-from violas_client.crypto.multi_ed25519 import MultiEd25519PublicKey, MultiEd25519Signature
-from violas_client.crypto.hash import HashValue
-from violas_client.move_core_types.account_address import AccountAddress
+from libra_client.crypto.ed25519 import Ed25519PublicKey, Ed25519Signature
+from libra_client.crypto.multi_ed25519 import MultiEd25519PublicKey, MultiEd25519Signature
+from libra_client.crypto.hash import HashValue
+from libra_client.move_core_types.account_address import AccountAddress
 
 class Scheme(IntEnum):
     Ed25519 = 0

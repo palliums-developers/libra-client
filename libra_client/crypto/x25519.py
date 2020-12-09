@@ -1,4 +1,4 @@
-from violas_client.canoser import DelegateT, BytesT
+from libra_client.canoser import DelegateT, BytesT
 
 # Size of a X25519 private key
 PRIVATE_KEY_SIZE = 32

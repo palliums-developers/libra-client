@@ -1,1 +1,1 @@
-from oracle_client.client import Client
+from violas_client.oracle_client.client import Client

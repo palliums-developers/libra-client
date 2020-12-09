@@ -1,7 +1,7 @@
-from violas_client.canoser import Struct, RustOptional
-from violas_client.lbrtypes.transaction import Version
-from violas_client.lbrtypes.proof.definition import AccountStateProof
-from violas_client.lbrtypes.account_state import AccountState
+from libra_client.canoser import Struct, RustOptional
+from libra_client.lbrtypes.transaction import Version
+from libra_client.lbrtypes.proof.definition import AccountStateProof
+from libra_client.lbrtypes.account_state import AccountState
 
 class AccountStateBlob(Struct):
     _fields = [

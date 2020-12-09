@@ -1,8 +1,8 @@
-from canoser import Struct, RustEnum, Uint64
-from lbrtypes.event import EventKey
-from lbrtypes.proof.definition import EventProof
-from move_core_types.language_storage import TypeTag, StructTag
-from lbrtypes.account_config import ACCOUNT_MODULE_NAME, SENT_EVENT_NAME, RECEIVED_EVENT_NAME, SentPaymentEvent, ReceivedPaymentEvent
+from violas_client.canoser import Struct, RustEnum, Uint64
+from violas_client.lbrtypes.event import EventKey
+from violas_client.lbrtypes.proof.definition import EventProof
+from violas_client.move_core_types.language_storage import TypeTag, StructTag
+from violas_client.lbrtypes.account_config import ACCOUNT_MODULE_NAME, SENT_EVENT_NAME, RECEIVED_EVENT_NAME, SentPaymentEvent, ReceivedPaymentEvent
 
 class ContractEventV0(Struct):
     _fields = [

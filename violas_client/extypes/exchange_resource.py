@@ -1,6 +1,6 @@
-from canoser import Struct, Uint64
-from lbrtypes.account_config import MoveResource
-from move_core_types.language_storage import StructTag, TypeTag
+from violas_client.canoser import Struct, Uint64
+from violas_client.lbrtypes.account_config import MoveResource
+from violas_client.move_core_types.language_storage import StructTag, TypeTag
 
 EXCHANGE_MODULE_NAME = "Exchange"
 

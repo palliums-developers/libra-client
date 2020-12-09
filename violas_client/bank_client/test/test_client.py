@@ -1,5 +1,5 @@
 from violas_client import Client, Wallet
-from move_core_types.language_storage import core_code_address
+from violas_client.move_core_types.language_storage import core_code_address
 
 import time
 

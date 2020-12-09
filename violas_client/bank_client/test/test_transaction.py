@@ -1,5 +1,5 @@
 from violas_client import Client, Wallet
-from banktypes.bytecode import CodeType
+from violas_client.banktypes.bytecode import CodeType
 
 
 client = Client()

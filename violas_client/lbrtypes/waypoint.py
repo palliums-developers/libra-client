@@ -1,8 +1,8 @@
-from canoser import Struct, Uint64, Optional
-from lbrtypes.transaction import Version
-from lbrtypes.ledger_info import LedgerInfo
-from crypto.hash import HashValue, gen_hasher
-from lbrtypes.rustlib import ensure
+from violas_client.canoser import Struct, Uint64, Optional
+from violas_client.lbrtypes.transaction import Version
+from violas_client.lbrtypes.ledger_info import LedgerInfo
+from violas_client.crypto.hash import HashValue, gen_hasher
+from violas_client.lbrtypes.rustlib import ensure
 
 WAYPOINT_DELIMITER = ':'
 
@@ -42,7 +42,7 @@ class Waypoint(Struct):
         return ledger_info.get_version() < self.get_version()
 
 class Ledger2WaypointConverter(Struct):
-    from lbrtypes.epoch_state import EpochState
+    from violas_client.lbrtypes.epoch_state import EpochState
     _fields = [
         ("epoch", Uint64),
         ("root_hash", HashValue),

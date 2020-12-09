@@ -1,7 +1,7 @@
 from copy import deepcopy
-from oracle_client.oracle_resource import OracleResource
-from lbrtypes.account_state import AccountState as LibraAccountState
-from lbrtypes.account_config.constants.libra import type_tag_for_currency_code
+from violas_client.oracle_client.oracle_resource import OracleResource
+from violas_client.lbrtypes.account_state import AccountState as LibraAccountState
+from violas_client.lbrtypes.account_config.constants.libra import type_tag_for_currency_code
 
 class AccountState(LibraAccountState):
 

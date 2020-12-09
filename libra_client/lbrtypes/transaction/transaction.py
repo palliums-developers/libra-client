@@ -1,14 +1,14 @@
-from violas_client.canoser import Uint64, Uint8, Struct, RustEnum
-from violas_client.move_core_types.account_address import AccountAddress
-from violas_client.lbrtypes.transaction.change_set import ChangeSet
-from violas_client.lbrtypes.transaction.script import Script
-from violas_client.lbrtypes.transaction.module import Module
-from violas_client.lbrtypes.transaction.authenticator import TransactionAuthenticator
-from violas_client.lbrtypes.contract_event import ContractEvent
-from violas_client.lbrtypes.block_metadata import BlockMetadata
-from violas_client.lbrtypes.proof.definition import TransactionListProof, TransactionProof
-from violas_client.crypto.hash import gen_hasher, HashValue
-from violas_client.lbrtypes.bytecode import TransactionType
+from libra_client.canoser import Uint64, Uint8, Struct, RustEnum
+from libra_client.move_core_types.account_address import AccountAddress
+from libra_client.lbrtypes.transaction.change_set import ChangeSet
+from libra_client.lbrtypes.transaction.script import Script
+from libra_client.lbrtypes.transaction.module import Module
+from libra_client.lbrtypes.transaction.authenticator import TransactionAuthenticator
+from libra_client.lbrtypes.contract_event import ContractEvent
+from libra_client.lbrtypes.block_metadata import BlockMetadata
+from libra_client.lbrtypes.proof.definition import TransactionListProof, TransactionProof
+from libra_client.crypto.hash import gen_hasher, HashValue
+from libra_client.lbrtypes.bytecode import TransactionType
 
 class Version(Uint64):
     pass
@@ -98,7 +98,7 @@ class Transaction(RustEnum):
             return self.value.raw_txn.payload.value
 
     def get_code_type(self):
-        from violas_client.lbrtypes.bytecode import CodeType
+        from libra_client.lbrtypes.bytecode import CodeType
         if self.enum_name == "BlockMetadata":
             return CodeType.BLOCK_METADATA
         script = self.get_script()

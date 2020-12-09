@@ -1,8 +1,8 @@
-from canoser import Struct, Uint64
-from lbrtypes.event import EventHandle
-from move_core_types.account_address import AccountAddress
-from move_core_types.move_resource import MoveResource
-from lbrtypes.account_config.resources import WithdrawCapabilityResourceOption
+from violas_client.canoser import Struct, Uint64
+from violas_client.lbrtypes.event import EventHandle
+from violas_client.move_core_types.account_address import AccountAddress
+from violas_client.move_core_types.move_resource import MoveResource
+from violas_client.lbrtypes.account_config.resources import WithdrawCapabilityResourceOption
 
 class LibraTokenResource(Struct, MoveResource):
     MODULE_NAME = "ViolasBank"

@@ -1,4 +1,4 @@
-from canoser import Struct
+from violas_client.canoser import Struct
 
 class AssociationCapabilityResource(Struct):
     _fields = [

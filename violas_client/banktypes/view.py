@@ -1,8 +1,8 @@
-from json_rpc.views import TransactionView as LibraTransactionView
-from banktypes.bytecode import get_code_type, CodeType
-from lbrtypes.bytecode import CodeType as LibraCodeType
-from banktypes.account_resources import ViolasEvent
-from banktypes.account_resources import EventPublish, EventRegisterLibraToken, EventMint, EventTransfer,\
+from violas_client.json_rpc.views import TransactionView as LibraTransactionView
+from violas_client.banktypes.bytecode import get_code_type, CodeType
+from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
+from violas_client.banktypes.account_resources import ViolasEvent
+from violas_client.banktypes.account_resources import EventPublish, EventRegisterLibraToken, EventMint, EventTransfer,\
     EventUpdatePrice, EventLock, EventRedeem, EventBorrow, EventRepayBorrow, EventLiquidateBorrow, EventUpdateCollateralFactor, \
     EventEnterBank, EventExitBank, EventUpdateRateModel, EventUpdatePriceFromOracle, EventClaimIncentive, EventSetIncentiveRate
 
