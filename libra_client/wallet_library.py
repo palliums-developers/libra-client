@@ -50,7 +50,6 @@ class Wallet():
         while self.child_number != depth:
             self.new_account()
 
-
     def new_account(self):
         child = Account(self.key_factory.private_child(self.child_number))
         old_child_number = self.child_number
@@ -75,12 +74,11 @@ class Wallet():
         if isinstance(address_or_refid, int):
             return self.accounts[address_or_refid]
 
-    def replace_address(self, old_addr, new_addr, new_auth_key):
+    def replace_address(self, old_addr, new_addr):
+        if isinstance(old_addr, str):
+            old_addr = bytes.fromhex(old_addr)
+        if isinstance(new_addr, bytes):
+            new_addr = bytes.fromhex(new_addr)
         account = self.get_account_by_address_or_refid(old_addr)
         if account is not None:
-            if isinstance(new_addr, str):
-                new_addr = bytes.fromhex(new_addr)
-            if isinstance(new_auth_key, str):
-                new_auth_key = bytes.fromhex(new_auth_key)
             account.address = new_addr
-            account.auth_key = new_auth_key+new_addr
