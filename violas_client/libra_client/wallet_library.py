@@ -78,7 +78,7 @@ class Wallet():
     def replace_address(self, old_addr, new_addr):
         if isinstance(old_addr, str):
             old_addr = bytes.fromhex(old_addr)
-        if isinstance(new_addr, bytes):
+        if isinstance(new_addr, str):
             new_addr = bytes.fromhex(new_addr)
         account = self.get_account_by_address_or_refid(old_addr)
         if account is not None:
