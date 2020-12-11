@@ -83,3 +83,4 @@ class Wallet():
         account = self.get_account_by_address_or_refid(old_addr)
         if account is not None:
             account.address = new_addr
+            self.addr_map.update({new_addr: self.addr_map.get(old_addr)})
