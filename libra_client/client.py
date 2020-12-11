@@ -44,18 +44,18 @@ NETWORKS = {
         "url": "http://51.140.241.96:50001",
         "faucet_file": f"{pre_path}/mint_test.key",
         'chain_id': NamedChain.TESTING
-    },
+},
 
     'bj_testnet': {
         "url": "http://47.93.114.230:50001",
         "faucet_file": f"{pre_path}/mint_bj.key",
         'chain_id': NamedChain.TESTING
-    },
+},
     'tmp_testnet': {
         "url": "http://47.93.114.230:37339",
         "faucet_file": f"{pre_path}/mint_tmp.key",
         'chain_id': NamedChain.TESTING
-    }
+}
 }
 
 class Client():
@@ -68,7 +68,7 @@ class Client():
     WAIT_TRANSACTION_COUNT = 1000
     WAIT_TRANSACTION_INTERVAL = 0.1
 
-    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")

@@ -7,6 +7,7 @@ from violas_client.lbrtypes.on_chain_config.validator_set import ValidatorSet
 from violas_client.lbrtypes.block_metadata import LibraBlockResource
 from violas_client.lbrtypes.access_path import AccessPath
 
+
 class AccountState(Struct):
     _fields = [
         ("ordered_map", {bytes: bytes})
@@ -115,6 +116,11 @@ class AccountState(Struct):
         resource = self.get(LibraBlockResource.resource_path())
         if resource:
             return LibraBlockResource.deserialize(resource)
+
+    def get_role_id(self):
+        resource = self.get(RoleId.resource_path())
+        if resource:
+            return RoleId.deserialize(resource).role_id
 
     def get_event_handle_by_query_path(self, query_path):
         from violas_client.lbrtypes.block_metadata import NEW_BLOCK_EVENT_PATH

@@ -50,6 +50,7 @@ class Wallet():
         while self.child_number != depth:
             self.new_account()
 
+
     def new_account(self):
         child = Account(self.key_factory.private_child(self.child_number))
         old_child_number = self.child_number
