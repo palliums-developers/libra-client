@@ -1,5 +1,11 @@
-from violas_client import Client, Wallet
-import time
+from libra_client import Client, Wallet
 
 client = Client()
-print(client.get_account_state(client.BANK_OWNER_ADDRESS).get_role_id())
+wallet = Wallet.new()
+
+a1 = wallet.new_account()
+a2 = wallet.new_account()
+
+client.mint_coin(a1.address, 1_000_000, auth_key_prefix=a1.auth_key_prefix)
+client.create_child_vasp_account(a1, a2.address, a2.auth_key_prefix)
+print(client.get_balances(a2.address))
