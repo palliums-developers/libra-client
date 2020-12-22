@@ -24,9 +24,9 @@ class BalanceResource(Struct, MoveResource):
             [current_typetag]
         )
 
-    @classmethod
-    def access_path_for(cls, currency_typetag):
-        return cls.struct_tag_for_currency(currency_typetag).access_vector()
+    # @classmethod
+    # def access_path_for(cls, currency_typetag):
+    #     return cls.struct_tag_for_currency(currency_typetag).access_vector()
 
     # @classmethod
     # def type_params(cls):

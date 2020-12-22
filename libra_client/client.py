@@ -41,7 +41,7 @@ NETWORKS = {
         'chain_id': NamedChain.TESTNET
     },
     'violas_testnet':{
-        "url": "http://13.68.141.242:50001",
+        "url": "http://51.140.241.96:50001",
         "faucet_file": f"{pre_path}/mint_test.key",
         'chain_id': NamedChain.TESTING
 },
