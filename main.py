@@ -1,11 +1,9 @@
 from libra_client import Client, Wallet
 
 
-client = Client()
+client = Client("violas_testnet")
 wallet = Wallet.new()
-code = "charge vacuum raccoon demand smart jacket unit spare poverty hero ordinary ball pudding law puzzle party crucial accident aerobic dad diagram desert green spike"
-code = "cost oppose sense coyote cup spider hedgehog always catch total badge focus cable million fringe hello exhaust unfair dragon amazing local buzz noise ocean"
-v = Wallet.new_from_mnemonic(code)
-print(v.new_account().address_hex)
+a1 = wallet.new_account()
+client.mint_coin(a1.address_hex, 100, auth_key_prefix=a1.auth_key_prefix)
 
 
