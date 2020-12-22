@@ -25,12 +25,12 @@ def new_sha3_256():
 
 
 class KeyFactory():
-    MNEMONIC_SALT_PREFIX = b"LIBRA WALLET: mnemonic salt prefix$"
-    MASTER_KEY_SALT = b"LIBRA WALLET: master key salt$"
-    INFO_PREFIX = b"LIBRA WALLET: derived key$"
+    MNEMONIC_SALT_PREFIX = b"DIEM WALLET: mnemonic salt prefix$"
+    MASTER_KEY_SALT = b"DIEM WALLET: main key salt$"
+    INFO_PREFIX = b"DIEM WALLET: derived key$"
 
     @classmethod
-    def to_seed(cls, mnemonic, passphrase="LIBRA"):
+    def to_seed(cls, mnemonic, passphrase="DIEM"):
         mnemonic = mnemonic.encode("utf-8")
         passphrase = cls.MNEMONIC_SALT_PREFIX + passphrase.encode("utf-8")
         if has_sha3():
@@ -39,12 +39,11 @@ class KeyFactory():
             stretched = hashlib.pbkdf2_hmac("sha512", mnemonic, passphrase, 2048)
         return stretched[:64]
 
-    def __init__(self, master):
-        self.master = master
-
-    @classmethod
-    def new(cls, seed):
+    def __init__(self, seed):
         master = hmac.new(KeyFactory.MASTER_KEY_SALT, seed, digestmod=new_sha3_256).digest()
+        self.master = master
+    @classmethod
+    def new(cls, master):
         return cls(master)
 
     @staticmethod

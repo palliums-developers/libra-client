@@ -35,9 +35,9 @@ MAX_GAS_AMOUNT = 1_000_000
 TX_EXPIRATION = 100
 
 NETWORKS = {
-    'libra_testnet':{
-        'url': "https://client.testnet.libra.org",
-        'faucet_server': "http://faucet.testnet.libra.org",
+    'diem_testnet':{
+        'url': "http://testnet.diem.com/v1",
+        'faucet_server': "http://testnet.diem.com/mint",
         'chain_id': NamedChain.TESTNET
     },
     'violas_testnet':{
@@ -310,7 +310,6 @@ class Client():
         args.append(TransactionArgument.to_bool(add_all_currency))
         args.append(TransactionArgument.to_U64(child_initial_balance))
 
-
         ty_args = self.get_type_args(currency_code)
         script = Script.gen_script(CodeType.CREATE_CHILD_VASP_ACCOUNT, *args, ty_args=ty_args)
         return self.submit_script(parent_vasp_account, script,
@@ -329,7 +328,9 @@ class Client():
         params = {
             "amount": micro_coins,
             "auth_key": (auth_key_prefix+receiver).hex(),
-            "currency_code": currency_code
+            "currency_code": currency_code,
+            "return_txns": "false",
+            "is_designated_dealer": "false"
         }
         try_time = 3
         while True:
