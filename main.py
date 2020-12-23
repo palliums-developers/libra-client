@@ -1,4 +1,4 @@
-from exchange_client import Client, Wallet
+from violas_client import Client, Wallet
 import time
 from enum import IntEnum
 
