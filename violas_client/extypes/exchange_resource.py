@@ -1,4 +1,4 @@
-from violas_client.canoser import Struct, Uint64
+from violas_client.canoser import Struct, Uint64, Uint128
 from violas_client.lbrtypes.account_config import MoveResource, AccountAddress
 
 EXCHANGE_MODULE_NAME = "Exchange"
@@ -50,7 +50,7 @@ class Event(Struct):
         ("data", bytes),
         ("timestamp", Uint64)
     ]
-    def get_event(self):
+    def get_swap_event(self):
         if self.etype == 1:
             return MintEvent.deserialize(self.data)
         if self.etype == 2:
@@ -60,36 +60,37 @@ class Event(Struct):
         if self.etype == 4:
             return RewardEvent.deserialize(self.data)
 
-class PoolUserIndex(Struct):
-    _fields = [
-        ("pool_id", Uint64),
-        ("user_index", Uint64)
-    ]
 
-class PoolUserIndexsResource(Struct, MoveResource):
-    MODULE_NAME = EXCHANGE_MODULE_NAME
-    STRUCT_NAME = "PoolUserIndexs"
 
-    _fields = [
-        ("pool_user_indexs", [PoolUserIndex]),
-    ]
 
-class UserInfo(Struct):
+
+
+class UserInfoResource(Struct):
     _fields = [
         ("amount", Uint64),
         ("reward_debt", Uint64)
     ]
 
-class PoolInfoResource(Struct, MoveResource):
-    MODULE_NAME = EXCHANGE_MODULE_NAME
-    STRUCT_NAME = "PoolInfo"
+class PoolUserInfoResource(Struct):
+    _fields = [
+        ("pool_id", Uint64),
+        ("user_info", UserInfoResource)
+    ]
 
+class PoolUserInfosResource(Struct, MoveResource):
+    MODULE_NAME = EXCHANGE_MODULE_NAME
+    STRUCT_NAME = "PoolUserInfos"
+
+    _fields = [
+        ("pool_user_infos", [PoolUserInfoResource]),
+    ]
+
+class PoolInfoResource(Struct):
     _fields = [
         ("id", Uint64),
         ("lp_supply", Uint64),
         ("alloc_point", Uint64),
-        ("acc_vls_per_share", Uint64),
-        ("users_info", [UserInfo]),
+        ("acc_vls_per_share", Uint128),
     ]
 
 class RewardPoolsResource(Struct, MoveResource):

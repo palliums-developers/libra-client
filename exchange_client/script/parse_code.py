@@ -1,7 +1,7 @@
 import sys
 import json
 import os
-from violas_client.canoser import bytes_to_int_list
+from canoser import bytes_to_int_list
 
 file_name = sys.argv[1]
 file = open(file_name, "a+")

@@ -1,35 +1,21 @@
 from violas_client.json_rpc.views import TransactionView as LibraTransactionView
-from violas_client.json_rpc.views import UserTransaction as LibraUserTransaction
 from violas_client.extypes.bytecode import get_code_type, CodeType
 from violas_client.lbrtypes.bytecode import CodeType as LibraCodeType
-from violas_client.extypes.exchange_resource import Event
-
-WITH_EVENT_TYPES = [CodeType.ADD_LIQUIDITY, CodeType.REMOVE_LIQUIDITY, CodeType.SWAP]
-
-def get_swap_event(data):
-    if isinstance(data, str):
-        data = bytes.fromhex(data)
-    return Event.deserialize(data).get_event()
-    # if code_type == CodeType.SWAP:
-    #     return SwapEvent.deserialize(data)
-    # if code_type == CodeType.ADD_LIQUIDITY:
-    #     return MintEvent.deserialize(data)
-    # if code_type == CodeType.REMOVE_LIQUIDITY:
-    #     return BurnEvent.deserialize(data)
+from violas_client.extypes.exchange_resource import *
 
 class TransactionView(LibraTransactionView):
+
+    type_maps = {
+        CodeType.ADD_LIQUIDITY: MintEvent,
+        CodeType.REMOVE_LIQUIDITY: BurnEvent,
+        CodeType.SWAP: SwapEvent,
+        CodeType.WITHDRAW_MINE_REWARD: RewardEvent,
+    }
+
     @classmethod
     def new(cls, tx):
         ret = tx
         ret.__class__ = TransactionView
-
-        if tx.get_code_type() in WITH_EVENT_TYPES:
-            for event in ret.events:
-                data = event.get_data()
-                if data is not None and len(data):
-                    event = get_swap_event(data)
-                    ret.swap_event = event
-                    break
         return ret
 
     def get_code_type(self):
@@ -38,9 +24,33 @@ class TransactionView(LibraTransactionView):
             return get_code_type(self.get_script_hash())
         return type
 
-    def get_swap_event(self):
-        if hasattr(self, "swap_event"):
-            return self.swap_event
+    def get_swap_events(self):
+        code_type = self.get_code_type()
+        if code_type in CodeType:
+            events = []
+            if code_type in CodeType:
+                for event in self.get_events():
+                    if event.data.enum_name == "Unknown":
+                        try:
+                            events.append(Event.deserialize(bytes.fromhex(event.data.value.raw)))
+                        except:
+                            pass
+        return events
+
+    def get_swap_type_events(self, t):
+        ret = []
+        event_type = self.type_maps.get(t)
+        for event in self.get_swap_events():
+            if isinstance(event.get_swap_event(), event_type):
+                ret.append(event)
+        return ret
+
+    def get_swap_reward_amount(self):
+        events = self.get_swap_events()
+        for event in events:
+            e = event.get_swap_event()
+            if isinstance(e, RewardEvent):
+                return e.reward_amount
 
     def get_receiver(self):
         receiver = super().get_receiver()
@@ -48,6 +58,7 @@ class TransactionView(LibraTransactionView):
             if len(self.events) > 0:
                 return self.events[-1].get_address()
         return receiver
+
 
     def __str__(self):
         import json
