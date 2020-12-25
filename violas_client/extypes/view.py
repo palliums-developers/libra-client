@@ -45,6 +45,11 @@ class TransactionView(LibraTransactionView):
                 ret.append(event)
         return ret
 
+    def get_swap_timestamp(self):
+        events = self.get_swap_events()
+        if len(events):
+            return events[0].timestamp
+
     def get_swap_reward_amount(self):
         events = self.get_swap_events()
         for event in events:
