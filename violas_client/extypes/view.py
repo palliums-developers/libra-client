@@ -69,7 +69,7 @@ class TransactionView(LibraTransactionView):
         amap = self.to_json_serializable()
         swap_events = self.get_swap_events()
         if len(swap_events):
-            amap["swap_event"] = swap_events[0].to_json_serializable()
+            amap["swap_event"] = swap_events[0].get_swap_event().to_json_serializable()
         return json.dumps(amap, sort_keys=False, indent=2)
 
 
