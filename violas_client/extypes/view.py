@@ -26,8 +26,8 @@ class TransactionView(LibraTransactionView):
 
     def get_swap_events(self):
         code_type = self.get_code_type()
+        events = []
         if code_type in CodeType:
-            events = []
             if code_type in CodeType:
                 for event in self.get_events():
                     if event.data.enum_name == "Unknown":

@@ -5,7 +5,7 @@ from violas_client.extypes.bytecode import CodeType as ExchangeType
 
 import time
 client = Client("violas_testnet")
-tx = client.get_transaction(1021353)
+tx = client.get_transaction(1021354)
 print(tx)
 # value = client.swap_get_reward_balance("e58e356451edb15e3a4b26129cd1ba69")
 # print(value)
