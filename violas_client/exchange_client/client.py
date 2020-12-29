@@ -495,7 +495,3 @@ class Client(LibraClient, Base):
         amounta = liquidity_amount * reserve.get_amountA() // liquidity_total_supply
         amountb = liquidity_amount * reserve.get_amountB() // liquidity_total_supply
         return amounta, amountb, liquidity_amount
-
-
-
-

@@ -60,11 +60,6 @@ class Event(Struct):
         if self.etype == 4:
             return RewardEvent.deserialize(self.data)
 
-
-
-
-
-
 class UserInfoResource(Struct):
     _fields = [
         ("amount", Uint64),

@@ -5,7 +5,7 @@ from violas_client.extypes.exchange_resource import *
 
 class TransactionView(LibraTransactionView):
 
-    type_maps = {
+    swap_type_maps = {
         CodeType.ADD_LIQUIDITY: MintEvent,
         CodeType.REMOVE_LIQUIDITY: BurnEvent,
         CodeType.SWAP: SwapEvent,
@@ -39,7 +39,7 @@ class TransactionView(LibraTransactionView):
 
     def get_swap_type_events(self, t):
         ret = []
-        event_type = self.type_maps.get(t)
+        event_type = self.swap_type_maps.get(t)
         for event in self.get_swap_events():
             if isinstance(event.get_swap_event(), event_type):
                 ret.append(event)
@@ -63,7 +63,6 @@ class TransactionView(LibraTransactionView):
             if len(self.events) > 0:
                 return self.events[-1].get_address()
         return receiver
-
 
     def __str__(self):
         import json
