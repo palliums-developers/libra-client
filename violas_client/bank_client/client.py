@@ -18,6 +18,7 @@ class Client(LibraClient):
 
     BANK_OWNER_ADDRESS = "00000000000000000000000042414e4b"
     BANK_MODULE_ADDRESS = core_code_address()
+    DEFAULT_GAS_COIN_NAME = "VLS"
 
     def bank_publish_module(self, sender_account, is_blocking=True, **kwargs):
         module = Module.gen_module(module_address=sender_account.address)
