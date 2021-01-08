@@ -107,6 +107,15 @@ class Client(LibraClient):
                                    module_address=self.get_bank_module_address())
         return self.submit_script(sender_account, script, is_blocking, **kwargs)
 
+    def bank_exit(self, sender_account, amount, currency_code, is_blocking=True, **kwargs):
+        args = []
+        args.append(TransactionArgument.to_U64(amount))
+
+        ty_args = self.get_type_args(currency_code)
+        script = Script.gen_script(CodeType.EXIT_BANK, *args, ty_args=ty_args,
+                                   module_address=self.get_bank_module_address())
+        return self.submit_script(sender_account, script, is_blocking, **kwargs)
+
     def bank_update_collateral_factor(self, sender_account, currency_code, factor, is_blocking=True, **kwargs):
         args = []
         args.append(TransactionArgument.to_U64(int(factor*(2**32))))

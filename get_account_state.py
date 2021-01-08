@@ -1,5 +1,4 @@
 import argparse
-from bank_client import Client
 
 module_address=""
 

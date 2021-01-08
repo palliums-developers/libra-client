@@ -15,7 +15,7 @@ from libra_client.lbrtypes.rustlib import ensure
 from libra_client.error import LibraError, StatusCode, ServerCode
 from libra_client.lbrtypes.bytecode import CodeType
 from libra_client.lbrtypes.transaction.transaction_argument import TransactionArgument
-from libra_client.lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
+from libra_client.lbrtypes.account_config import association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
 from libra_client.lbrtypes.transaction.helper import create_user_txn
 from libra_client.lbrtypes.account_state import AccountState
 from libra_client.lbrtypes.account_config import config_address
@@ -69,7 +69,7 @@ class Client():
 
     DEFAULT_GAS_COIN_NAME = "XUS"
 
-    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="diem_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -351,7 +351,7 @@ class Client():
         ensure(status == requests.codes.ok, f"Failed to query remote faucet server[status={status}]: {body}")
         sequence_number = int(body)
         if is_blocking:
-            self.wait_for_transaction(testnet_dd_account_address(), sequence_number - 1)
+            self.wait_for_transaction(testnet_dd_account_address(), sequence_number-1)
         return sequence_number-1
 
     def get_metadata(self):
