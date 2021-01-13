@@ -1,10 +1,8 @@
 import argparse
-
-module_address=""
+from violas_client import Client
 
 parser = argparse.ArgumentParser()
 parser.add_argument("address")
 args = parser.parse_args()
-client = Client.new(url="http://47.93.114.230:50001")
-client.set_bank_module_address(module_address)
-client.get_account_state(args.address)
+client = Client("bj_testnet")
+print(client.get_account_state(args.address))
