@@ -139,14 +139,14 @@ class Client():
         state = self.get_account_state(association_address())
         return state.get_currency_info_resource(currency_code)
 
-    def get_account_state(self, account_address: Union[bytes, str]) -> Optional[AccountState]:
-        return self.get_account_blob(account_address)
+    def get_account_state(self, account_address: Union[bytes, str], from_version=None, to_version=None) -> Optional[AccountState]:
+        return self.get_account_blob(account_address, from_version, to_version)
         # address = Address.normalize_to_bytes(account_address)
         # return self.client.get_account_state(address, True)
 
-    def get_account_blob(self, account_address: Union[bytes, str]):
+    def get_account_blob(self, account_address: Union[bytes, str], from_version=None, to_version=None):
         address = Address.normalize_to_bytes(account_address)
-        return self.client.get_account_blob(address)
+        return self.client.get_account_blob(address, from_version, to_version)
 
     def get_account_transaction(self, account_address: Union[bytes, str], sequence_number: int, fetch_events: bool=True) -> TransactionView:
         return self.client.get_txn_by_acc_seq(account_address, sequence_number, fetch_events)

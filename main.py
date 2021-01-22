@@ -3,9 +3,12 @@ import time
 from violas_client import Client, Wallet
 
 client = Client("violas_testnet")
-while True:
-    client.tiered_mint(1_000_000_000_000, "vBTC")
-    client.tiered_mint(1_000_000_000_000, "vUSDT")
+state1 = client.get_account_state("b14bc3286e4b9b41c86022f2e614d721")
+state2 = client.get_account_state("b14bc3286e4b9b41c86022f2e614d721", 9412226)
+print(state1.get_balance("vBTC"))
+print(state2.get_balance("vBTC"))
+# client.mint_coin("b14bc3286e4b9b41c86022f2e614d721", 99, currency_code="vBTC")
+
 
 # wallet = Wallet.new()
 #

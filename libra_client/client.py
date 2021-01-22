@@ -15,7 +15,7 @@ from libra_client.lbrtypes.rustlib import ensure
 from libra_client.error import LibraError, StatusCode, ServerCode
 from libra_client.lbrtypes.bytecode import CodeType
 from libra_client.lbrtypes.transaction.transaction_argument import TransactionArgument
-from libra_client.lbrtypes.account_config import association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
+from libra_client.lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
 from libra_client.lbrtypes.transaction.helper import create_user_txn
 from libra_client.lbrtypes.account_state import AccountState
 from libra_client.lbrtypes.account_config import config_address
@@ -43,7 +43,7 @@ NETWORKS = {
         "url": "http://13.68.141.242:50001",
         "faucet_file": f"{pre_path}/mint_test.key",
         'chain_id': NamedChain.TESTING
-},
+    },
 
     'bj_testnet': {
         "url": "http://47.93.114.230:50001",
@@ -69,7 +69,7 @@ class Client():
 
     DEFAULT_GAS_COIN_NAME = "XUS"
 
-    def __init__(self, network="diem_testnet", waypoint: Optional[Waypoint]=None):
+    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -139,14 +139,14 @@ class Client():
         state = self.get_account_state(association_address())
         return state.get_currency_info_resource(currency_code)
 
-    def get_account_state(self, account_address: Union[bytes, str]) -> Optional[AccountState]:
-        return self.get_account_blob(account_address)
+    def get_account_state(self, account_address: Union[bytes, str], from_version=None, to_version=None) -> Optional[AccountState]:
+        return self.get_account_blob(account_address, from_version, to_version)
         # address = Address.normalize_to_bytes(account_address)
         # return self.client.get_account_state(address, True)
 
-    def get_account_blob(self, account_address: Union[bytes, str]):
+    def get_account_blob(self, account_address: Union[bytes, str], from_version=None, to_version=None):
         address = Address.normalize_to_bytes(account_address)
-        return self.client.get_account_blob(address)
+        return self.client.get_account_blob(address, from_version, to_version)
 
     def get_account_transaction(self, account_address: Union[bytes, str], sequence_number: int, fetch_events: bool=True) -> TransactionView:
         return self.client.get_txn_by_acc_seq(account_address, sequence_number, fetch_events)
@@ -351,7 +351,7 @@ class Client():
         ensure(status == requests.codes.ok, f"Failed to query remote faucet server[status={status}]: {body}")
         sequence_number = int(body)
         if is_blocking:
-            self.wait_for_transaction(testnet_dd_account_address(), sequence_number-1)
+            self.wait_for_transaction(testnet_dd_account_address(), sequence_number - 1)
         return sequence_number-1
 
     def get_metadata(self):
