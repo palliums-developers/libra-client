@@ -2,11 +2,17 @@ import random
 import time
 from violas_client import Client, Wallet
 
-client = Client("violas_testnet")
-state1 = client.get_account_state("b14bc3286e4b9b41c86022f2e614d721")
-state2 = client.get_account_state("b14bc3286e4b9b41c86022f2e614d721", 9412226)
-print(state1.get_balance("vBTC"))
-print(state2.get_balance("vBTC"))
+client = Client("bj_testnet")
+wallet = Wallet.new()
+a1 = wallet.new_account()
+client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
+client.add_currency_to_account(a1, "VLS")
+client.bank_publish(a1, gas_currency_code="vBTC")
+client.bank_lock2(a1, 100_000_000, currency_code="vBTC")
+amount = client.bank_get_lock_amount(a1.address, "vBTC")
+print(amount)
+print(client.get_account_registered_currencies(a1.address))
+client.bank_redeem2(a1, amount=8888, currency_code="vBTC")
 # client.mint_coin("b14bc3286e4b9b41c86022f2e614d721", 99, currency_code="vBTC")
 
 
