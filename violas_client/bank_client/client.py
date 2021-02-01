@@ -295,7 +295,6 @@ class Client(LibraClient):
         token_info_stores = owner_state.get_token_info_store_resource()
         sum = 0
         for currency, amount in result.items():
-            print("violas", account_address, currency_code, amount, token_info_stores.get_price(currency), token_info_stores.get_collateral_factor(currency))
             sum += mantissa_mul(mantissa_mul(amount, token_info_stores.get_price(currency)), token_info_stores.get_collateral_factor(currency))
         return sum
 
