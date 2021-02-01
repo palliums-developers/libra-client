@@ -1,18 +1,16 @@
 import random
 import time
 from violas_client import Client, Wallet
+from violas_client.lbrtypes.bytecode import CodeType
 
+start = 0
 client = Client("bj_testnet")
-wallet = Wallet.new()
-a1 = wallet.new_account()
-client.mint_coin(a1.address, 300_000_000, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
-client.add_currency_to_account(a1, "VLS")
-client.bank_publish(a1, gas_currency_code="vBTC")
-client.bank_lock2(a1, 100_000_000, currency_code="vBTC")
-amount = client.bank_get_lock_amount(a1.address, "vBTC")
-print(amount)
-print(client.get_account_registered_currencies(a1.address))
-client.bank_redeem2(a1, amount=8888, currency_code="vBTC")
+while True:
+    tx = client.get_transaction(start)
+    if tx.get_code_type() == CodeType.UNKNOWN:
+        print(start)
+    start += 1
+
 # client.mint_coin("b14bc3286e4b9b41c86022f2e614d721", 99, currency_code="vBTC")
 
 
