@@ -445,6 +445,7 @@ class Client():
         if isinstance(addr, bytes):
             addr = addr.hex()
         addr = addr.lower()
+        print(self.accounts_seq.get(addr))
         return self.accounts_seq.get(addr)
 
     def set_seq(self, addr, seq):

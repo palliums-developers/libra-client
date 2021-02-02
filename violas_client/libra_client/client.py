@@ -1,26 +1,26 @@
 import time
 import requests
-from libra_client.json_rpc.views import TransactionView
+from violas_client.json_rpc.views import TransactionView
 from typing import Optional, Union
 
-from libra_client.lbrtypes.account_config.constants.lbr import CORE_CODE_ADDRESS
-from libra_client.move_core_types.language_storage import TypeTag, StructTag
-from libra_client.move_core_types.account_address import AccountAddress as Address
-from libra_client.methods import LibraClient
-from libra_client.lbrtypes.waypoint import Waypoint
-from libra_client.account import Account
-from libra_client.lbrtypes.transaction import TransactionPayload, SignedTransaction
-from libra_client.lbrtypes.transaction.script import Script
-from libra_client.lbrtypes.rustlib import ensure
-from libra_client.error import LibraError, StatusCode, ServerCode
-from libra_client.lbrtypes.bytecode import CodeType
-from libra_client.lbrtypes.transaction.transaction_argument import TransactionArgument
-from libra_client.lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
-from libra_client.lbrtypes.transaction.helper import create_user_txn
-from libra_client.lbrtypes.account_state import AccountState
-from libra_client.lbrtypes.account_config import config_address
-from libra_client.lbrtypes.event import EventKey
-from libra_client.lbrtypes import NamedChain
+from violas_client.lbrtypes.account_config.constants.lbr import CORE_CODE_ADDRESS
+from violas_client.move_core_types.language_storage import TypeTag, StructTag
+from violas_client.move_core_types.account_address import AccountAddress as Address
+from violas_client.libra_client.methods import LibraClient
+from violas_client.lbrtypes.waypoint import Waypoint
+from violas_client.libra_client.account import Account
+from violas_client.lbrtypes.transaction import TransactionPayload, SignedTransaction
+from violas_client.lbrtypes.transaction.script import Script
+from violas_client.lbrtypes.rustlib import ensure
+from violas_client.error import LibraError, StatusCode, ServerCode
+from violas_client.lbrtypes.bytecode import CodeType
+from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
+from violas_client.lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
+from violas_client.lbrtypes.transaction.helper import create_user_txn
+from violas_client.lbrtypes.account_state import AccountState
+from violas_client.lbrtypes.account_config import config_address
+from violas_client.lbrtypes.event import EventKey
+from violas_client.lbrtypes import NamedChain
 
 import os
 from pathlib import Path
@@ -445,6 +445,7 @@ class Client():
         if isinstance(addr, bytes):
             addr = addr.hex()
         addr = addr.lower()
+        print(self.accounts_seq.get(addr))
         return self.accounts_seq.get(addr)
 
     def set_seq(self, addr, seq):
