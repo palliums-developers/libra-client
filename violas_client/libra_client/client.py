@@ -1,26 +1,26 @@
 import time
 import requests
-from violas_client.json_rpc.views import TransactionView
+from libra_client.json_rpc.views import TransactionView
 from typing import Optional, Union
 
-from violas_client.lbrtypes.account_config.constants.lbr import CORE_CODE_ADDRESS
-from violas_client.move_core_types.language_storage import TypeTag, StructTag
-from violas_client.move_core_types.account_address import AccountAddress as Address
-from violas_client.libra_client.methods import LibraClient
-from violas_client.lbrtypes.waypoint import Waypoint
-from violas_client.libra_client.account import Account
-from violas_client.lbrtypes.transaction import TransactionPayload, SignedTransaction
-from violas_client.lbrtypes.transaction.script import Script
-from violas_client.lbrtypes.rustlib import ensure
-from violas_client.error import LibraError, StatusCode, ServerCode
-from violas_client.lbrtypes.bytecode import CodeType
-from violas_client.lbrtypes.transaction.transaction_argument import TransactionArgument
-from violas_client.lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
-from violas_client.lbrtypes.transaction.helper import create_user_txn
-from violas_client.lbrtypes.account_state import AccountState
-from violas_client.lbrtypes.account_config import config_address
-from violas_client.lbrtypes.event import EventKey
-from violas_client.lbrtypes import NamedChain
+from libra_client.lbrtypes.account_config.constants.lbr import CORE_CODE_ADDRESS
+from libra_client.move_core_types.language_storage import TypeTag, StructTag
+from libra_client.move_core_types.account_address import AccountAddress as Address
+from libra_client.methods import LibraClient
+from libra_client.lbrtypes.waypoint import Waypoint
+from libra_client.account import Account
+from libra_client.lbrtypes.transaction import TransactionPayload, SignedTransaction
+from libra_client.lbrtypes.transaction.script import Script
+from libra_client.lbrtypes.rustlib import ensure
+from libra_client.error import LibraError, StatusCode, ServerCode
+from libra_client.lbrtypes.bytecode import CodeType
+from libra_client.lbrtypes.transaction.transaction_argument import TransactionArgument
+from libra_client.lbrtypes.account_config import  association_address, treasury_compliance_account_address, transaction_fee_address, testnet_dd_account_address
+from libra_client.lbrtypes.transaction.helper import create_user_txn
+from libra_client.lbrtypes.account_state import AccountState
+from libra_client.lbrtypes.account_config import config_address
+from libra_client.lbrtypes.event import EventKey
+from libra_client.lbrtypes import NamedChain
 
 import os
 from pathlib import Path
@@ -88,6 +88,7 @@ class Client():
 
         faucet_server = chain.get("faucet_server")
         self.faucet_server = faucet_server
+        self.accounts_seq = dict()
 
     @classmethod
     def new(cls, url, chain_id=NamedChain.TESTING, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
@@ -402,18 +403,23 @@ class Client():
         self.client.submit_transaction(signed_transaction)
         if is_blocking:
             self.wait_for_transaction(sender_address, sequence_number)
+        self.set_seq(sender_address, sequence_number+1)
         return sequence_number
 
     def submit_script(self, sender_account, script, is_blocking=True, gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         gas_currency_code = self.get_gas_currency_code(gas_currency_code=gas_currency_code)
-        sequence_number = self.get_sequence_number(sender_account.address)
+        sequence_number = self.get_local_seq(sender_account.address)
+        if sequence_number is None:
+            sequence_number = self.get_sequence_number(sender_account.address)
         signed_txn = create_user_txn(TransactionPayload("Script",script), sender_account, sequence_number, max_gas_amount, gas_unit_price, gas_currency_code, txn_expiration, chain_id=self.chain_id)
         self.submit_signed_transaction(signed_txn, is_blocking)
         return sequence_number
 
     def submit_module(self, sender_account, module,  is_blocking=True, gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         gas_currency_code = self.get_gas_currency_code(gas_currency_code=gas_currency_code)
-        sequence_number = self.get_sequence_number(sender_account.address)
+        sequence_number = self.get_local_seq(sender_account.address)
+        if sequence_number is None:
+            sequence_number = self.get_sequence_number(sender_account.address)
         signed_txn = create_user_txn(TransactionPayload("Module", module), sender_account, sequence_number, max_gas_amount, gas_unit_price, gas_currency_code, txn_expiration, chain_id=self.chain_id)
         self.submit_signed_transaction(signed_txn, is_blocking)
         return sequence_number
@@ -434,3 +440,17 @@ class Client():
                     return value
             return catch_execption_func
         return get_exception
+
+    def get_local_seq(self, addr):
+        if isinstance(addr, bytes):
+            addr = addr.hex()
+        addr = addr.lower()
+        return self.accounts_seq.get(addr)
+
+    def set_seq(self, addr, seq):
+        if isinstance(addr, bytes):
+            addr = addr.hex()
+        addr = addr.lower()
+        self.accounts_seq[addr] = seq
+
+
