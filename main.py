@@ -11,10 +11,13 @@ while True:
         print(start)
     start += 1
 
-# client.mint_coin("b14bc3286e4b9b41c86022f2e614d721", 99, currency_code="vBTC")
+client = Client()
+wallet = Wallet.new()
+a1 = wallet.new_account()
+client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
+client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
+client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
 
-
-# wallet = Wallet.new()
 #
 # i = 0
 # while True:

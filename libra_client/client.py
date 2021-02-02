@@ -88,6 +88,7 @@ class Client():
 
         faucet_server = chain.get("faucet_server")
         self.faucet_server = faucet_server
+        self.accounts_seq = dict()
 
     @classmethod
     def new(cls, url, chain_id=NamedChain.TESTING, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
@@ -106,6 +107,7 @@ class Client():
         faucet_server = faucet_server
         ret.faucet_server = faucet_server
         ret.chain_id = chain_id.value
+        ret.accounts_seq = dict()
         return ret
 
     def get_balance(self, account_address: Union[bytes, str], currency_code=None, currency_module_address=None)-> Optional[int]:
@@ -402,18 +404,23 @@ class Client():
         self.client.submit_transaction(signed_transaction)
         if is_blocking:
             self.wait_for_transaction(sender_address, sequence_number)
+        self.set_seq(sender_address, sequence_number+1)
         return sequence_number
 
     def submit_script(self, sender_account, script, is_blocking=True, gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         gas_currency_code = self.get_gas_currency_code(gas_currency_code=gas_currency_code)
-        sequence_number = self.get_sequence_number(sender_account.address)
+        sequence_number = self.get_local_seq(sender_account.address)
+        if sequence_number is None:
+            sequence_number = self.get_sequence_number(sender_account.address)
         signed_txn = create_user_txn(TransactionPayload("Script",script), sender_account, sequence_number, max_gas_amount, gas_unit_price, gas_currency_code, txn_expiration, chain_id=self.chain_id)
         self.submit_signed_transaction(signed_txn, is_blocking)
         return sequence_number
 
     def submit_module(self, sender_account, module,  is_blocking=True, gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
         gas_currency_code = self.get_gas_currency_code(gas_currency_code=gas_currency_code)
-        sequence_number = self.get_sequence_number(sender_account.address)
+        sequence_number = self.get_local_seq(sender_account.address)
+        if sequence_number is None:
+            sequence_number = self.get_sequence_number(sender_account.address)
         signed_txn = create_user_txn(TransactionPayload("Module", module), sender_account, sequence_number, max_gas_amount, gas_unit_price, gas_currency_code, txn_expiration, chain_id=self.chain_id)
         self.submit_signed_transaction(signed_txn, is_blocking)
         return sequence_number
@@ -434,3 +441,17 @@ class Client():
                     return value
             return catch_execption_func
         return get_exception
+
+    def get_local_seq(self, addr):
+        if isinstance(addr, bytes):
+            addr = addr.hex()
+        addr = addr.lower()
+        return self.accounts_seq.get(addr)
+
+    def set_seq(self, addr, seq):
+        if isinstance(addr, bytes):
+            addr = addr.hex()
+        addr = addr.lower()
+        self.accounts_seq[addr] = seq
+
+
