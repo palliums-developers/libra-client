@@ -107,6 +107,7 @@ class Client():
         faucet_server = faucet_server
         ret.faucet_server = faucet_server
         ret.chain_id = chain_id.value
+        ret.accounts_seq = dict()
         return ret
 
     def get_balance(self, account_address: Union[bytes, str], currency_code=None, currency_module_address=None)-> Optional[int]:
