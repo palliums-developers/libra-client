@@ -3,22 +3,42 @@ import time
 from violas_client import Client, Wallet
 from violas_client.lbrtypes.bytecode import CodeType
 
-start = 0
-client = Client("bj_testnet")
-while True:
-    tx = client.get_transaction(start)
-    if tx.get_code_type() == CodeType.UNKNOWN:
-        print(start)
-    start += 1
+code = "trouble menu nephew group alert recipe hotel fatigue wet shadow say fold huge olive solution enjoy garden appear vague joy great keep cactus melt"
 
-client = Client()
 wallet = Wallet.new()
-a1 = wallet.new_account()
-client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
-client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
-client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
+client = Client()
+w = wallet.new_from_mnemonic(code)
+liquidity_account = w.new_account()
+a1 = w.new_account()
+print(client.swap_get_liquidity_balances(liquidity_account.address_hex))
+print(client.get_account_registered_currencies(liquidity_account.address_hex))
+# client.add_currency_to_account(a1, "vUSDT")
+# client.transfer_coin(liquidity_account, a1.address_hex, 10000, currency_code="vBTC")
+# client.transfer_coin(liquidity_account, a1.address_hex, 10000, currency_code="vUSDT")
 
+# client.add_currency_to_account(liquidity_account, "vUSDT")
+# client.add_currency_to_account(liquidity_account, "VLS")
+# client.mint_coin(liquidity_account.address, 10_000_000, currency_code="vUSDT",
+#                  auth_key_prefix=liquidity_account.auth_key_prefix, is_blocking=True)
 #
+# client.swap_add_liquidity(liquidity_account, "vBTC", "vUSDT", 200_000, 100_000)
+# values = client.swap_get_liquidity_balances(liquidity_account.address)[0]
+# print(values["liquidity"])
+# client.swap_remove_liquidity(liquidity_account, "vBTC", "vUSDT", 10000)
+# while True:
+#     tx = client.get_transaction(start)
+#     if tx.get_code_type() == CodeType.UNKNOWN:
+#         print(start)
+#     start += 1
+#
+# client = Client()
+# wallet = Wallet.new()
+# a1 = wallet.new_account()
+# client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
+# client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
+# client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
+#
+# #
 # i = 0
 # while True:
 #     a1 = wallet.new_account()
