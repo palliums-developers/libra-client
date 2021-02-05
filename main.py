@@ -2,13 +2,9 @@ import random
 import time
 from violas_client import Client, Wallet
 
-client = Client()
-wallet = Wallet.new()
-a1 = wallet.new_account()
-client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
-client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
-client.mint_coin(a1.address, 100, auth_key_prefix=a1.auth_key_prefix, currency_code="vBTC")
-
+client = Client("violas_testnet")
+tx = client.get_transaction(19254391)
+print(tx.get_code_type())
 #
 # i = 0
 # while True:
