@@ -1,17 +1,18 @@
 import random
 import time
-from violas_client import Client, Wallet
-from violas_client.lbrtypes.bytecode import CodeType
+from libra_client import Client, Wallet
 
 code = "trouble menu nephew group alert recipe hotel fatigue wet shadow say fold huge olive solution enjoy garden appear vague joy great keep cactus melt"
 
 wallet = Wallet.new()
-client = Client()
-w = wallet.new_from_mnemonic(code)
-liquidity_account = w.new_account()
-a1 = w.new_account()
-print(client.swap_get_liquidity_balances(liquidity_account.address_hex))
-print(client.get_account_registered_currencies(liquidity_account.address_hex))
+client = Client.new("violas_testnet", chain_id=4)
+w = wallet.new()
+a = w.new_account()
+client.mint_coin(a.address_hex, 100, a.auth_key_prefix)
+# liquidity_account = w.new_account()
+# a1 = w.new_account()
+# print(client.swap_get_liquidity_balances(liquidity_account.address_hex))
+# print(client.get_account_registered_currencies(liquidity_account.address_hex))
 # client.add_currency_to_account(a1, "vUSDT")
 # client.transfer_coin(liquidity_account, a1.address_hex, 10000, currency_code="vBTC")
 # client.transfer_coin(liquidity_account, a1.address_hex, 10000, currency_code="vUSDT")

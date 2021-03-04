@@ -102,7 +102,7 @@ class Client():
 
         faucet_server = faucet_server
         ret.faucet_server = faucet_server
-        ret.chain_id = chain_id.value
+        ret.chain_id = chain_id
         ret.accounts_seq = dict()
 
         return ret
