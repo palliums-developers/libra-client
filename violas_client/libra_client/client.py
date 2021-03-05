@@ -65,12 +65,11 @@ class Client():
 
     DEFAULT_GAS_COIN_NAME = "XUS"
 
-    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None, chain_id=NamedChain.TESTING):
+    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
         url = chain.get("url")
-        self.chain_id = chain_id
         self.client = LibraClient.new(url, waypoint)
         faucet_account_file = chain.get("faucet_file")
         if faucet_account_file is None:
@@ -85,9 +84,10 @@ class Client():
         faucet_server = chain.get("faucet_server")
         self.faucet_server = faucet_server
         self.accounts_seq = dict()
+        self.chain_id = self.get_metadata().chain_id
 
     @classmethod
-    def new(cls, url, chain_id=NamedChain.TESTING, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
+    def new(cls, url, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
         ret = cls.__new__(cls)
         ret.client = LibraClient.new(url, waypoint)
         faucet_account_file = faucet_file
@@ -102,7 +102,7 @@ class Client():
 
         faucet_server = faucet_server
         ret.faucet_server = faucet_server
-        ret.chain_id = chain_id
+        ret.chain_id = ret.get_metadata().chain_id
         ret.accounts_seq = dict()
 
         return ret
