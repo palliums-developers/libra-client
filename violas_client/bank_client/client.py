@@ -83,7 +83,6 @@ class Client(LibraClient):
     def bank_publish(self, sender_account, data=None, is_blocking=True, **kwargs):
         args = []
         args.append(TransactionArgument.to_U8Vector(data, hex=False))
-
         script = Script.gen_script(CodeType.PUBLISH, *args, ty_args=[], module_address=self.get_bank_module_address())
         return self.submit_script(sender_account, script, is_blocking, **kwargs)
 
@@ -291,7 +290,6 @@ class Client(LibraClient):
                     exchange_rate = owner_state.get_exchange_rate(index)
                     amount = state.get_lock_amount(index, exchange_rate)
                     currency_code = self.bank_get_currency_code(index)
-                    print("violas", account_address, currency_code, exchange_rate, amount)
                     result[currency_code] = amount
         token_info_stores = owner_state.get_token_info_store_resource()
         sum = 0
