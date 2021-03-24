@@ -2,7 +2,7 @@ from violas_client import Client, Wallet
 from violas_client.banktypes.bytecode import CodeType
 
 
-client = Client("bj_testnet")
+client = Client("violas_testnet")
 
 def test_get_code_type():
     wallet = Wallet.new()

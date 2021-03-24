@@ -11,8 +11,7 @@ from typing import Optional
 from violas_client.error import LibraError
 from violas_client.banktypes.bank_error import BankError
 from violas_client.move_core_types.language_storage import core_code_address
-from violas_client.lbrtypes.account_config import association_address
-from violas_client.banktypes.utils import mantissa_div, mantissa_mul, new_mantissa
+from violas_client.banktypes.utils import mantissa_div, mantissa_mul
 
 class Client(LibraClient):
 
