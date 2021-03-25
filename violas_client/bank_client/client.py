@@ -410,6 +410,7 @@ class Client(LibraClient):
         state = self.get_account_state(self.get_bank_module_address())
         return state.get_utilization_rate(currency_code)
 
+    @LibraClient.return_when_error(False)
     def bank_is_published(self, account_address):
         return self.get_account_state(account_address).bank_is_published()
 
