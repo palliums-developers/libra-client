@@ -67,7 +67,7 @@ class Client():
 
     ACCOUNTS_SEQS = dict()
 
-    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None, chain_id=None):
+    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None, chain_id=None, remember_seq=False):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")
@@ -86,9 +86,10 @@ class Client():
         faucet_server = chain.get("faucet_server")
         self.faucet_server = faucet_server
         self.chain_id = chain_id or self.get_metadata().chain_id
+        self.remember_seq = remember_seq
 
     @classmethod
-    def new(cls, url, chain_id=None, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None):
+    def new(cls, url, chain_id=None, faucet_file:Optional[str]=None, faucet_server:Optional[str]=None, waypoint:Optional[Waypoint]=None, remember_seq=False):
         ret = cls.__new__(cls)
         ret.client = LibraClient.new(url, waypoint)
         faucet_account_file = faucet_file
@@ -105,6 +106,7 @@ class Client():
         ret.faucet_server = faucet_server
         ret.chain_id = chain_id or ret.get_metadata().chain_id
         ret.accounts_seq = dict()
+        ret.remember_seq = remember_seq
 
         return ret
 
@@ -411,7 +413,11 @@ class Client():
         if sequence_number is None:
             sequence_number = self.get_sequence_number(sender_account.address)
         signed_txn = create_user_txn(TransactionPayload("Script",script), sender_account, sequence_number, max_gas_amount, gas_unit_price, gas_currency_code, txn_expiration, chain_id=self.chain_id)
-        self.submit_signed_transaction(signed_txn, is_blocking)
+        try:
+            self.submit_signed_transaction(signed_txn, is_blocking)
+        except Exception as e:
+            self.set_seq(sender_account.address, self.get_sequence_number(sender_account.address))
+            raise e
         return sequence_number
 
     def submit_module(self, sender_account, module,  is_blocking=True, gas_currency_code=None, max_gas_amount=MAX_GAS_AMOUNT, gas_unit_price=GAS_UNIT_PRICE, txn_expiration=TXN_EXPIRATION):
@@ -443,8 +449,10 @@ class Client():
     def get_local_seq(self, addr):
         if isinstance(addr, bytes):
             addr = addr.hex()
-        addr = addr.lower()
-        return self.__class__.ACCOUNTS_SEQS.get(addr)
+        if self.remember_seq:
+            addr = addr.lower()
+            return self.__class__.ACCOUNTS_SEQS.get(addr)
+        return self.get_sequence_number(addr)
 
     def set_seq(self, addr, seq):
         if isinstance(addr, bytes):
