@@ -80,7 +80,7 @@ class AccountState(Struct):
     def get_childVASP_resource(self) -> Optional[ChildVASP]:
         child_vasp = self.get(ChildVASP.resource_path())
         if child_vasp:
-            return ParentVASP.deserialize(child_vasp)
+            return ChildVASP.deserialize(child_vasp)
 
     def get_designated_dealer_resource(self) -> Optional[DesignatedDealer]:
         designated_dealer = self.get(DesignatedDealer.resource_path())

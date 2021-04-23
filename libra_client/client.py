@@ -116,6 +116,12 @@ class Client():
             return account_state.get_balance(currency_code, currency_module_address)
         return 0
 
+    def get_parent_vasp(self, account_address):
+        ac = self.get_account_state(account_address)
+        rs = ac.get_childVASP_resource()
+        if rs is not None:
+            return rs.parent_vasp_addr.hex()
+
     def get_balances(self, account_address: Union[bytes, str]):
         address = Address.normalize_to_bytes(account_address)
         state = self.client.get_account_state(address, True)
