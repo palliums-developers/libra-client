@@ -67,7 +67,7 @@ class Client():
 
     ACCOUNTS_SEQS = dict()
 
-    def __init__(self, network="violas_testnet", waypoint: Optional[Waypoint]=None, chain_id=None, remember_seq=False):
+    def __init__(self, network="bj_testnet", waypoint: Optional[Waypoint]=None, chain_id=None, remember_seq=False):
         ensure(network in NETWORKS, "The specified chain does not exist")
         chain = NETWORKS[network]
         ensure("url" in chain, "The specified chain has no url")

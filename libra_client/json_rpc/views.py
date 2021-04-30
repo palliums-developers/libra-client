@@ -11,6 +11,18 @@ class AmountView(Struct):
         ("currency", StrT)
     ]
 
+class PreburnWithMetadataView(Struct):
+    _fields = [
+        ("preburn", AmountView),
+        ("metadata", str)
+    ]
+
+class PreburnQueueView(Struct):
+    _fields = [
+        ("currency", str),
+        ("preburns", [PreburnWithMetadataView])
+    ]
+
 class DesignatedDealerView(Struct):
     _fields = [
         ("human_name", str),
@@ -21,6 +33,7 @@ class DesignatedDealerView(Struct):
         ("received_mint_events_key", str),
         ("compliance_key_rotation_events_key", str),
         ("base_url_rotation_events_key", str),
+        ("preburn_queues", [PreburnQueueView])
     ]
 
 class ParentVASPView(Struct):
@@ -71,6 +84,7 @@ class AccountView(Struct):
         ("delegated_withdrawal_capability", BoolT),
         ("is_frozen", BoolT),
         ("role", AccountRoleView),
+        ("version", Uint64)
     ]
 
     @staticmethod
