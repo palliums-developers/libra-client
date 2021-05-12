@@ -14,28 +14,28 @@ class AccountState(LibraAccountState):
 
     @get_exception
     def swap_get_reserves_resource(self, exchange_module_address=None) -> Optional[ReservesResource]:
-        resource = self.get(ReservesResource.resource_path(module_address=self.get_exchange_module_address(exchange_module_address)))
+        resource = self.get(ReservesResource.access_path_for(module_address=self.get_exchange_module_address(exchange_module_address)))
         return ReservesResource.deserialize(resource).reserves
 
-    @get_exception
+    # @get_exception
     def swap_get_tokens_resource(self, exchange_module_address=None) -> Optional[TokensResource]:
-        resource = self.get(TokensResource.resource_path(module_address=self.get_exchange_module_address(exchange_module_address)))
+        resource = self.get(TokensResource.access_path_for(module_address=self.get_exchange_module_address(exchange_module_address)))
         return TokensResource.deserialize(resource)
 
-    @get_exception
+    # @get_exception
     def swap_get_registered_currencies(self, exchange_module_address=None) -> Optional[RegisteredCurrenciesResource]:
-        resource = self.get(RegisteredCurrenciesResource.resource_path(module_address=self.get_exchange_module_address(exchange_module_address)))
+        resource = self.get(RegisteredCurrenciesResource.access_path_for(module_address=self.get_exchange_module_address(exchange_module_address)))
         return RegisteredCurrenciesResource.deserialize(resource)
 
     @get_exception
     def swap_get_reward_pools(self) -> Optional[RewardPoolsResource]:
-        key = RewardPoolsResource.resource_path(module_address=self.get_exchange_module_address())
+        key = RewardPoolsResource.access_path_for(module_address=self.get_exchange_module_address())
         resource = self.get(key)
         return RewardPoolsResource.deserialize(resource)
 
     @get_exception
     def swap_get_pool_user_infos(self) -> Optional[PoolUserInfosResource]:
-        key = PoolUserInfosResource.resource_path(module_address=self.get_exchange_module_address())
+        key = PoolUserInfosResource.access_path_for(module_address=self.get_exchange_module_address())
         resource = self.get(key)
         return PoolUserInfosResource.deserialize(resource)
 
