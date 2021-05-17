@@ -56,6 +56,7 @@ class TransactionView(LibraTransactionView):
             e = event.get_swap_event()
             if isinstance(e, RewardEvent):
                 return e.reward_amount
+        return 0
 
     def get_receiver(self):
         receiver = super().get_receiver()
